@@ -2,52 +2,52 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Categories on Andreas Makas</title>
-    <link>http://localhost:1313/categories/</link>
+    <link>https://ndrma.github.io/categories/</link>
     <description>Recent content in Categories on Andreas Makas</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 16 Apr 2024 22:31:58 +0100</lastBuildDate>
-    <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ndrma.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Houdini</title>
-      <link>http://localhost:1313/categories/houdini/</link>
+      <link>https://ndrma.github.io/categories/houdini/</link>
       <pubDate>Tue, 16 Apr 2024 22:31:58 +0100</pubDate>
-      <guid>http://localhost:1313/categories/houdini/</guid>
+      <guid>https://ndrma.github.io/categories/houdini/</guid>
       <description></description>
     </item>
     <item>
       <title>Linux</title>
-      <link>http://localhost:1313/categories/linux/</link>
+      <link>https://ndrma.github.io/categories/linux/</link>
       <pubDate>Tue, 16 Apr 2024 22:31:58 +0100</pubDate>
-      <guid>http://localhost:1313/categories/linux/</guid>
+      <guid>https://ndrma.github.io/categories/linux/</guid>
       <description></description>
     </item>
     <item>
       <title>Notes</title>
-      <link>http://localhost:1313/categories/notes/</link>
+      <link>https://ndrma.github.io/categories/notes/</link>
       <pubDate>Tue, 16 Apr 2024 22:31:58 +0100</pubDate>
-      <guid>http://localhost:1313/categories/notes/</guid>
+      <guid>https://ndrma.github.io/categories/notes/</guid>
       <description></description>
     </item>
     <item>
       <title>Snippets</title>
-      <link>http://localhost:1313/categories/snippets/</link>
+      <link>https://ndrma.github.io/categories/snippets/</link>
       <pubDate>Tue, 16 Apr 2024 22:31:58 +0100</pubDate>
-      <guid>http://localhost:1313/categories/snippets/</guid>
+      <guid>https://ndrma.github.io/categories/snippets/</guid>
       <description></description>
     </item>
     <item>
       <title>Unreal</title>
-      <link>http://localhost:1313/categories/unreal/</link>
+      <link>https://ndrma.github.io/categories/unreal/</link>
       <pubDate>Tue, 16 Apr 2024 22:31:58 +0100</pubDate>
-      <guid>http://localhost:1313/categories/unreal/</guid>
+      <guid>https://ndrma.github.io/categories/unreal/</guid>
       <description></description>
     </item>
     <item>
       <title>GIS</title>
-      <link>http://localhost:1313/categories/gis/</link>
+      <link>https://ndrma.github.io/categories/gis/</link>
       <pubDate>Mon, 08 Apr 2024 19:08:03 +0100</pubDate>
-      <guid>http://localhost:1313/categories/gis/</guid>
+      <guid>https://ndrma.github.io/categories/gis/</guid>
       <description></description>
     </item>
   </channel>
