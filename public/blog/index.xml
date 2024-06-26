@@ -2,33 +2,33 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Blogs on Andreas Makas</title>
-    <link>https://ndrma.github.io/blog/</link>
+    <link>http://localhost:1313/blog/</link>
     <description>Recent content in Blogs on Andreas Makas</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 16 Apr 2024 22:31:58 +0100</lastBuildDate>
-    <atom:link href="https://ndrma.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Unreal&#43;houdini&#43;linux</title>
-      <link>https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/</link>
+      <link>http://localhost:1313/blog/unreal&#43;houdini&#43;linux/</link>
       <pubDate>Tue, 16 Apr 2024 22:31:58 +0100</pubDate>
-      <guid>https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/</guid>
+      <guid>http://localhost:1313/blog/unreal&#43;houdini&#43;linux/</guid>
       <description>⬛️ links and before we begin https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running https://www.sidefx.com/forum/topic/61839/?page=1#post-404735 https://www.youtube.com/watch?v=TOpdnwBxEq4 (unlisted video, for UE4, but helpful stuff, sourcing houdini environment (the most useful part) at around 27:40) during houdini installation, choose the plugins you&amp;rsquo;ll want / need, otherwise install those now for the version you&amp;rsquo;re on (a lot of the time, the most recent bleeding edge version won&amp;rsquo;t play well with compiling alongside UE) https://www.youtube.com/watch?v=600RgBneV_A (newer video, Manjaro base, UE5.1) ⬛️ First things make the directory for UE5 and switch to it git clone git@github.</description>
     </item>
     <item>
       <title>linux_things</title>
-      <link>https://ndrma.github.io/blog/linux_things/</link>
+      <link>http://localhost:1313/blog/linux_things/</link>
       <pubDate>Tue, 16 Apr 2024 20:23:26 +0100</pubDate>
-      <guid>https://ndrma.github.io/blog/linux_things/</guid>
+      <guid>http://localhost:1313/blog/linux_things/</guid>
       <description>While using linux for vfx work I&amp;rsquo;ve had to do some general maintenance stuff, wrote the steps so that I understand the process better myself. I use linux mint btw.
 ⬛️ Moving /home (and some partitioning that was needed) This guide is the source of what I did: https://forums.linuxmint.com/viewtopic.php?p=2192189#p2192189 It&amp;rsquo;s written by a well respected member of the linux mint forums (rene, thank you), it&amp;rsquo;s really solid.
 The guide being solid is no substitute to having backups and timeshifts, so do those.</description>
     </item>
     <item>
       <title>GIS_things</title>
-      <link>https://ndrma.github.io/blog/gis_things/</link>
+      <link>http://localhost:1313/blog/gis_things/</link>
       <pubDate>Mon, 08 Apr 2024 19:08:03 +0100</pubDate>
-      <guid>https://ndrma.github.io/blog/gis_things/</guid>
+      <guid>http://localhost:1313/blog/gis_things/</guid>
       <description>lines of code / process for when trying to modify maps</description>
     </item>
   </channel>
