@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on Andreas Makas</title>
+    <link>http://localhost:1313/posts/</link>
+    <description>Recent content in Posts on Andreas Makas</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 08 Apr 2024 19:08:03 +0100</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GIS_things</title>
+      <link>http://localhost:1313/posts/gis_things/</link>
+      <pubDate>Mon, 08 Apr 2024 19:08:03 +0100</pubDate>
+      <guid>http://localhost:1313/posts/gis_things/</guid>
+      <description>Overview text here?
+[file](&amp;lt;-github file link)
+more text with code
+Next section second thiagsasdasd</description>
+    </item>
+  </channel>
+</rss>

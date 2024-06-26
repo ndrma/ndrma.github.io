@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Houdini on Andreas Makas</title>
+    <link>https://ndrma.github.io/tags/houdini/</link>
+    <description>Recent content in Houdini on Andreas Makas</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Apr 2024 22:31:58 +0100</lastBuildDate>
+    <atom:link href="https://ndrma.github.io/tags/houdini/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Unreal&#43;houdini&#43;linux</title>
+      <link>https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/</link>
+      <pubDate>Tue, 16 Apr 2024 22:31:58 +0100</pubDate>
+      <guid>https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/</guid>
+      <description>⬛️ links and before we begin https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running https://www.sidefx.com/forum/topic/61839/?page=1#post-404735 https://www.youtube.com/watch?v=TOpdnwBxEq4 (unlisted video, for UE4, but helpful stuff, sourcing houdini environment (the most useful part) at around 27:40) during houdini installation, choose the plugins you&amp;rsquo;ll want / need, otherwise install those now for the version you&amp;rsquo;re on (a lot of the time, the most recent bleeding edge version won&amp;rsquo;t play well with compiling alongside UE) https://www.youtube.com/watch?v=600RgBneV_A (newer video, Manjaro base, UE5.1) ⬛️ First things make the directory for UE5 and switch to it git clone git@github.</description>
+    </item>
+  </channel>
+</rss>

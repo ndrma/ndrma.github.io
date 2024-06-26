@@ -1,0 +1,132 @@
+#base config
+baseURL: https://ndrma.github.io/
+languageCode: en-us
+title: Andreas Makas
+theme: PaperMod
+
+params:
+  # Search opts
+  fuseOpts:
+      isCaseSensitive: false
+      shouldSort: true
+      location: 0
+      distance: 1000
+      threshold: 0.4
+      minMatchCharLength: 0
+      keys: ["title", "permalink", "summary", "tags", "categories", "content"]
+      includeScore: 1
+
+  #ShowBreadCrumbs: true
+
+  # Misc Settings
+  ShowCodeCopyButtons: true
+  defaultTheme: dark #auto
+  cover:
+    linkFullImages: true
+
+  assets:
+    disableHLJS: true
+
+  # Home Page
+  homeInfoParams:
+    Title: useful stuff 
+    Content: >
+      - Welcome!
+
+      - The posts below are stuff I find useful in my workflow and usually come back to - (hope they help you somewhere along your journey!)
+
+  # Social Icons
+  socialIcons:
+    - name: LinkedIn
+      url: "https://www.linkedin.com/in/andreas-makas/"
+    - name: github
+      url: "https://github.com/ndrma"
+  #  - name: vimeo
+  #   url : ""
+  #  - name: youtube
+  #   url : ""
+
+  # Custom site variables
+  githubUsername: ndrma
+
+
+# Nav menu
+menu:
+  main:
+    - name: useful stuff 
+      url: "#"
+      weight: 5
+    - name: projects 
+      url: projects
+      weight: 10
+    - name: snippets 
+      url: snippets
+      weight: 15
+    - name: links 
+      url: links
+      weight: 20
+    - name: info
+      url: info
+      weight: 25
+    # - name: tags 
+    #   url: tags/
+    #   weight: 30
+    - name: search 
+      url: search/
+      weight: 35
+
+enableEmoji: true
+
+# Search
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+    # Syntax highlighting
+#PygmentsUseClasses : true
+#PygmentsCodefences : true
+#PygmentsStyle : "monokai"
+# Markup Settings
+markup:
+  
+  highlight:
+    anchorLineNos: false
+    codeFences: true
+    guessSyntax: true
+    hl_Lines: ""
+    hl_inline: false
+    lineAnchors: ""
+    lineNoStart: 1
+    lineNos: false
+    lineNumbersInTable: true
+    noClasses: true
+    noHl: false
+    style: monokai # or nord
+    tabWidth: 4
+    # more config and styles here: https://gohugo.io/getting-started/configuration-markup/#highlight
+  # Enable inline HTML until a better shorcode for collapse that will collapse <figures>
+  goldmark:
+    renderer:
+      unsafe: true
+
+# Privacy Settings
+privacy:
+  disqus:
+    disable: true
+  googleAnalytics:
+    disable: true
+  instagram:
+    disable: true
+  twitter:
+    disable: true
+  vimeo:
+    disable: true
+    enableDNT: true # Do not track
+    simple: true # Open in a new tab and go to vimeo
+  youtube:
+    disable: false
+    privacyEnhanced: true # Don't store info about visitors
+
+

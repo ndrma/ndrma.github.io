@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Unreal&#43;houdini&#43;linux | Andreas Makas</title>
+<meta name="keywords" content="UE5, Unreal, linux, vfx, houdini">
+<meta name="description" content="⬛️ links and before we begin https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running https://www.sidefx.com/forum/topic/61839/?page=1#post-404735 https://www.youtube.com/watch?v=TOpdnwBxEq4 (unlisted video, for UE4, but helpful stuff, sourcing houdini environment (the most useful part) at around 27:40) during houdini installation, choose the plugins you&rsquo;ll want / need, otherwise install those now for the version you&rsquo;re on (a lot of the time, the most recent bleeding edge version won&rsquo;t play well with compiling alongside UE) https://www.youtube.com/watch?v=600RgBneV_A (newer video, Manjaro base, UE5.1) ⬛️ First things make the directory for UE5 and switch to it git clone git@github.">
+<meta name="author" content="">
+<link rel="canonical" href="https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://ndrma.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://ndrma.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://ndrma.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://ndrma.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://ndrma.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Unreal&#43;houdini&#43;linux" />
+<meta property="og:description" content="⬛️ links and before we begin https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running https://www.sidefx.com/forum/topic/61839/?page=1#post-404735 https://www.youtube.com/watch?v=TOpdnwBxEq4 (unlisted video, for UE4, but helpful stuff, sourcing houdini environment (the most useful part) at around 27:40) during houdini installation, choose the plugins you&rsquo;ll want / need, otherwise install those now for the version you&rsquo;re on (a lot of the time, the most recent bleeding edge version won&rsquo;t play well with compiling alongside UE) https://www.youtube.com/watch?v=600RgBneV_A (newer video, Manjaro base, UE5.1) ⬛️ First things make the directory for UE5 and switch to it git clone git@github." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/" />
+<meta property="og:image" content="https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/blog/images/unreal_engine.png" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2024-04-16T22:31:58+01:00" />
+<meta property="article:modified_time" content="2024-04-16T22:31:58+01:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/blog/images/unreal_engine.png" />
+<meta name="twitter:title" content="Unreal&#43;houdini&#43;linux"/>
+<meta name="twitter:description" content="⬛️ links and before we begin https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running https://www.sidefx.com/forum/topic/61839/?page=1#post-404735 https://www.youtube.com/watch?v=TOpdnwBxEq4 (unlisted video, for UE4, but helpful stuff, sourcing houdini environment (the most useful part) at around 27:40) during houdini installation, choose the plugins you&rsquo;ll want / need, otherwise install those now for the version you&rsquo;re on (a lot of the time, the most recent bleeding edge version won&rsquo;t play well with compiling alongside UE) https://www.youtube.com/watch?v=600RgBneV_A (newer video, Manjaro base, UE5.1) ⬛️ First things make the directory for UE5 and switch to it git clone git@github."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Blogs",
+      "item": "https://ndrma.github.io/blog/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Unreal+houdini+linux",
+      "item": "https://ndrma.github.io/blog/unreal+houdini+linux/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Unreal+houdini+linux",
+  "name": "Unreal\u002bhoudini\u002blinux",
+  "description": "⬛️ links and before we begin https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running https://www.sidefx.com/forum/topic/61839/?page=1#post-404735 https://www.youtube.com/watch?v=TOpdnwBxEq4 (unlisted video, for UE4, but helpful stuff, sourcing houdini environment (the most useful part) at around 27:40) during houdini installation, choose the plugins you\u0026rsquo;ll want / need, otherwise install those now for the version you\u0026rsquo;re on (a lot of the time, the most recent bleeding edge version won\u0026rsquo;t play well with compiling alongside UE) https://www.youtube.com/watch?v=600RgBneV_A (newer video, Manjaro base, UE5.1) ⬛️ First things make the directory for UE5 and switch to it git clone git@github.",
+  "keywords": [
+    "UE5", "Unreal", "linux", "vfx", "houdini"
+  ],
+  "articleBody": "⬛️ links and before we begin https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running https://www.sidefx.com/forum/topic/61839/?page=1#post-404735 https://www.youtube.com/watch?v=TOpdnwBxEq4 (unlisted video, for UE4, but helpful stuff, sourcing houdini environment (the most useful part) at around 27:40) during houdini installation, choose the plugins you’ll want / need, otherwise install those now for the version you’re on (a lot of the time, the most recent bleeding edge version won’t play well with compiling alongside UE) https://www.youtube.com/watch?v=600RgBneV_A (newer video, Manjaro base, UE5.1) ⬛️ First things make the directory for UE5 and switch to it git clone git@github.com:EpicGames/UnrealEngine.git now in the UE5 directory ./Setup.sh then find the plugin for unreal at /opt/sidefx/houdini_engine (you need to plugin that corresponds to the current version of houdini in the system, if you remove that version it will break the integration) get the HoudiniEngine folder and copy it in the Plugins/Runtime folder of UE5 NOW it is important to initialize the houdini environment before the next step so that when the make files are generated it knows what to look for cd /opt/hfsX source houdini_setup The Houdini 20.0.653 environment has been initialized. back in the top directory ./GenerateProjectFiles.sh [With the environment initialized you shouldn’t get any errors at the generate script] make (it shouldn’t require sudo) a lot of the times there might be some error in the UE make that just reks all of it. That’s 99% the houdini engine plugin. 1st try removing it from the directory and recompiling, it should go faster and without errors. Then is the troubleshooting, have to find a houdini version that UE5 agrees with and wants to compile. So off you go! after compiling has finished, and all has gone well, need shortcuts for rofi now ⬛️ regarding updates and changes soon(TM)\n",
+  "wordCount" : "282",
+  "inLanguage": "en",
+  "image":"https://ndrma.github.io/blog/unreal+houdini+linux/blog/images/unreal_engine.png","datePublished": "2024-04-16T22:31:58+01:00",
+  "dateModified": "2024-04-16T22:31:58+01:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://ndrma.github.io/blog/unreal+houdini+linux/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Andreas Makas",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ndrma.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class=" dark" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://ndrma.github.io/" accesskey="h" title="Andreas Makas (Alt + H)">Andreas Makas</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://ndrma.github.io/" title="useful stuff">
+                    <span>useful stuff</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ndrma.github.io/projects" title="projects">
+                    <span>projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ndrma.github.io/snippets" title="snippets">
+                    <span>snippets</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ndrma.github.io/links" title="links">
+                    <span>links</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ndrma.github.io/info" title="info">
+                    <span>info</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ndrma.github.io/search/" title="search (Alt &#43; /)" accesskey=/>
+                    <span>search</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Unreal&#43;houdini&#43;linux
+    </h1>
+    <div class="post-meta"><span title='2024-04-16 22:31:58 +0100 BST'>April 16, 2024</span>&nbsp;·&nbsp;2 min
+
+</div>
+  </header> 
+<figure class="entry-cover"><a href="https://ndrma.github.io/blog/images/unreal_engine.png" target="_blank"
+            rel="noopener noreferrer"><img loading="eager" src="https://ndrma.github.io/blog/images/unreal_engine.png" alt="Cover Photo"></a>
+        
+</figure><div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#--links-and-before-we-begin" aria-label="⬛️  links and before we begin">⬛️  links and before we begin</a></li>
+                <li>
+                    <a href="#--first-things" aria-label="⬛️  First things">⬛️  First things</a></li>
+                <li>
+                    <a href="#--regarding-updates-and-changes" aria-label="⬛️  regarding updates and changes">⬛️  regarding updates and changes</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h3 id="--links-and-before-we-begin">⬛️  links and before we begin<a hidden class="anchor" aria-hidden="true" href="#--links-and-before-we-begin">#</a></h3>
+<ol>
+<li><a href="https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running">https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running</a></li>
+<li><a href="https://www.sidefx.com/forum/topic/61839/?page=1#post-404735">https://www.sidefx.com/forum/topic/61839/?page=1#post-404735</a></li>
+<li><a href="https://www.youtube.com/watch?v=TOpdnwBxEq4">https://www.youtube.com/watch?v=TOpdnwBxEq4</a> (unlisted video, for UE4, but helpful stuff, sourcing houdini environment (the most useful part) at around 27:40)</li>
+<li>during houdini installation, choose the plugins you&rsquo;ll want / need, otherwise install those now for the version you&rsquo;re on (a lot of the time, the most recent bleeding edge version won&rsquo;t play well with compiling alongside UE)</li>
+<li><a href="https://www.youtube.com/watch?v=600RgBneV_A">https://www.youtube.com/watch?v=600RgBneV_A</a> (newer video, Manjaro base, UE5.1)</li>
+</ol>
+<h3 id="--first-things">⬛️  First things<a hidden class="anchor" aria-hidden="true" href="#--first-things">#</a></h3>
+<br />
+<ul>
+<li>make the directory for UE5 and switch to it</li>
+<li><code>git clone git@github.com:EpicGames/UnrealEngine.git</code></li>
+<li>now in the UE5 directory <code>./Setup.sh</code></li>
+<li>then find the plugin for unreal at <code>/opt/sidefx/houdini_engine</code> (you need to plugin that corresponds to the current version of houdini in the system, if you remove that version it will break the integration)</li>
+<li>get the <code>HoudiniEngine</code> folder and copy it in the <code>Plugins/Runtime</code> folder of UE5</li>
+<li><strong>NOW</strong> it is important to initialize the houdini environment before the next step so that when the make files are generated it knows what to look for</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>cd /opt/hfsX
+</span></span><span style="display:flex;"><span>source houdini_setup
+</span></span><span style="display:flex;"><span>The Houdini 20.0.653 environment has been initialized.
+</span></span></code></pre></div><ul>
+<li>back in the top directory <code> ./GenerateProjectFiles.sh</code> [With the environment initialized you shouldn&rsquo;t get any errors at the generate script]</li>
+<li><code>make</code> (it shouldn&rsquo;t require sudo)</li>
+<li>a lot of the times there might be some error in the UE make that just reks all of it. That&rsquo;s 99% the houdini engine plugin. 1st try removing it from the directory and recompiling, it should go faster and without errors.</li>
+<li>Then is the troubleshooting, have to find a houdini version that UE5 agrees with and wants to compile. So off you go!</li>
+<li>after compiling has finished, and all has gone well, need shortcuts for rofi now</li>
+</ul>
+<h3 id="--regarding-updates-and-changes">⬛️  regarding updates and changes<a hidden class="anchor" aria-hidden="true" href="#--regarding-updates-and-changes">#</a></h3>
+<p>soon(TM)</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://ndrma.github.io/tags/ue5/">UE5</a></li>
+      <li><a href="https://ndrma.github.io/tags/unreal/">Unreal</a></li>
+      <li><a href="https://ndrma.github.io/tags/linux/">Linux</a></li>
+      <li><a href="https://ndrma.github.io/tags/vfx/">Vfx</a></li>
+      <li><a href="https://ndrma.github.io/tags/houdini/">Houdini</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="https://ndrma.github.io/">Andreas Makas</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

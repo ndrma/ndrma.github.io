@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Vex on Andreas Makas</title>
+    <link>http://localhost:1313/tags/vex/</link>
+    <description>Recent content in Vex on Andreas Makas</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 07 Apr 2024 20:47:52 +0100</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/vex/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Water_cannon_2</title>
+      <link>http://localhost:1313/projects/water_cannon_2/</link>
+      <pubDate>Sun, 07 Apr 2024 20:47:52 +0100</pubDate>
+      <guid>http://localhost:1313/projects/water_cannon_2/</guid>
+      <description>Overview text here?
+[file](&amp;lt;-github file link)
+more text with code
+Next section second thiagsasdasd</description>
+    </item>
+    <item>
+      <title>LOLWHAT</title>
+      <link>http://localhost:1313/blog/grub2/</link>
+      <pubDate>Sat, 06 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/blog/grub2/</guid>
+      <description>how to rebuild the grub for REASONS</description>
+    </item>
+    <item>
+      <title>Rebuild grub</title>
+      <link>http://localhost:1313/blog/grub/</link>
+      <pubDate>Sat, 06 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/blog/grub/</guid>
+      <description>how to rebuild the grub for REASONS</description>
+    </item>
+    <item>
+      <title>Rebuild grub</title>
+      <link>http://localhost:1313/projects/water_cannon/</link>
+      <pubDate>Sat, 06 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/projects/water_cannon/</guid>
+      <description>how to rebuild the grub for REASONS</description>
+    </item>
+  </channel>
+</rss>
