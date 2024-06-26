@@ -2,3 +2,6 @@
 	path = themes/hugo-PaperMod
 	url = https://github.com/ndrma/hugo-PaperMod.git
 
+[submodule "external/ndrma.github.io"]
+	path = external/ndrma.github.io
+	url = https://github.com/ndrma/ndrma.github.io
