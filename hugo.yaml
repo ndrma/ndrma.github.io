@@ -1,5 +1,5 @@
 #base config
-baseURL: https://github.com/ndrma/ndrma.github.io
+baseURL: https://ndrma.github.io/
 languageCode: en-us
 title: Andreas Makas
 theme: PaperMod
