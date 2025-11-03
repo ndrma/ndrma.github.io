@@ -2,18 +2,47 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Unreal on Andreas Makas</title>
-    <link>https://ndrma.github.io/tags/unreal/</link>
+    <link>http://localhost:1313/tags/unreal/</link>
     <description>Recent content in Unreal on Andreas Makas</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 16 Apr 2024 22:31:58 +0100</lastBuildDate>
-    <atom:link href="https://ndrma.github.io/tags/unreal/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/unreal/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Unreal&#43;houdini&#43;linux</title>
-      <link>https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/</link>
+      <link>http://localhost:1313/blog/unreal&#43;houdini&#43;linux/</link>
       <pubDate>Tue, 16 Apr 2024 22:31:58 +0100</pubDate>
-      <guid>https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/</guid>
-      <description>⬛️ links and before we begin https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running https://www.sidefx.com/forum/topic/61839/?page=1#post-404735 https://www.youtube.com/watch?v=TOpdnwBxEq4 (unlisted video, for UE4, but helpful stuff, sourcing houdini environment (the most useful part) at around 27:40) during houdini installation, choose the plugins you&amp;rsquo;ll want / need, otherwise install those now for the version you&amp;rsquo;re on (a lot of the time, the most recent bleeding edge version won&amp;rsquo;t play well with compiling alongside UE) https://www.youtube.com/watch?v=600RgBneV_A (newer video, Manjaro base, UE5.1) ⬛️ First things make the directory for UE5 and switch to it git clone git@github.</description>
+      <guid>http://localhost:1313/blog/unreal&#43;houdini&#43;linux/</guid>
+      <description>&lt;h3 id=&#34;--links-and-before-we-begin&#34;&gt;⬛️  links and before we begin&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running&#34;&gt;https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.sidefx.com/forum/topic/61839/?page=1#post-404735&#34;&gt;https://www.sidefx.com/forum/topic/61839/?page=1#post-404735&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=TOpdnwBxEq4&#34;&gt;https://www.youtube.com/watch?v=TOpdnwBxEq4&lt;/a&gt; (unlisted video, for UE4, but helpful stuff, sourcing houdini environment (the most useful part) at around 27:40)&lt;/li&gt;
+&lt;li&gt;during houdini installation, choose the plugins you&amp;rsquo;ll want / need, otherwise install those now for the version you&amp;rsquo;re on (a lot of the time, the most recent bleeding edge version won&amp;rsquo;t play well with compiling alongside UE)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=600RgBneV_A&#34;&gt;https://www.youtube.com/watch?v=600RgBneV_A&lt;/a&gt; (newer video, Manjaro base, UE5.1)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;--first-things&#34;&gt;⬛️  First things&lt;/h3&gt;
+&lt;br /&gt;
+&lt;ul&gt;
+&lt;li&gt;make the directory for UE5 and switch to it&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git clone git@github.com:EpicGames/UnrealEngine.git&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;now in the UE5 directory &lt;code&gt;./Setup.sh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;then find the plugin for unreal at &lt;code&gt;/opt/sidefx/houdini_engine&lt;/code&gt; (you need to plugin that corresponds to the current version of houdini in the system, if you remove that version it will break the integration)&lt;/li&gt;
+&lt;li&gt;get the &lt;code&gt;HoudiniEngine&lt;/code&gt; folder and copy it in the &lt;code&gt;Plugins/Runtime&lt;/code&gt; folder of UE5&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NOW&lt;/strong&gt; it is important to initialize the houdini environment before the next step so that when the make files are generated it knows what to look for&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd /opt/hfsX
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;source houdini_setup
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;The Houdini 20.0.653 environment has been initialized.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;back in the top directory &lt;code&gt; ./GenerateProjectFiles.sh&lt;/code&gt; [With the environment initialized you shouldn&amp;rsquo;t get any errors at the generate script]&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;make&lt;/code&gt; (it shouldn&amp;rsquo;t require sudo)&lt;/li&gt;
+&lt;li&gt;a lot of the times there might be some error in the UE make that just reks all of it. That&amp;rsquo;s 99% the houdini engine plugin. 1st try removing it from the directory and recompiling, it should go faster and without errors.&lt;/li&gt;
+&lt;li&gt;Then is the troubleshooting, have to find a houdini version that UE5 agrees with and wants to compile. So off you go!&lt;/li&gt;
+&lt;li&gt;after compiling has finished, and all has gone well, need shortcuts for rofi now&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;--regarding-updates-and-changes&#34;&gt;⬛️  regarding updates and changes&lt;/h3&gt;
+&lt;p&gt;soon(TM)&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
