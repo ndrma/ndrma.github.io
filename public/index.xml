@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Andreas Makas</title>
-    <link>http://localhost:1313/</link>
+    <link>https://ndrma.github.io/</link>
     <description>Recent content on Andreas Makas</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 16 Apr 2024 22:31:58 +0100</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ndrma.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Unreal&#43;houdini&#43;linux</title>
-      <link>http://localhost:1313/blog/unreal&#43;houdini&#43;linux/</link>
+      <link>https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/</link>
       <pubDate>Tue, 16 Apr 2024 22:31:58 +0100</pubDate>
-      <guid>http://localhost:1313/blog/unreal&#43;houdini&#43;linux/</guid>
+      <guid>https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/</guid>
       <description>&lt;h3 id=&#34;--links-and-before-we-begin&#34;&gt;⬛️  links and before we begin&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running&#34;&gt;https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running&lt;/a&gt;&lt;/li&gt;
@@ -46,9 +46,9 @@
     </item>
     <item>
       <title>linux_things</title>
-      <link>http://localhost:1313/blog/linux_things/</link>
+      <link>https://ndrma.github.io/blog/linux_things/</link>
       <pubDate>Tue, 16 Apr 2024 20:23:26 +0100</pubDate>
-      <guid>http://localhost:1313/blog/linux_things/</guid>
+      <guid>https://ndrma.github.io/blog/linux_things/</guid>
       <description>&lt;p&gt;While using linux for vfx work I&amp;rsquo;ve had to do some general maintenance stuff, wrote the steps so that I understand the process better myself. I use linux mint btw.&lt;/p&gt;
 &lt;h3 id=&#34;--moving-home-and-some-partitioning-that-was-needed&#34;&gt;⬛️  Moving /home (and some partitioning that was needed)&lt;/h3&gt;
 &lt;br /&gt;
@@ -61,16 +61,16 @@ Using &lt;a href=&#34;https://gitlab.gnome.org/World/pika-backup&#34;&gt;pika&lt
     </item>
     <item>
       <title>GIS_things</title>
-      <link>http://localhost:1313/blog/gis_things/</link>
+      <link>https://ndrma.github.io/blog/gis_things/</link>
       <pubDate>Mon, 08 Apr 2024 19:08:03 +0100</pubDate>
-      <guid>http://localhost:1313/blog/gis_things/</guid>
+      <guid>https://ndrma.github.io/blog/gis_things/</guid>
       <description>lines of code / process for when trying to modify maps</description>
     </item>
     <item>
       <title>Snippets</title>
-      <link>http://localhost:1313/snippets/</link>
+      <link>https://ndrma.github.io/snippets/</link>
       <pubDate>Sun, 07 Apr 2024 00:17:30 +0100</pubDate>
-      <guid>http://localhost:1313/snippets/</guid>
+      <guid>https://ndrma.github.io/snippets/</guid>
       <description>&lt;p&gt;second&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;asdasd
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;github-repos&#34;&gt;github repos&lt;/h2&gt;
@@ -99,9 +99,9 @@ Extra info here: &lt;a href=&#34;http://longair.net/blog/2009/04/16/git-fetch-an
     </item>
     <item>
       <title>info</title>
-      <link>http://localhost:1313/info/</link>
+      <link>https://ndrma.github.io/info/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/info/</guid>
+      <guid>https://ndrma.github.io/info/</guid>
       <description>&lt;p&gt;Hello!&lt;/p&gt;
 &lt;p&gt;I&amp;rsquo;m a researcher and FX Artist currently working at &lt;a href=&#34;https://www.counter-investigations.org&#34;&gt;Forensis&lt;/a&gt;. I have been recently awarded the &lt;a href=&#34;https://daphnejournalismprize.eu/edition-2023/&#34;&gt;Daphne Caruana Galizia Prize for Journalism&lt;/a&gt;. I have previously worked at &lt;a href=&#34;https://www.forensic-architecture.org&#34;&gt;Forensic Architecture&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;My work ranges widely from 3D modelling, to data mapping and processing, to investigative research. Lately I have developed VFX for documentaries and spatial investigations. You can find my reel below:&lt;/p&gt;

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Linux on Andreas Makas</title>
-    <link>http://localhost:1313/categories/linux/</link>
+    <link>https://ndrma.github.io/categories/linux/</link>
     <description>Recent content in Linux on Andreas Makas</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 16 Apr 2024 22:31:58 +0100</lastBuildDate>
-    <atom:link href="http://localhost:1313/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ndrma.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Unreal&#43;houdini&#43;linux</title>
-      <link>http://localhost:1313/blog/unreal&#43;houdini&#43;linux/</link>
+      <link>https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/</link>
       <pubDate>Tue, 16 Apr 2024 22:31:58 +0100</pubDate>
-      <guid>http://localhost:1313/blog/unreal&#43;houdini&#43;linux/</guid>
+      <guid>https://ndrma.github.io/blog/unreal&#43;houdini&#43;linux/</guid>
       <description>&lt;h3 id=&#34;--links-and-before-we-begin&#34;&gt;⬛️  links and before we begin&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running&#34;&gt;https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running&lt;/a&gt;&lt;/li&gt;
@@ -46,9 +46,9 @@
     </item>
     <item>
       <title>linux_things</title>
-      <link>http://localhost:1313/blog/linux_things/</link>
+      <link>https://ndrma.github.io/blog/linux_things/</link>
       <pubDate>Tue, 16 Apr 2024 20:23:26 +0100</pubDate>
-      <guid>http://localhost:1313/blog/linux_things/</guid>
+      <guid>https://ndrma.github.io/blog/linux_things/</guid>
       <description>&lt;p&gt;While using linux for vfx work I&amp;rsquo;ve had to do some general maintenance stuff, wrote the steps so that I understand the process better myself. I use linux mint btw.&lt;/p&gt;
 &lt;h3 id=&#34;--moving-home-and-some-partitioning-that-was-needed&#34;&gt;⬛️  Moving /home (and some partitioning that was needed)&lt;/h3&gt;
 &lt;br /&gt;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="auto">
+<html lang="en" dir="auto" data-theme="dark">
 
 <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,7 +18,7 @@ Using pika lately and really liking it.
 ">
 <meta name="author" content="">
 <link rel="canonical" href="https://ndrma.github.io/blog/linux_things/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://ndrma.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://ndrma.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://ndrma.github.io/favicon-32x32.png">
@@ -35,25 +35,29 @@ Using pika lately and really liking it.
         }
 
     </style>
-</noscript><meta property="og:title" content="linux_things" />
-<meta property="og:description" content="While using linux for vfx work I&rsquo;ve had to do some general maintenance stuff, wrote the steps so that I understand the process better myself. I use linux mint btw.
-⬛️  Moving /home (and some partitioning that was needed)
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.querySelector("html").dataset.theme = 'light';
+    }
 
-This guide is the source of what I did: https://forums.linuxmint.com/viewtopic.php?p=2192189#p2192189
-It&rsquo;s written by a well respected member of the linux mint forums (rene, thank you), it&rsquo;s really solid.
-The guide being solid is no substitute to having backups and timeshifts, so do those.
-Using pika lately and really liking it.
-
-" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ndrma.github.io/blog/linux_things/" />
-<meta property="og:image" content="https://ndrma.github.io/blog/linux_things/blog/images/mint.jpg" /><meta property="article:section" content="blog" />
-<meta property="article:published_time" content="2024-04-16T20:23:26+01:00" />
-<meta property="article:modified_time" content="2024-04-16T20:23:26+01:00" />
-
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://ndrma.github.io/blog/linux_things/blog/images/mint.jpg" />
-<meta name="twitter:title" content="linux_things"/>
+</script><meta property="og:url" content="https://ndrma.github.io/blog/linux_things/">
+  <meta property="og:site_name" content="Andreas Makas">
+  <meta property="og:title" content="linux_things">
+  <meta property="og:description" content="While using linux for vfx work I’ve had to do some general maintenance stuff, wrote the steps so that I understand the process better myself. I use linux mint btw.
+⬛️ Moving /home (and some partitioning that was needed) This guide is the source of what I did: https://forums.linuxmint.com/viewtopic.php?p=2192189#p2192189 It’s written by a well respected member of the linux mint forums (rene, thank you), it’s really solid.
+The guide being solid is no substitute to having backups and timeshifts, so do those. Using pika lately and really liking it. ">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2024-04-16T20:23:26+01:00">
+    <meta property="article:modified_time" content="2024-04-16T20:23:26+01:00">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="Vfx">
+    <meta property="og:image" content="https://ndrma.github.io/blog/linux_things/blog/images/mint.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ndrma.github.io/blog/linux_things/blog/images/mint.jpg">
+<meta name="twitter:title" content="linux_things">
 <meta name="twitter:description" content="While using linux for vfx work I&rsquo;ve had to do some general maintenance stuff, wrote the steps so that I understand the process better myself. I use linux mint btw.
 ⬛️  Moving /home (and some partitioning that was needed)
 
@@ -62,7 +66,7 @@ It&rsquo;s written by a well respected member of the linux mint forums (rene, th
 The guide being solid is no substitute to having backups and timeshifts, so do those.
 Using pika lately and really liking it.
 
-"/>
+">
 
 
 <script type="application/ld+json">
@@ -115,21 +119,13 @@ Using pika lately and really liking it.
 }
 </script>
 </head>
-
-<body class=" dark" id="top">
-<script>
-    if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
-    }
-
-</script>
-
-<header class="header">
+<body id="top">
+    <header class="header">
     <nav class="nav">
         <div class="logo">
             <a href="https://ndrma.github.io/" accesskey="h" title="Andreas Makas (Alt + H)">Andreas Makas</a>
             <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -198,12 +194,14 @@ Using pika lately and really liking it.
     <h1 class="post-title entry-hint-parent">
       linux_things
     </h1>
-    <div class="post-meta"><span title='2024-04-16 20:23:26 +0100 BST'>April 16, 2024</span>&nbsp;·&nbsp;2 min
+    <div class="post-meta"><span title='2024-04-16 20:23:26 +0100 BST'>April 16, 2024</span>&nbsp;·&nbsp;<span>2 min</span>
 
 </div>
   </header> 
-<figure class="entry-cover"><a href="https://ndrma.github.io/blog/images/mint.jpg" target="_blank"
-            rel="noopener noreferrer"><img loading="eager" src="https://ndrma.github.io/blog/images/mint.jpg" alt="Cover Photo"></a>
+<figure class="entry-cover">
+        <a href="https://ndrma.github.io/blog/images/mint.jpg" target="_blank" rel="noopener noreferrer">
+        <img loading="eager" src="https://ndrma.github.io/blog/images/mint.jpg" alt="Cover Photo">
+        </a>
         
 </figure><div class="toc">
     <details >
@@ -285,7 +283,8 @@ In my case, I had a whole nvme, where I'd thrown everything in (assigning /home 
     </main>
     
 <footer class="footer">
-    <span>&copy; 2025 <a href="https://ndrma.github.io/">Andreas Makas</a></span>
+        <span>&copy; 2025 <a href="https://ndrma.github.io/">Andreas Makas</a></span> · 
+
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
@@ -299,9 +298,14 @@ In my case, I had a whole nvme, where I'd thrown everything in (assigning /home 
 </a>
 
 <script>
-    let menu = document.getElementById('menu')
+    let menu = document.getElementById('menu');
     if (menu) {
-        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
         menu.onscroll = function () {
             localStorage.setItem("menu-scroll-position", menu.scrollLeft);
         }
@@ -342,11 +346,12 @@ In my case, I had a whole nvme, where I'd thrown everything in (assigning /home 
 </script>
 <script>
     document.getElementById("theme-toggle").addEventListener("click", () => {
-        if (document.body.className.includes("dark")) {
-            document.body.classList.remove('dark');
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
             localStorage.setItem("pref-theme", 'light');
         } else {
-            document.body.classList.add('dark');
+            html.dataset.theme = 'dark';
             localStorage.setItem("pref-theme", 'dark');
         }
     })
