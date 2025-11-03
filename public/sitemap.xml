@@ -62,6 +62,8 @@
     <loc>http://localhost:1313/snippets/</loc>
     <lastmod>2024-04-07T00:17:30+01:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/dataviz/</loc>
+  </url><url>
     <loc>http://localhost:1313/info/</loc>
   </url><url>
     <loc>http://localhost:1313/links/</loc>
