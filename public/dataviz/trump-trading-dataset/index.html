@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="dark">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Andreas Makas</title>
+<meta name="keywords" content="">
+<meta name="description" content="Trump Trading Patterns — Portfolio Dataset
+Data compiled for web-interactive visualization. All facts traceable to BBC&rsquo;s April 2026 investigation, with corroborating sources where relevant.
+Primary source: BBC investigation, April 2026 — &ldquo;Is It Luck, Skill, or a Leak? BBC Probes Trades Before Trump&rsquo;s Announcements&rdquo;
+Corroborating sources: Yahoo Finance, BusinessToday, NPR/AP, IBTimes UK (all April 2026)
+Important sourcing note for your piece: The BBC did the primary investigation. Your piece visualizes their findings. Every caption/annotation on the interactive should credit the BBC. Language must match Verify house style: &ldquo;the BBC investigation identified&rdquo; / &ldquo;reported pattern&rdquo; / &ldquo;alleged anomaly&rdquo; — never assertive claims of insider trading, which is an unproven allegation.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/dataviz/trump-trading-dataset/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/dataviz/trump-trading-dataset/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="Andreas Makas (Alt + H)">Andreas Makas</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/" title="useful stuff">
+                    <span>useful stuff</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/dataviz" title="dataviz">
+                    <span>dataviz</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/projects" title="projects">
+                    <span>projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/snippets" title="snippets">
+                    <span>snippets</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/links" title="links">
+                    <span>links</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/info" title="info">
+                    <span>info</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search/" title="search (Alt &#43; /)" accesskey=/>
+                    <span>search</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><h1 id="trump-trading-patterns--portfolio-dataset">Trump Trading Patterns — Portfolio Dataset<a hidden class="anchor" aria-hidden="true" href="#trump-trading-patterns--portfolio-dataset">#</a></h1>
+<p>Data compiled for web-interactive visualization. All facts traceable to BBC&rsquo;s April 2026 investigation, with corroborating sources where relevant.</p>
+<p><strong>Primary source:</strong> BBC investigation, April 2026 — <em>&ldquo;Is It Luck, Skill, or a Leak? BBC Probes Trades Before Trump&rsquo;s Announcements&rdquo;</em></p>
+<p><strong>Corroborating sources:</strong> Yahoo Finance, BusinessToday, NPR/AP, IBTimes UK (all April 2026)</p>
+<p><strong>Important sourcing note for your piece:</strong> The BBC did the primary investigation. Your piece visualizes their findings. Every caption/annotation on the interactive should credit the BBC. Language must match Verify house style: &ldquo;the BBC investigation identified&rdquo; / &ldquo;reported pattern&rdquo; / &ldquo;alleged anomaly&rdquo; — never assertive claims of insider trading, which is an unproven allegation.</p>
+<hr>
+<h2 id="dataset-seven-documented-incidents">Dataset: Seven Documented Incidents<a hidden class="anchor" aria-hidden="true" href="#dataset-seven-documented-incidents">#</a></h2>
+<h3 id="incident-1--sp-500-liberation-day-tariff-pause">Incident 1 — S&amp;P 500 &ldquo;Liberation Day&rdquo; Tariff Pause<a hidden class="anchor" aria-hidden="true" href="#incident-1--sp-500-liberation-day-tariff-pause">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Field</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>id</code></td>
+          <td>sp500-liberation-day-2025</td>
+      </tr>
+      <tr>
+          <td><code>date</code></td>
+          <td>2025-04-09</td>
+      </tr>
+      <tr>
+          <td><code>announcement_time_bst</code></td>
+          <td>~18:37 BST (post-market interview release)</td>
+      </tr>
+      <tr>
+          <td><code>announcement_time_gmt</code></td>
+          <td>~17:37 GMT</td>
+      </tr>
+      <tr>
+          <td><code>instrument</code></td>
+          <td>S&amp;P 500 (tracked via SPY ETF options)</td>
+      </tr>
+      <tr>
+          <td><code>market</code></td>
+          <td>Options on S&amp;P 500 index fund</td>
+      </tr>
+      <tr>
+          <td><code>announcement_type</code></td>
+          <td>Tariff policy (90-day &ldquo;Liberation Day&rdquo; pause)</td>
+      </tr>
+      <tr>
+          <td><code>announcement_summary</code></td>
+          <td>Trump announced 90-day pause on reciprocal tariffs, excluding China</td>
+      </tr>
+      <tr>
+          <td><code>pre_announcement_window</code></td>
+          <td>~37 minutes before reporter posted</td>
+      </tr>
+      <tr>
+          <td><code>anomaly_description</code></td>
+          <td>Over $2M wagered on S&amp;P 500 rising despite 7 consecutive days of losses. Contract volume jumped from ~100s per minute earlier in day to 10,000+ per minute just after 18:00 BST</td>
+      </tr>
+      <tr>
+          <td><code>wager_size_usd</code></td>
+          <td>&gt;2,000,000</td>
+      </tr>
+      <tr>
+          <td><code>volume_baseline_per_minute</code></td>
+          <td>~100-500 (earlier in day)</td>
+      </tr>
+      <tr>
+          <td><code>volume_peak_per_minute</code></td>
+          <td>&gt;10,000</td>
+      </tr>
+      <tr>
+          <td><code>outcome_direction</code></td>
+          <td>S&amp;P 500 rose sharply after announcement</td>
+      </tr>
+      <tr>
+          <td><code>primary_source</code></td>
+          <td>BBC investigation, April 2026</td>
+      </tr>
+      <tr>
+          <td><code>notes</code></td>
+          <td>Earliest of the BBC-reported incidents. Often cited as the most clear-cut volume-spike example</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="incident-2--oil-prices--cbs-interview-war-very-complete">Incident 2 — Oil Prices / CBS Interview &ldquo;War Very Complete&rdquo;<a hidden class="anchor" aria-hidden="true" href="#incident-2--oil-prices--cbs-interview-war-very-complete">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Field</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>id</code></td>
+          <td>oil-cbs-interview-mar-2026</td>
+      </tr>
+      <tr>
+          <td><code>date</code></td>
+          <td>2026-03-09</td>
+      </tr>
+      <tr>
+          <td><code>announcement_time_et</code></td>
+          <td>15:16 Eastern Time</td>
+      </tr>
+      <tr>
+          <td><code>announcement_time_gmt</code></td>
+          <td>19:16 GMT</td>
+      </tr>
+      <tr>
+          <td><code>trade_time_gmt</code></td>
+          <td>18:29 GMT</td>
+      </tr>
+      <tr>
+          <td><code>time_delta_minutes</code></td>
+          <td>47 minutes before reporter&rsquo;s X post</td>
+      </tr>
+      <tr>
+          <td><code>instrument</code></td>
+          <td>Oil futures (short positions)</td>
+      </tr>
+      <tr>
+          <td><code>market</code></td>
+          <td>Oil futures contracts</td>
+      </tr>
+      <tr>
+          <td><code>announcement_type</code></td>
+          <td>Media interview — conflict status</td>
+      </tr>
+      <tr>
+          <td><code>announcement_summary</code></td>
+          <td>In CBS News phone interview, Trump said US-Israel-Iran war was &ldquo;very complete, pretty much&rdquo;</td>
+      </tr>
+      <tr>
+          <td><code>pre_announcement_window</code></td>
+          <td>47 minutes</td>
+      </tr>
+      <tr>
+          <td><code>anomaly_description</code></td>
+          <td>Large volume of short bets on oil prices placed 47 minutes before CBS reporter posted about interview on X. Futures contracts betting on lower prices spiked more than 4x, fell, then rose again minutes after official announcement</td>
+      </tr>
+      <tr>
+          <td><code>outcome_direction</code></td>
+          <td>Oil prices dropped approximately 25% after announcement</td>
+      </tr>
+      <tr>
+          <td><code>outcome_magnitude_pct</code></td>
+          <td>-25</td>
+      </tr>
+      <tr>
+          <td><code>primary_source</code></td>
+          <td>BBC investigation, April 2026</td>
+      </tr>
+      <tr>
+          <td><code>secondary_sources</code></td>
+          <td>BusinessToday (2026-04-21), IBTimes UK (2026-04-21)</td>
+      </tr>
+      <tr>
+          <td><code>analyst_quote</code></td>
+          <td>Oil analyst told BBC the activity appeared &ldquo;abnormal&rdquo;</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="incident-3--oil-prices--truth-social-complete-and-total-resolution">Incident 3 — Oil Prices / Truth Social &ldquo;Complete and Total Resolution&rdquo;<a hidden class="anchor" aria-hidden="true" href="#incident-3--oil-prices--truth-social-complete-and-total-resolution">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Field</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>id</code></td>
+          <td>oil-truthsocial-mar-2026</td>
+      </tr>
+      <tr>
+          <td><code>date</code></td>
+          <td>2026-03-23</td>
+      </tr>
+      <tr>
+          <td><code>announcement_time_note</code></td>
+          <td>Time of Truth Social post (specific timestamp per BBC)</td>
+      </tr>
+      <tr>
+          <td><code>trade_time_note</code></td>
+          <td>14 minutes before Truth Social post</td>
+      </tr>
+      <tr>
+          <td><code>time_delta_minutes</code></td>
+          <td>14</td>
+      </tr>
+      <tr>
+          <td><code>instrument</code></td>
+          <td>Oil futures</td>
+      </tr>
+      <tr>
+          <td><code>market</code></td>
+          <td>Oil futures contracts</td>
+      </tr>
+      <tr>
+          <td><code>announcement_type</code></td>
+          <td>Truth Social post — diplomatic status</td>
+      </tr>
+      <tr>
+          <td><code>announcement_summary</code></td>
+          <td>Trump posted that Washington had held &ldquo;VERY GOOD AND PRODUCTIVE CONVERSATIONS&rdquo; with Tehran over a &ldquo;COMPLETE AND TOTAL RESOLUTION&rdquo; to hostilities</td>
+      </tr>
+      <tr>
+          <td><code>pre_announcement_window</code></td>
+          <td>14 minutes</td>
+      </tr>
+      <tr>
+          <td><code>anomaly_description</code></td>
+          <td>&ldquo;Unusually high number&rdquo; of bets on US oil prices placed 14 minutes before Trump&rsquo;s Truth Social post</td>
+      </tr>
+      <tr>
+          <td><code>price_before_usd</code></td>
+          <td>&lt;113</td>
+      </tr>
+      <tr>
+          <td><code>price_after_usd</code></td>
+          <td>&lt;100 (then recovered to ~104)</td>
+      </tr>
+      <tr>
+          <td><code>outcome_direction</code></td>
+          <td>Oil prices fell sharply, then partially recovered</td>
+      </tr>
+      <tr>
+          <td><code>primary_source</code></td>
+          <td>BBC investigation, April 2026</td>
+      </tr>
+      <tr>
+          <td><code>contextual_note</code></td>
+          <td>Post came two days after Trump had threatened to &ldquo;obliterate&rdquo; Iran&rsquo;s power plants, making the reversal newsworthy</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="incident-4--polymarket-cluster-us-iran-strike-february-2026">Incident 4 — Polymarket Cluster: US-Iran Strike (February 2026)<a hidden class="anchor" aria-hidden="true" href="#incident-4--polymarket-cluster-us-iran-strike-february-2026">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Field</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>id</code></td>
+          <td>polymarket-iran-strike-feb-2026</td>
+      </tr>
+      <tr>
+          <td><code>date</code></td>
+          <td>2026-02 (cluster)</td>
+      </tr>
+      <tr>
+          <td><code>resolution_date</code></td>
+          <td>2026-02-28</td>
+      </tr>
+      <tr>
+          <td><code>instrument</code></td>
+          <td>Polymarket prediction market contracts</td>
+      </tr>
+      <tr>
+          <td><code>market</code></td>
+          <td>Polymarket (prediction markets)</td>
+      </tr>
+      <tr>
+          <td><code>announcement_type</code></td>
+          <td>Military strike — US attack on Iran</td>
+      </tr>
+      <tr>
+          <td><code>announcement_summary</code></td>
+          <td>Trump confirmed US strike on Iran in early hours of 28 February 2026</td>
+      </tr>
+      <tr>
+          <td><code>num_accounts</code></td>
+          <td>6</td>
+      </tr>
+      <tr>
+          <td><code>account_characteristic</code></td>
+          <td>All six accounts created in February 2026, wagered on US strike on Iran by 28 February</td>
+      </tr>
+      <tr>
+          <td><code>collective_payout_usd</code></td>
+          <td>~1,200,000</td>
+      </tr>
+      <tr>
+          <td><code>post_event_behavior</code></td>
+          <td>Five of six users placed no further bets</td>
+      </tr>
+      <tr>
+          <td><code>data_source</code></td>
+          <td>Blockchain analytics: Bubblemaps (cited by BBC)</td>
+      </tr>
+      <tr>
+          <td><code>primary_source</code></td>
+          <td>BBC investigation, April 2026</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="incident-5--polymarket-us-iran-ceasefire-april-2026">Incident 5 — Polymarket: US-Iran Ceasefire (April 2026)<a hidden class="anchor" aria-hidden="true" href="#incident-5--polymarket-us-iran-ceasefire-april-2026">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Field</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>id</code></td>
+          <td>polymarket-iran-ceasefire-apr-2026</td>
+      </tr>
+      <tr>
+          <td><code>date</code></td>
+          <td>2026-04-07</td>
+      </tr>
+      <tr>
+          <td><code>instrument</code></td>
+          <td>Polymarket prediction market contracts</td>
+      </tr>
+      <tr>
+          <td><code>market</code></td>
+          <td>Polymarket</td>
+      </tr>
+      <tr>
+          <td><code>announcement_type</code></td>
+          <td>Diplomatic — ceasefire announcement</td>
+      </tr>
+      <tr>
+          <td><code>announcement_summary</code></td>
+          <td>US-Iran ceasefire announced by Washington and Tehran on 7 April 2026</td>
+      </tr>
+      <tr>
+          <td><code>anomaly_description</code></td>
+          <td>One account from the February cluster subsequently made $163,000 by correctly betting on ceasefire before announcement. Separately, AP reported at least 50 brand new accounts placed substantial bets on US-Iran ceasefire in the hours/minutes before Trump announced it on social media</td>
+      </tr>
+      <tr>
+          <td><code>payout_single_account_usd</code></td>
+          <td>163,000</td>
+      </tr>
+      <tr>
+          <td><code>ap_cluster_accounts</code></td>
+          <td>≥50</td>
+      </tr>
+      <tr>
+          <td><code>ap_cluster_note</code></td>
+          <td>These were the sole bets made on Polymarket through these accounts</td>
+      </tr>
+      <tr>
+          <td><code>primary_source</code></td>
+          <td>BBC investigation, April 2026</td>
+      </tr>
+      <tr>
+          <td><code>secondary_sources</code></td>
+          <td>AP/NPR (2026-04-10)</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="incident-6--polymarket-burdensome-mix-account">Incident 6 — Polymarket: &ldquo;Burdensome-Mix&rdquo; Account<a hidden class="anchor" aria-hidden="true" href="#incident-6--polymarket-burdensome-mix-account">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Field</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>id</code></td>
+          <td>polymarket-burdensome-mix</td>
+      </tr>
+      <tr>
+          <td><code>date</code></td>
+          <td>2026 (specific date not disclosed in reporting)</td>
+      </tr>
+      <tr>
+          <td><code>instrument</code></td>
+          <td>Polymarket prediction market contracts</td>
+      </tr>
+      <tr>
+          <td><code>market</code></td>
+          <td>Polymarket</td>
+      </tr>
+      <tr>
+          <td><code>account_name</code></td>
+          <td>&ldquo;Burdensome-Mix&rdquo;</td>
+      </tr>
+      <tr>
+          <td><code>initial_wager_usd</code></td>
+          <td>32,500</td>
+      </tr>
+      <tr>
+          <td><code>final_payout_usd</code></td>
+          <td>436,000</td>
+      </tr>
+      <tr>
+          <td><code>return_multiple</code></td>
+          <td>~13.4x</td>
+      </tr>
+      <tr>
+          <td><code>anomaly_description</code></td>
+          <td>BBC flagged the Polymarket account &ldquo;Burdensome-Mix&rdquo; which turned $32,500 in wagers into $436,000</td>
+      </tr>
+      <tr>
+          <td><code>primary_source</code></td>
+          <td>BBC investigation, April 2026</td>
+      </tr>
+      <tr>
+          <td><code>notes</code></td>
+          <td>Specific trades not detailed in public reporting beyond the stake-to-payout ratio</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h3 id="incident-7--polymarket-maduro-capture-january-2026">Incident 7 — Polymarket: Maduro Capture (January 2026)<a hidden class="anchor" aria-hidden="true" href="#incident-7--polymarket-maduro-capture-january-2026">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Field</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>id</code></td>
+          <td>polymarket-maduro-jan-2026</td>
+      </tr>
+      <tr>
+          <td><code>date</code></td>
+          <td>2026-01</td>
+      </tr>
+      <tr>
+          <td><code>instrument</code></td>
+          <td>Polymarket prediction market contracts</td>
+      </tr>
+      <tr>
+          <td><code>market</code></td>
+          <td>Polymarket</td>
+      </tr>
+      <tr>
+          <td><code>announcement_type</code></td>
+          <td>Political — Venezuelan leader removal from office</td>
+      </tr>
+      <tr>
+          <td><code>announcement_summary</code></td>
+          <td>Venezuelan president Nicolás Maduro captured</td>
+      </tr>
+      <tr>
+          <td><code>anomaly_description</code></td>
+          <td>Anonymous Polymarket user made $400,000 profit by betting Maduro would be out of office, hours before the capture</td>
+      </tr>
+      <tr>
+          <td><code>payout_usd</code></td>
+          <td>400,000</td>
+      </tr>
+      <tr>
+          <td><code>time_delta</code></td>
+          <td>Hours before event</td>
+      </tr>
+      <tr>
+          <td><code>primary_source</code></td>
+          <td>AP/NPR (2026-04-10)</td>
+      </tr>
+      <tr>
+          <td><code>note</code></td>
+          <td>Not in original BBC five, but cited by AP/NPR in related coverage; decide whether to include as BBC&rsquo;s scope is the &ldquo;five incidents&rdquo; focus</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="json-export-ready-for-d3js">JSON Export (ready for D3/JS)<a hidden class="anchor" aria-hidden="true" href="#json-export-ready-for-d3js">#</a></h2>
+<p>Copy this directly into a <code>data.json</code> file for your interactive:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;meta&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;Trades Before the Announcements&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;subtitle&#34;</span>: <span style="color:#e6db74">&#34;Patterns of unusual trading activity preceding Trump market-moving statements&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;primary_source&#34;</span>: <span style="color:#e6db74">&#34;BBC investigation, April 2026&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;primary_source_url&#34;</span>: <span style="color:#e6db74">&#34;https://www.bbc.com/&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;compiled&#34;</span>: <span style="color:#e6db74">&#34;2026-04-23&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;sourcing_note&#34;</span>: <span style="color:#e6db74">&#34;Data compiled from BBC investigation and corroborating reporting (Yahoo Finance, AP/NPR, BusinessToday, IBTimes). Values reflect figures as reported.&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;incidents&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;sp500-liberation-day-2025&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;date&#34;</span>: <span style="color:#e6db74">&#34;2025-04-09&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;label&#34;</span>: <span style="color:#e6db74">&#34;S&amp;P 500 tariff pause&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;market&#34;</span>: <span style="color:#e6db74">&#34;S&amp;P 500 options&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;announcement&#34;</span>: <span style="color:#e6db74">&#34;90-day &#39;Liberation Day&#39; tariff pause&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;lead_minutes&#34;</span>: <span style="color:#ae81ff">37</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;wager_usd&#34;</span>: <span style="color:#ae81ff">2000000</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;volume_baseline&#34;</span>: <span style="color:#ae81ff">400</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;volume_peak&#34;</span>: <span style="color:#ae81ff">10000</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;outcome_description&#34;</span>: <span style="color:#e6db74">&#34;S&amp;P 500 rose sharply after announcement&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;source_primary&#34;</span>: <span style="color:#e6db74">&#34;BBC&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;source_secondary&#34;</span>: [<span style="color:#e6db74">&#34;Yahoo Finance&#34;</span>, <span style="color:#e6db74">&#34;IBTimes UK&#34;</span>]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;oil-cbs-mar-2026&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;date&#34;</span>: <span style="color:#e6db74">&#34;2026-03-09&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;label&#34;</span>: <span style="color:#e6db74">&#34;Oil / CBS interview&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;market&#34;</span>: <span style="color:#e6db74">&#34;Oil futures&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;announcement&#34;</span>: <span style="color:#e6db74">&#34;&#39;War very complete&#39; CBS interview&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;lead_minutes&#34;</span>: <span style="color:#ae81ff">47</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;outcome_description&#34;</span>: <span style="color:#e6db74">&#34;Oil prices fell approximately 25%&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;outcome_pct&#34;</span>: <span style="color:#ae81ff">-25</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;source_primary&#34;</span>: <span style="color:#e6db74">&#34;BBC&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;source_secondary&#34;</span>: [<span style="color:#e6db74">&#34;BusinessToday&#34;</span>, <span style="color:#e6db74">&#34;IBTimes UK&#34;</span>]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;oil-truthsocial-mar-2026&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;date&#34;</span>: <span style="color:#e6db74">&#34;2026-03-23&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;label&#34;</span>: <span style="color:#e6db74">&#34;Oil / Truth Social post&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;market&#34;</span>: <span style="color:#e6db74">&#34;Oil futures&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;announcement&#34;</span>: <span style="color:#e6db74">&#34;&#39;Complete and total resolution&#39; Truth Social post&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;lead_minutes&#34;</span>: <span style="color:#ae81ff">14</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;price_before&#34;</span>: <span style="color:#ae81ff">113</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;price_after&#34;</span>: <span style="color:#ae81ff">100</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;price_recovered&#34;</span>: <span style="color:#ae81ff">104</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;outcome_description&#34;</span>: <span style="color:#e6db74">&#34;Oil fell from under $113 to below $100, partially recovered&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;source_primary&#34;</span>: <span style="color:#e6db74">&#34;BBC&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;polymarket-iran-strike-feb-2026&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;date&#34;</span>: <span style="color:#e6db74">&#34;2026-02-28&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;label&#34;</span>: <span style="color:#e6db74">&#34;Polymarket: US strike on Iran&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;market&#34;</span>: <span style="color:#e6db74">&#34;Polymarket&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;announcement&#34;</span>: <span style="color:#e6db74">&#34;US strike on Iran confirmed&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;num_accounts&#34;</span>: <span style="color:#ae81ff">6</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;payout_usd&#34;</span>: <span style="color:#ae81ff">1200000</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;outcome_description&#34;</span>: <span style="color:#e6db74">&#34;Six accounts created February 2026, all wagered on US strike by Feb 28&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;source_primary&#34;</span>: <span style="color:#e6db74">&#34;BBC&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;source_secondary&#34;</span>: [<span style="color:#e6db74">&#34;Bubblemaps&#34;</span>]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;polymarket-iran-ceasefire-apr-2026&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;date&#34;</span>: <span style="color:#e6db74">&#34;2026-04-07&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;label&#34;</span>: <span style="color:#e6db74">&#34;Polymarket: US-Iran ceasefire&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;market&#34;</span>: <span style="color:#e6db74">&#34;Polymarket&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;announcement&#34;</span>: <span style="color:#e6db74">&#34;US-Iran ceasefire announced&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;num_accounts&#34;</span>: <span style="color:#ae81ff">50</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;single_account_payout_usd&#34;</span>: <span style="color:#ae81ff">163000</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;outcome_description&#34;</span>: <span style="color:#e6db74">&#34;50+ new accounts placed substantial bets in hours before announcement&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;source_primary&#34;</span>: <span style="color:#e6db74">&#34;AP/NPR&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;source_secondary&#34;</span>: [<span style="color:#e6db74">&#34;BBC&#34;</span>]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;polymarket-burdensome-mix&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;date&#34;</span>: <span style="color:#e6db74">&#34;2026&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;label&#34;</span>: <span style="color:#e6db74">&#34;Polymarket: &#39;Burdensome-Mix&#39; account&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;market&#34;</span>: <span style="color:#e6db74">&#34;Polymarket&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;announcement&#34;</span>: <span style="color:#e6db74">&#34;Various&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;initial_wager_usd&#34;</span>: <span style="color:#ae81ff">32500</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;final_payout_usd&#34;</span>: <span style="color:#ae81ff">436000</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;return_multiple&#34;</span>: <span style="color:#ae81ff">13.4</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;outcome_description&#34;</span>: <span style="color:#e6db74">&#34;Account turned $32,500 into $436,000 across wagers&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;source_primary&#34;</span>: <span style="color:#e6db74">&#34;BBC&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<h2 id="csv-export-for-spreadsheet-work">CSV Export (for spreadsheet work)<a hidden class="anchor" aria-hidden="true" href="#csv-export-for-spreadsheet-work">#</a></h2>
+<p>For Guardian&rsquo;s &ldquo;restructuring data within a spreadsheet&rdquo; ask, you might want to open this in a spreadsheet first, reshape it, then export. Here&rsquo;s a tidy CSV structure:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csv" data-lang="csv"><span style="display:flex;"><span><span style="color:#e6db74">id</span>,<span style="color:#e6db74">date</span>,<span style="color:#e6db74">label</span>,<span style="color:#e6db74">market</span>,<span style="color:#e6db74">announcement</span>,<span style="color:#e6db74">lead_minutes</span>,<span style="color:#e6db74">wager_usd</span>,<span style="color:#e6db74">payout_usd</span>,<span style="color:#e6db74">outcome_pct</span>,<span style="color:#e6db74">source_primary</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">sp500-liberation-day-2025</span>,<span style="color:#e6db74">2025-04-09</span>,<span style="color:#e6db74">S&amp;P 500 tariff pause</span>,<span style="color:#e6db74">S&amp;P 500 options</span>,<span style="color:#e6db74">90-day tariff pause</span>,<span style="color:#e6db74">37</span>,<span style="color:#e6db74">2000000</span>,,,<span style="color:#e6db74">BBC</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">oil-cbs-mar-2026</span>,<span style="color:#e6db74">2026-03-09</span>,<span style="color:#e6db74">Oil / CBS interview</span>,<span style="color:#e6db74">Oil futures</span>,<span style="color:#e6db74">&#34;&#39;War very complete&#39; CBS interview&#34;</span>,<span style="color:#e6db74">47</span>,,,<span style="color:#e6db74">-25</span>,<span style="color:#e6db74">BBC</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">oil-truthsocial-mar-2026</span>,<span style="color:#e6db74">2026-03-23</span>,<span style="color:#e6db74">Oil / Truth Social</span>,<span style="color:#e6db74">Oil futures</span>,<span style="color:#e6db74">&#34;&#39;Complete and total resolution&#39; post&#34;</span>,<span style="color:#e6db74">14</span>,,,,<span style="color:#e6db74">BBC</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">polymarket-iran-strike-feb-2026</span>,<span style="color:#e6db74">2026-02-28</span>,<span style="color:#e6db74">Polymarket: US strike</span>,<span style="color:#e6db74">Polymarket</span>,<span style="color:#e6db74">US strike on Iran confirmed</span>,,,<span style="color:#e6db74">1200000</span>,,<span style="color:#e6db74">BBC</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">polymarket-iran-ceasefire-apr-2026</span>,<span style="color:#e6db74">2026-04-07</span>,<span style="color:#e6db74">Polymarket: ceasefire</span>,<span style="color:#e6db74">Polymarket</span>,<span style="color:#e6db74">US-Iran ceasefire announced</span>,,,<span style="color:#e6db74">163000</span>,,<span style="color:#e6db74">AP/NPR</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">polymarket-burdensome-mix</span>,<span style="color:#e6db74">2026</span>,<span style="color:#e6db74">&#34;&#39;Burdensome-Mix&#39; account&#34;</span>,<span style="color:#e6db74">Polymarket</span>,<span style="color:#e6db74">Various</span>,,<span style="color:#e6db74">32500</span>,<span style="color:#e6db74">436000</span>,,<span style="color:#e6db74">BBC</span>
+</span></span></code></pre></div><hr>
+<h2 id="supporting-facts-and-quotes-for-captions--explanatory-panels">Supporting Facts and Quotes (for captions / explanatory panels)<a hidden class="anchor" aria-hidden="true" href="#supporting-facts-and-quotes-for-captions--explanatory-panels">#</a></h2>
+<p><strong>Regulatory context:</strong></p>
+<ul>
+<li>CFTC (Commodity Futures Trading Commission) chairman Michael Selig, appointed April 17 2026, told a Congressional committee the agency is investigating &ldquo;hundreds of possible cases&rdquo; — source: BusinessToday (2026-04-21)</li>
+<li>SEC declined to comment on the BBC&rsquo;s findings</li>
+<li>CFTC did not respond to BBC&rsquo;s request for comment</li>
+</ul>
+<p><strong>Denials / statements:</strong></p>
+<ul>
+<li>White House spokesman Davis Ingle told the BBC: any implication that administration officials engaged in such activity &ldquo;without evidence is baseless and irresponsible reporting&rdquo;</li>
+<li>White House reportedly sent internal email warning staff against betting on prediction markets (March 2026)</li>
+</ul>
+<p><strong>Industry statements:</strong></p>
+<ul>
+<li>Polymarket publicly stated it &ldquo;sets, maintains, and enforces the highest standards of market integrity&rdquo; and &ldquo;proactively works with regulators&rdquo;</li>
+<li>Polymarket and Kalshi introduced new rules in March 2026 aimed at preventing insider trading</li>
+</ul>
+<p><strong>Political relationships (if relevant to your piece):</strong></p>
+<ul>
+<li>Donald Trump Jr. is an investor in Polymarket and sits on its advisory board</li>
+<li>Trump Jr. also acts as a strategic advisor to Kalshi</li>
+<li><em>Source:</em> BBC investigation</li>
+</ul>
+<p><strong>Congressional reaction:</strong></p>
+<ul>
+<li>Rep. Ritchie Torres (D-NY) to AP: &ldquo;What is the statistical likelihood that anyone other than an insider trader placed a winning bet 12 minutes before a market-moving presidential announcement&hellip; God, or an insider trader. And something tells me that God is not placing bets around Donald Trump&rsquo;s posts on Truth Social.&rdquo;</li>
+<li>Senator Murphy alleged &ldquo;corrupt&rdquo; insider trading (context of Iran post)</li>
+</ul>
+<p><strong>Jurisdictional note (useful framing):</strong>
+Prediction markets fall under CFTC jurisdiction. Traditional securities (S&amp;P 500, oil futures) under CFTC/SEC dual jurisdiction.</p>
+<hr>
+<h2 id="language-and-framing-guide-for-your-piece">Language and Framing Guide for Your Piece<a hidden class="anchor" aria-hidden="true" href="#language-and-framing-guide-for-your-piece">#</a></h2>
+<p><strong>Do use:</strong></p>
+<ul>
+<li>&ldquo;BBC investigation identified&rdquo;</li>
+<li>&ldquo;Reported pattern of unusual trading activity&rdquo;</li>
+<li>&ldquo;Bets placed [X] minutes before announcement&rdquo;</li>
+<li>&ldquo;Alleged anomaly&rdquo;</li>
+<li>&ldquo;The BBC reported that&hellip;&rdquo;</li>
+<li>&ldquo;Analysts quoted by the BBC called the activity &lsquo;abnormal&rsquo;&rdquo;</li>
+</ul>
+<p><strong>Don&rsquo;t use:</strong></p>
+<ul>
+<li>&ldquo;Insider trading&rdquo; as an assertion (it&rsquo;s an allegation, no prosecutions)</li>
+<li>&ldquo;Trump&rsquo;s team&rdquo; or &ldquo;administration officials traded&rdquo; (not proven)</li>
+<li>&ldquo;Leak&rdquo; as assertion (in the headline of the BBC piece it&rsquo;s a question, not a claim)</li>
+</ul>
+<p><strong>For every number on the interactive, include attribution.</strong> The tooltip or detail view for each incident should show the primary source. &ldquo;Source: BBC investigation, April 2026&rdquo; at minimum, with secondary sources where relevant.</p>
+<hr>
+<h2 id="production-checklist-for-piece-3-interactive">Production Checklist for Piece 3 (Interactive)<a hidden class="anchor" aria-hidden="true" href="#production-checklist-for-piece-3-interactive">#</a></h2>
+<ul>
+<li><input disabled="" type="checkbox"> <code>data.json</code> file created from the JSON export above</li>
+<li><input disabled="" type="checkbox"> Interactive framework chosen (D3 / Observable Plot / vanilla)</li>
+<li><input disabled="" type="checkbox"> Timeline component: horizontal, one marker per incident, dates visible</li>
+<li><input disabled="" type="checkbox"> Detail component: click/tap → shows incident detail card with <code>announcement</code>, <code>lead_minutes</code>, <code>outcome_description</code>, sources</li>
+<li><input disabled="" type="checkbox"> Mobile responsive tested at 375px</li>
+<li><input disabled="" type="checkbox"> All attributions visible (per-incident and overall)</li>
+<li><input disabled="" type="checkbox"> Citation footer: &ldquo;Data compiled from BBC investigation (April 2026); corroborating reporting from AP/NPR, BusinessToday, IBTimes UK, Yahoo Finance&rdquo;</li>
+<li><input disabled="" type="checkbox"> Screenshot still exports at 2-3 key states</li>
+</ul>
+<hr>
+<h2 id="what-this-dataset-does-and-doesnt-do">What This Dataset Does and Doesn&rsquo;t Do<a hidden class="anchor" aria-hidden="true" href="#what-this-dataset-does-and-doesnt-do">#</a></h2>
+<p><strong>Does:</strong></p>
+<ul>
+<li>Give you a ready-to-deploy JSON and CSV for the interactive</li>
+<li>Provide proper attribution for every data point</li>
+<li>Give you ready language for captions, tooltips, and the cover letter</li>
+<li>Flag what&rsquo;s solid (BBC-reported) vs what&rsquo;s adjacent (AP-reported)</li>
+</ul>
+<p><strong>Doesn&rsquo;t:</strong></p>
+<ul>
+<li>Replace primary research (it is compiled from news reports, not underlying market data)</li>
+<li>Include tick-level price series (you&rsquo;d need TradingView/Yahoo Finance if you want to build actual price charts inside the detail view)</li>
+<li>Claim anything the BBC didn&rsquo;t claim (important for defensibility)</li>
+</ul>
+<p><strong>If you want tick-level price data for a detail view:</strong></p>
+<ul>
+<li>S&amp;P 500 (SPY) intraday for 9 April 2025: available on Yahoo Finance historical data, free</li>
+<li>Oil futures (WTI / Brent) intraday for 9 March and 23 March 2026: Yahoo Finance or TradingView, free tier sufficient</li>
+<li>This would add ~2 hours to your Day 4 but would make the detail views substantially richer. Optional.</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/">Andreas Makas</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

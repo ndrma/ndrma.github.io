@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trades before the announcements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafafa;
+    --fg: #1a1a1a;
+    --fg-muted: #666666;
+    --fg-subtle: #999999;
+    --rule: #e0e0e0;
+    --rule-soft: #ededed;
+    --rule-strong: #333333;
+    --accent-equities: #3A8A8F;
+    --accent-commodities: #C89B3C;
+    --accent-prediction: #8A5A7A;
+    --median-line: #d63847;
+    --event-line: #c4c4c4;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    padding: 2rem 1.25rem 0.25rem;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  header {
+    margin-bottom: 2rem;
+    max-width: 720px;
+  }
+
+  .kicker {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: var(--fg-muted);
+    line-height: 1.5;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin: 1.5rem 0 0.5rem;
+    font-size: 0.8125rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--fg-muted);
+  }
+
+  .legend-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-item-line {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--fg-muted);
+  }
+
+  .legend-line-swatch {
+    width: 18px;
+    height: 2px;
+    background: repeating-linear-gradient(to right, var(--median-line) 0 4px, transparent 4px 7px);
+    flex-shrink: 0;
+  }
+
+  .legend-event-swatch {
+    width: 1px;
+    height: 14px;
+    background: var(--event-line);
+    flex-shrink: 0;
+  }
+
+  .legend-notes {
+    font-size: 0.75rem;
+    color: var(--fg-subtle);
+    margin-top: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .legend-notes span {
+    display: inline-block;
+    margin-right: 1rem;
+  }
+
+  /* Chart area — top padding for event labels, bottom padding for month labels */
+  .chart {
+    position: relative;
+    margin: 2.5rem 0 1rem;
+    padding: 4rem 0 2.5rem;
+  }
+
+  .chart-inner {
+    position: relative;
+    margin: 0 3rem 0 3.5rem;
+    height: 460px;
+  }
+
+  /* Y-axis zones */
+  .zone {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px dashed var(--rule);
+    font-size: 0.6875rem;
+    color: var(--fg-subtle);
+    padding-top: 0.25rem;
+  }
+
+  .zone-label {
+    position: absolute;
+    left: -3rem;
+    top: 0.25rem;
+    width: 2.5rem;
+    font-size: 0.625rem;
+    color: var(--fg-muted);
+    text-align: right;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+  }
+
+  /* Event marker: single uniform light gray vertical line
+     Runs from the axis up past the top of chart-inner into the label area. */
+
+  .event-line {
+    position: absolute;
+    bottom: 0;
+    width: 1px;
+    background: var(--event-line);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Event labels: sit in the top padding of .chart, above chart-inner.
+     Positioned absolutely within chart-inner, anchored to bottom: 100%.
+     Alignment (left/right) chooses which side of the line the label sits. */
+  .event-label {
+    position: absolute;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--fg);
+    line-height: 1.3;
+    width: 120px;
+    background: var(--bg);
+    cursor: pointer;
+  }
+
+  .event-label:hover .event-date,
+  .event-label.active .event-date {
+    color: var(--fg);
+  }
+
+  /* Vertical slots: 0 = top row, 1 = lower row.  */
+  .event-label.slot-0 {
+    bottom: calc(100% + 2rem);
+  }
+
+  .event-label.slot-1 {
+    bottom: calc(100% + 0.3rem);
+  }
+
+  .event-label.align-right {
+    padding-left: 0.4rem;
+    text-align: left;
+  }
+
+  .event-label.align-left {
+    transform: translateX(-100%);
+    padding-right: 0.4rem;
+    text-align: right;
+  }
+
+  .event-label .event-date {
+    display: block;
+    color: var(--fg-muted);
+    font-weight: 600;
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 0.15rem;
+  }
+
+  /* Median line */
+  .median-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0;
+    border-top: 1.5px dashed var(--median-line);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .median-line-label {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -1.15rem;
+    background: var(--bg);
+    padding: 0 0.5rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: var(--median-line);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* Timeline axis at bottom */
+  .timeline-axis {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--fg);
+  }
+
+  .timeline-axis::before,
+  .timeline-axis::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 1px;
+    height: 7px;
+    background: var(--fg);
+  }
+
+  .timeline-axis::before { left: 0; }
+  .timeline-axis::after { right: 0; }
+
+  .month-tick {
+    position: absolute;
+    bottom: 0;
+    width: 1px;
+    height: 4px;
+    background: var(--rule-strong);
+    opacity: 0.3;
+  }
+
+  .quarter-label {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  .y-axis-title {
+    position: absolute;
+    left: -3.5rem;
+    top: 50%;
+    transform: rotate(-90deg) translateX(50%);
+    transform-origin: right top;
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* Markers */
+  .markers-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+  }
+
+  .marker {
+    position: absolute;
+    transform: translate(-50%, 50%);
+    cursor: pointer;
+    padding: 0;
+    background: transparent;
+    border: none;
+  }
+
+  .marker:focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 4px;
+    border-radius: 50%;
+  }
+
+  .marker-dot {
+    border-radius: 50%;
+    opacity: 0.82;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    display: block;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+  }
+
+  .marker:hover .marker-dot,
+  .marker:focus .marker-dot,
+  .marker.active .marker-dot {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+
+  /* Tooltip */
+  .tooltip {
+    position: absolute;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1rem 1.125rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+    width: min(360px, calc(100vw - 2rem));
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 50;
+    color: var(--fg);
+  }
+
+  .tooltip.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .tooltip-date {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .tooltip-market {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .tooltip-market-swatch {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .tooltip-label {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+  }
+
+  .tooltip-stats {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 0.75rem;
+    margin: 0.75rem 0;
+    padding: 0.625rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .tooltip-stat-label {
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+  }
+
+  .tooltip-stat-value {
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .tooltip-stat-value.ratio {
+    color: var(--median-line);
+  }
+
+  .tooltip-detail {
+    font-size: 0.8125rem;
+    color: var(--fg);
+    line-height: 1.5;
+    margin-bottom: 0.625rem;
+  }
+
+  .tooltip-announcement {
+    font-weight: 500;
+  }
+
+  .tooltip-sources {
+    font-size: 0.6875rem;
+    color: var(--fg-muted);
+    line-height: 1.4;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+    line-height: 1.55;
+    max-width: 720px;
+  }
+
+  footer p {
+    margin-bottom: 0.625rem;
+  }
+
+  footer strong {
+    color: var(--fg);
+    font-weight: 600;
+  }
+
+  .instruction {
+    font-size: 0.75rem;
+    color: var(--fg-subtle);
+    font-style: italic;
+    margin-top: 1.5rem;
+  }
+
+  /* Mobile */
+  @media (max-width: 720px) {
+    body {
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .chart {
+      padding: 3.5rem 0 2.5rem;
+    }
+
+    .chart-inner {
+      margin: 0 2rem 0 2.75rem;
+      height: 420px;
+    }
+
+    .y-axis-title {
+      left: -2.75rem;
+    }
+
+    .zone-label {
+      left: -2.5rem;
+      width: 2rem;
+      font-size: 0.5625rem;
+    }
+
+    .median-line-label,
+    .event-label {
+      font-size: 0.5625rem;
+    }
+
+    .event-label {
+      width: 95px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="kicker">Portfolio piece · April 2026</div>
+  <h1>Trades before the announcements</h1>
+  <p class="subtitle">Documented instances of trading activity preceding Trump foreign policy and market moving announcements during his second term. The vertical position of each circle shows how close the trade was placed to the event it appeared to anticipate. Compiled from reporting by the BBC, Bloomberg, the Financial Times, Reuters, The New York Times, and others.</p>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-swatch" style="background: var(--accent-equities)"></span>Equities / stock index</span>
+    <span class="legend-item"><span class="legend-swatch" style="background: var(--accent-commodities)"></span>Commodities / oil</span>
+    <span class="legend-item"><span class="legend-swatch" style="background: var(--accent-prediction)"></span>Prediction markets</span>
+    <span class="legend-item-line"><span class="legend-line-swatch"></span>Median lead time</span>
+    <span class="legend-item-line"><span class="legend-event-swatch"></span>Key events</span>
+  </div>
+  <p class="legend-notes">
+    <span>Circle size reflects scale of wager or payout where publicly disclosed/accessible.</span>
+  </p>
+</header>
+
+<div class="chart">
+  <div class="chart-inner" id="chart-inner">
+    <div class="y-axis-title">Lead time before event</div>
+    <div class="markers-layer" id="markers"></div>
+    <div class="timeline-axis" id="timeline-axis"></div>
+  </div>
+  <p class="instruction">Hover or tap a circle or event label to see details.</p>
+</div>
+
+<div class="tooltip" id="tooltip" role="tooltip" aria-hidden="true"></div>
+
+<footer>
+
+  <p><strong>Framing.</strong> Incidents documented in reporting. Insider trading remains an allegation; no prosecutions have occured. The White House has denied any wrongdoing, stating that any implication officials are engaged in such activity "without evidence is baseless and irresponsible reporting."</p>
+  <p><strong>About the median line.</strong> Half of all recorded trades were placed within this lead time of their event, half were placed earlier.</p>
+  <p><strong>About return ratio.</strong> Shown where both a wager and payout are publicly disclosed. Futures trades report notional value but not a cleanly comparable payout.</p>
+  <p><strong>Regulatory context.</strong> CFTC chairman Michael Selig told Congress the agency is investigating "hundreds of possible cases." The DOJ Public Integrity Section was reduced from 36 lawyers to two in 2025. The SEC's top enforcement official resigned in early April 2026 after clashing with leadership over cases close to the president's circle.</p>
+  <p><strong>Sources.</strong> BBC investigation (April 2026); Bloomberg; FT; Reuters; New York Times; CBS; NPR; AP; AJ; The New Yorker; TIME; Fortune; Axios; CNN; Dune Analytics; statements Senators and Representatives; Bubblemaps; commentary from Paul Krugman.</p>
+  <p style="margin-top: 1rem;">Data compiled on 22 April 2026. Portfolio piece by Andreas Makas.</p>
+
+</footer>
+
+</div>
+
+<script>
+const DATA = {
+  markets: {
+    equities: { label: "Equities", color: "#3A8A8F" },
+    commodities: { label: "Commodities / oil", color: "#C89B3C" },
+    prediction: { label: "Prediction markets", color: "#8A5A7A" }
+  },
+  zones: [
+    { id: "minutes", label: "Minutes", range: [0.04, 0.30], description: "Under 1 hour before event", max_minutes: 60 },
+    { id: "hours",   label: "Hours",   range: [0.34, 0.52], description: "Same day, hours before" },
+    { id: "days",    label: "Days",    range: [0.56, 0.74], description: "Days before event" },
+    { id: "weeks",   label: "Weeks+",  range: [0.78, 0.92], description: "Weeks before event" }
+  ],
+  events: [
+    // align: "left" = label text flows leftward from the line (line on the right edge of label)
+    // align: "right" = label text flows rightward from the line (line on the left edge of label)
+    // omit align to use auto fallback (based on distance to right edge of chart)
+    // vertical_slot: 0 = top row (higher), 1 = lower row. default 0.
+    // detail: short one-liner shown in the hover callout.
+    { date: "2025-03-04", label: "Tariffs", vertical_slot: 0,
+      detail: "Trump announced 25% tariffs on Mexico and Canada, plus an additional 10% on China." },
+    { date: "2025-04-09", label: "Liberation Day pause", vertical_slot: 1,
+      detail: "The administration paused planned tariffs for 90 days, excluding China — sending the S&P up ~9.5%." },
+    { date: "2026-01-03", label: "Maduro's capture", vertical_slot: 0, align: "left",
+      detail: "Trump administration forces captured Venezuelan president Nicolás Maduro." },
+    { date: "2026-02-28", label: "US strikes Iran", vertical_slot: 1,
+      detail: "Trump confirmed US military strikes on Iran in the early hours of 28 February." },
+    { date: "2026-03-23", label: "Iran 'resolution' post", vertical_slot: 0,
+      detail: "Trump posted on Truth Social of 'productive conversations' with Iran — later denied by Iranian officials." },
+    { date: "2026-04-07", label: "US–Iran ceasefire", vertical_slot: 0, align: "right",
+      detail: "Trump announced a US–Iran ceasefire on Truth Social at ~6:30 PM ET." }
+  ],
+  incidents: [
+    {
+      id: "lawmaker-trades-mar-2025",
+      date: "2025-03-03",
+      date_display: "3 March 2025",
+      market: "equities",
+      label: "Lawmaker disclosures before tariff announcement",
+      announcement_summary: "Trump announced additional 10% tariff on China, 25% on Mexico and Canada (4 March)",
+      lead_zone: "days",
+      outcome_summary: "16 lawmakers from both parties reported trades that day",
+      detail: "On 3 March 2025 — reported as the worst market day of the year to date — 16 lawmakers (both Democrat and Republican) reported hundreds of thousands of dollars in stock trades, the highest single-day lawmaker trading disclosure through mid-April. Trump's tariff announcement on Mexico, Canada, and additional China duties came the following day.",
+      sources: ["CNN"]
+    },
+    {
+      id: "sp500-buy-stocks-2025",
+      date: "2025-04-04",
+      date_display: "4 April 2025",
+      market: "equities",
+      label: "'Buy stocks now' post",
+      announcement_summary: "Trump publicly urged investors to 'buy stocks now' shortly before administration paused tariffs for 90 days",
+      lead_zone: "days",
+      outcome_summary: "S&P rose significantly after subsequent tariff pause",
+      detail: "In early April 2025, Trump publicly urged people to 'buy stocks now' shortly before his administration paused planned tariffs for 90 days. The public statement preceded the formal policy announcement and was separately noted alongside other tariff-related trading patterns.",
+      sources: ["Mirror US"]
+    },
+    {
+      id: "sp500-liberation-day-2025",
+      date: "2025-04-09",
+      date_display: "9 April 2025",
+      market: "equities",
+      label: "S&P 500 tariff pause",
+      announcement_summary: "Trump announced 90-day 'Liberation Day' tariff pause, excluding China",
+      lead_minutes: 18,
+      wager_usd: 2000000,
+      payout_usd: 21000000,
+      outcome_summary: "S&P 500 jumped ~9.5% in a day; SPY call options went from $2.14M to $21M",
+      detail: "Eighteen minutes before the tariff pause announcement, traders made large bets on stock indices rising. Over $2M was wagered on S&P 500 rising despite 7 consecutive days of losses. Contract volume on an S&P 500 tracking fund jumped from hundreds per minute earlier in the day to over 10,000 per minute just after 18:00 BST. A block of SPY call options reportedly increased in value from $2.14M to over $21M after the announcement. The S&P jumped almost 10% — one of its largest single-day gains since the Second World War.",
+      sources: ["BBC investigation, April 2026"]
+    },
+    {
+      id: "polymarket-maduro-jan-2026",
+      date: "2026-01-02",
+      date_display: "30 Dec 2025 – 2 Jan 2026",
+      market: "prediction",
+      label: "Polymarket: Maduro capture",
+      announcement_summary: "Trump administration captured Venezuelan president Nicolás Maduro on 3 January 2026",
+      lead_zone: "days",
+      wager_usd: 32500,
+      payout_usd: 436000,
+      outcome_summary: "Account made ~$400,000 profit; changed username, stopped betting",
+      detail: "A brand-new Polymarket account placed ~$32,500 in wagers between 30 December 2025 and 2 January 2026 that Maduro would be removed from office by end of January. Trump administration's capture operation on 3 January netted the account $436,000. Account changed username and placed no further bets. Rep. Ritchie Torres introduced the Public Integrity in Financial Prediction Markets Act in response.",
+      sources: ["BBC investigation, April 2026", "CNN", "Rep. Ritchie Torres statement"]
+    },
+    {
+      id: "polymarket-150-accounts-feb-2026",
+      date: "2026-02-27",
+      date_display: "27 February 2026",
+      market: "prediction",
+      label: "Polymarket: 150+ account Iran strike surge",
+      announcement_summary: "US strike on Iran confirmed early hours of 28 February 2026",
+      lead_zone: "hours",
+      outcome_summary: "150+ accounts placed hundreds of bets predicting strike within 24 hours",
+      detail: "On the Friday before the Iran war began, a New York Times analysis found that more than 150 Polymarket accounts placed hundreds of bets predicting a US strike on Iran by the next day. This pattern — a coordinated surge of accounts making the same time-sensitive prediction — is distinct from the smaller six-account cluster also documented in February.",
+      sources: ["New York Times", "Axios"]
+    },
+    {
+      id: "polymarket-iran-strike-feb-2026",
+      date: "2026-02-28",
+      date_display: "February 2026",
+      market: "prediction",
+      label: "Polymarket: 6-account Iran strike cluster",
+      announcement_summary: "Trump confirmed US strike on Iran, early hours of 28 February 2026",
+      lead_zone: "weeks",
+      payout_usd: 1200000,
+      outcome_summary: "Six accounts collectively paid out $1.2M; five stopped betting entirely",
+      detail: "Six Polymarket accounts created in February 2026, all wagered on a US strike on Iran by 28 February. After Trump confirmed attacks in early hours of 28 February, the accounts collectively won $1.2 million. Five of the six users have placed no bets since. Data sourced by blockchain analytics firm Bubblemaps.",
+      sources: ["BBC investigation, April 2026", "Bubblemaps"]
+    },
+    {
+      id: "oil-cbs-mar-2026",
+      date: "2026-03-09",
+      date_display: "9 March 2026",
+      market: "commodities",
+      label: "Oil / CBS interview",
+      announcement_summary: "Trump told CBS News the Iran conflict was 'very complete, pretty much'",
+      lead_minutes: 47,
+      outcome_summary: "Oil prices dropped ~25% after announcement",
+      detail: "Large volume of short bets on oil futures placed at 18:29 GMT — 47 minutes before the CBS reporter's post at 19:16 GMT (15:16 ET) that made Trump's 'very complete' remark public. An oil analyst told the BBC the activity appeared 'abnormal.' Oil slumped from $100/barrel to $85 before partial recovery to $90.",
+      sources: ["BBC investigation, April 2026", "BusinessToday", "IBTimes UK"]
+    },
+    {
+      id: "sp500-iran-talks-mar-2026",
+      date: "2026-03-23",
+      date_display: "23 March 2026",
+      market: "equities",
+      label: "S&P 500 futures before Iran talks post",
+      announcement_summary: "Trump Truth Social post: 'productive conversations' with Iran at 7:04 AM ET",
+      lead_minutes: 5,
+      wager_usd: 1500000000,
+      outcome_summary: "Dow Jones surged 1,000+ points; oil fell",
+      detail: "$1.5 billion worth of S&P 500 futures was purchased approximately five minutes before Trump's Monday announcement of peace talks with Iran. Sen. Chris Murphy publicly asked: 'Who was it? Trump? A family member? A White House staffer? This is corruption.' Senators Warren and Whitehouse sent a formal letter to CFTC requesting investigation.",
+      sources: ["Common Dreams", "Financial Times", "Sen. Warren / Sen. Whitehouse letter", "Sen. Chris Murphy statement"]
+    },
+    {
+      id: "oil-truthsocial-mar-2026",
+      date: "2026-03-23",
+      date_display: "23 March 2026",
+      market: "commodities",
+      label: "Oil futures / 'Complete resolution' post",
+      announcement_summary: "Trump Truth Social post about 'complete and total resolution' with Iran, 7:04 AM ET",
+      lead_minutes: 15,
+      wager_usd: 580000000,
+      outcome_summary: "Oil fell from <$113 to <$100; ~11% drop",
+      detail: "Roughly 6,200 Brent and WTI futures contracts — covering at least 6 million barrels of crude — changed hands between 6:49 AM and 6:50 AM NY time, 15 minutes before Trump's Truth Social post. Financial Times put the notional value at $580M. Volume was ~9× the typical level for that time of day. Rep. Torres formally requested SEC and CFTC investigation. Paul Krugman, Nobel laureate in economics, headlined his response 'Treason in the Futures Market.' Iranian officials subsequently denied negotiations were taking place.",
+      sources: ["BBC investigation", "Bloomberg", "Financial Times", "Reuters", "The New Yorker", "CBS News", "NPR (Krugman interview)", "Rep. Torres letter"]
+    },
+    {
+      id: "polymarket-2m-cluster-mar-2026",
+      date: "2026-03-25",
+      date_display: "Late March 2026",
+      market: "prediction",
+      label: "Polymarket: $2M Iran cluster",
+      announcement_summary: "Iran war and ceasefire timing predictions",
+      lead_zone: "weeks",
+      wager_usd: 2000000,
+      outcome_summary: "Newly created accounts made coordinated bets on Iran war timing",
+      detail: "A group of newly created Polymarket accounts bet $2 million on the same three predictions: no Iran ceasefire by 31 March, no entry of US forces into Iran by 31 March, and US forces entering Iran by 30 April. Identified by the X account Polymarket History, which works with blockchain analytics to flag suspicious wallets.",
+      sources: ["Al Jazeera, 25 March 2026", "Polymarket History (X)"]
+    },
+    {
+      id: "oil-fm-iran-760m",
+      date: "2026-04-01",
+      date_display: "Early April 2026",
+      market: "commodities",
+      label: "Oil / Iran FM announcement",
+      announcement_summary: "Iran's foreign minister made a public announcement moving oil markets",
+      lead_minutes: 20,
+      wager_usd: 760000000,
+      outcome_summary: "$760M bet on falling oil prices placed before public announcement",
+      detail: "Rep. Ritchie Torres sent a letter to CFTC Chairman Michael Selig demanding the agency expand its investigation to include a $760 million bet on falling oil prices placed approximately 20 minutes before Iran's foreign minister publicly announced news that moved oil markets.",
+      sources: ["Rep. Ritchie Torres letter", "Inquisitr"]
+    },
+    {
+      id: "polymarket-iran-ceasefire-apr-2026",
+      date: "2026-04-07",
+      date_display: "7 April 2026",
+      market: "prediction",
+      label: "Polymarket: US-Iran ceasefire",
+      announcement_summary: "Trump announced US-Iran ceasefire on Truth Social at ~6:30 PM ET",
+      lead_zone: "hours",
+      wager_usd: 72000,
+      payout_usd: 200000,
+      outcome_summary: "50+ new accounts; one account profited $200k on $72k stake",
+      detail: "At least 50 newly created Polymarket accounts placed substantial bets on a US-Iran ceasefire in the hours and minutes before Trump's announcement, generating hundreds of thousands of dollars in profit. One account placed ~$72,000 and profited $200,000 — the example cited in reporting; the sizing reflects that one representative account. These were the sole bets made on Polymarket through these accounts. The bets were placed as Trump was publicly continuing to escalate rhetoric, warning 'a whole civilization will die.'",
+      sources: ["AP / NPR, 10 April 2026", "TIME", "BBC investigation", "Mirror US"]
+    }
+  ]
+};
+
+const markersEl = document.getElementById('markers');
+const chartInner = document.getElementById('chart-inner');
+const tooltipEl = document.getElementById('tooltip');
+
+const startDate = new Date('2025-02-01').getTime();
+const endDate   = new Date('2026-04-30').getTime();
+
+function getXPosition(dateStr) {
+  const t = new Date(dateStr).getTime();
+  const ratio = (t - startDate) / (endDate - startDate);
+  return Math.max(0.01, Math.min(0.99, ratio)) * 100;
+}
+
+function getYPosition(incident) {
+  if (incident.lead_minutes !== undefined && incident.lead_minutes !== null) {
+    const m = incident.lead_minutes;
+    const minZone = DATA.zones.find(z => z.id === 'minutes');
+    if (m <= minZone.max_minutes) {
+      const zoneHeight = minZone.range[1] - minZone.range[0];
+      return minZone.range[0] + (m / minZone.max_minutes) * zoneHeight;
+    }
+    const hoursZone = DATA.zones.find(z => z.id === 'hours');
+    const hoursRatio = Math.min(1, (m - 60) / (23 * 60));
+    const zoneHeight = hoursZone.range[1] - hoursZone.range[0];
+    return hoursZone.range[0] + hoursRatio * zoneHeight;
+  }
+  const zone = DATA.zones.find(z => z.id === incident.lead_zone);
+  if (!zone) return 0.5;
+  return (zone.range[0] + zone.range[1]) / 2;
+}
+
+function getSize(incident) {
+  const value = incident.wager_usd || incident.payout_usd || 100000;
+  const maxValue = 1500000000;
+  const minSize = 10;
+  const maxSize = 40;
+  const ratio = Math.sqrt(value / maxValue);
+  return Math.max(minSize, Math.min(maxSize, ratio * maxSize * 1.2));
+}
+
+function renderQuarterTicks() {
+  const axisEl = document.getElementById('timeline-axis');
+  const ticks = [
+    { date: '2025-04-01', label: 'Apr 2025' },
+    { date: '2025-07-01', label: 'Jul 2025' },
+    { date: '2025-10-01', label: 'Oct 2025' },
+    { date: '2026-01-01', label: 'Jan 2026' },
+    { date: '2026-04-01', label: 'Apr 2026' }
+  ];
+
+  ticks.forEach(({ date, label }) => {
+    const t = new Date(date).getTime();
+    if (t < startDate || t > endDate) return;
+    const ratio = (t - startDate) / (endDate - startDate);
+
+    const tick = document.createElement('div');
+    tick.className = 'month-tick';
+    tick.style.left = `${ratio * 100}%`;
+    axisEl.appendChild(tick);
+
+    const lab = document.createElement('div');
+    lab.className = 'quarter-label';
+    lab.style.left = `${ratio * 100}%`;
+    lab.textContent = label;
+    axisEl.appendChild(lab);
+  });
+}
+
+function renderZoneDividers() {
+  DATA.zones.forEach(zone => {
+    const divider = document.createElement('div');
+    divider.className = 'zone';
+    const topPct = 100 - (zone.range[1] * 100);
+    divider.style.top = `${topPct}%`;
+
+    const label = document.createElement('div');
+    label.className = 'zone-label';
+    label.textContent = zone.label;
+    divider.appendChild(label);
+
+    chartInner.insertBefore(divider, markersEl);
+  });
+}
+
+
+function renderEventMarkers() {
+  DATA.events.forEach(event => {
+    const leftPct = getXPosition(event.date);
+
+
+    let align = event.align;
+    if (align !== 'left' && align !== 'right') {
+      align = leftPct > 82 ? 'left' : 'right';
+    }
+
+
+    const line = document.createElement('div');
+    line.className = 'event-line';
+    line.style.left = `${leftPct}%`;
+    // height extends from bottom: 0 up to 100% of chart-inner + into top padding
+    line.style.height = 'calc(100% + 3.5rem)';
+    chartInner.insertBefore(line, markersEl);
+
+
+    const slot = (event.vertical_slot === 1) ? 1 : 0;
+    const labelEl = document.createElement('div');
+    labelEl.className = `event-label slot-${slot} align-${align}`;
+    labelEl.style.left = `${leftPct}%`;
+    const d = new Date(event.date);
+    const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    labelEl.innerHTML = `<span class="event-date">${dateStr}</span>${event.label}`;
+
+    const showEvt = () => showEventTooltip(event, labelEl);
+    labelEl.addEventListener('mouseenter', showEvt);
+    labelEl.addEventListener('mouseleave', hideTooltipDelayed);
+    labelEl.addEventListener('click', (e) => { e.stopPropagation(); showEvt(); });
+
+    chartInner.insertBefore(labelEl, markersEl);
+  });
+}
+
+function showEventTooltip(event, anchorEl) {
+  clearTimeout(tooltipTimeout);
+  const d = new Date(event.date);
+  const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  tooltipEl.innerHTML = `
+    <div class="tooltip-date">${dateStr}</div>
+    <div class="tooltip-label" style="font-size:0.875rem">${event.label}</div>
+    ${event.detail ? `<div class="tooltip-detail" style="margin-top:0.5rem;margin-bottom:0">${event.detail}</div>` : ''}
+  `;
+  tooltipEl.classList.add('visible');
+  tooltipEl.setAttribute('aria-hidden', 'false');
+
+  const rect = anchorEl.getBoundingClientRect();
+  const ttW = tooltipEl.offsetWidth;
+  const ttH = tooltipEl.offsetHeight;
+  const vpW = window.innerWidth;
+
+  let left = rect.left + window.scrollX + rect.width / 2 - ttW / 2;
+  left = Math.max(8, Math.min(left, vpW - ttW - 8));
+
+  let top = rect.top + window.scrollY - ttH - 8;
+  if (top < window.scrollY + 8) top = rect.bottom + window.scrollY + 8;
+
+  tooltipEl.style.left = `${left}px`;
+  tooltipEl.style.top = `${top}px`;
+}
+
+function computeMedianLeadMinutes() {
+  const values = DATA.incidents
+    .filter(i => i.lead_minutes !== undefined && i.lead_minutes !== null)
+    .map(i => i.lead_minutes)
+    .sort((a, b) => a - b);
+  if (values.length === 0) return null;
+  const mid = Math.floor(values.length / 2);
+  return values.length % 2 === 0
+    ? (values[mid - 1] + values[mid]) / 2
+    : values[mid];
+}
+
+function renderMedianLine() {
+  const median = computeMedianLeadMinutes();
+  if (median === null) return;
+
+  const minZone = DATA.zones.find(z => z.id === 'minutes');
+  const zoneHeight = minZone.range[1] - minZone.range[0];
+  const y = minZone.range[0] + (median / minZone.max_minutes) * zoneHeight;
+
+  const bottomPct = y * 100;
+
+  const line = document.createElement('div');
+  line.className = 'median-line';
+  line.style.bottom = `${bottomPct}%`;
+
+  const label = document.createElement('span');
+  label.className = 'median-line-label';
+  label.textContent = `Median: ${median} min before event`;
+  line.appendChild(label);
+
+  chartInner.insertBefore(line, markersEl);
+}
+
+function formatCurrency(n) {
+  if (!n) return '—';
+  if (n >= 1e9) return '$' + (n / 1e9).toFixed(1) + 'bn';
+  if (n >= 1e6) return '$' + (n / 1e6).toFixed(n >= 10e6 ? 0 : 1) + 'M';
+  if (n >= 1e3) return '$' + (n / 1e3).toFixed(0) + 'k';
+  return '$' + n;
+}
+
+function formatRatio(wager, payout) {
+  if (!wager || !payout) return null;
+  const ratio = payout / wager;
+  if (ratio >= 2) return `${ratio.toFixed(1)}× return`;
+  return `${ratio.toFixed(2)}× return`;
+}
+
+function renderMarker(incident) {
+  const marketInfo = DATA.markets[incident.market];
+  const size = getSize(incident);
+  const left = getXPosition(incident.date);
+  const y = getYPosition(incident);
+  const bottomPct = y * 100;
+
+  const el = document.createElement('button');
+  el.className = 'marker';
+  el.setAttribute('aria-label', `${incident.date_display}: ${incident.label}`);
+  el.style.left = `${left}%`;
+  el.style.bottom = `${bottomPct}%`;
+
+  const dot = document.createElement('span');
+  dot.className = 'marker-dot';
+  dot.style.width = `${size}px`;
+  dot.style.height = `${size}px`;
+  dot.style.background = marketInfo.color;
+  el.appendChild(dot);
+
+  const showTooltip = () => showTooltipFor(incident, el);
+  const hideTooltip = () => hideTooltipDelayed();
+
+  el.addEventListener('mouseenter', showTooltip);
+  el.addEventListener('mouseleave', hideTooltip);
+  el.addEventListener('focus', showTooltip);
+  el.addEventListener('blur', hideTooltip);
+  el.addEventListener('click', (e) => {
+    e.preventDefault();
+    showTooltip();
+  });
+
+  markersEl.appendChild(el);
+}
+
+let tooltipTimeout;
+
+function showTooltipFor(incident, markerEl) {
+  clearTimeout(tooltipTimeout);
+  const marketInfo = DATA.markets[incident.market];
+
+  const stats = [];
+  if (incident.lead_minutes !== undefined && incident.lead_minutes !== null) {
+    stats.push(['Lead time before event', `${incident.lead_minutes} minutes`, false]);
+  } else if (incident.lead_zone) {
+    const zoneInfo = DATA.zones.find(z => z.id === incident.lead_zone);
+    stats.push(['Lead time', zoneInfo ? zoneInfo.description : incident.lead_zone, false]);
+  }
+  if (incident.wager_usd) {
+    stats.push(['Wager size', formatCurrency(incident.wager_usd), false]);
+  }
+  if (incident.payout_usd) {
+    stats.push(['Payout', formatCurrency(incident.payout_usd), false]);
+  }
+  const ratio = formatRatio(incident.wager_usd, incident.payout_usd);
+  if (ratio) {
+    stats.push(['Return ratio', ratio, true]);
+  }
+  if (incident.outcome_summary) {
+    stats.push(['Outcome', incident.outcome_summary, false]);
+  }
+
+  tooltipEl.innerHTML = `
+    <div class="tooltip-date">${incident.date_display}</div>
+    <div class="tooltip-market">
+      <span class="tooltip-market-swatch" style="background: ${marketInfo.color}"></span>
+      ${marketInfo.label}
+    </div>
+    <div class="tooltip-label">${incident.label}</div>
+    <div class="tooltip-detail tooltip-announcement">${incident.announcement_summary}</div>
+    ${stats.length ? `
+      <div class="tooltip-stats">
+        ${stats.map(([k, v, emphasize]) => `
+          <div class="tooltip-stat-label">${k}</div>
+          <div class="tooltip-stat-value${emphasize ? ' ratio' : ''}">${v}</div>
+        `).join('')}
+      </div>
+    ` : ''}
+    <div class="tooltip-detail">${incident.detail}</div>
+    <div class="tooltip-sources">Sources: ${incident.sources.join(' · ')}</div>
+  `;
+
+  tooltipEl.classList.add('visible');
+  tooltipEl.setAttribute('aria-hidden', 'false');
+
+  const markerRect = markerEl.getBoundingClientRect();
+  const tooltipWidth = tooltipEl.offsetWidth;
+  const tooltipHeight = tooltipEl.offsetHeight;
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  let top = markerRect.top + window.scrollY + (markerRect.height / 2) - (tooltipHeight / 2);
+  let left = markerRect.right + window.scrollX + 12;
+
+  if (left + tooltipWidth > viewportWidth - 8) {
+    left = markerRect.left + window.scrollX - tooltipWidth - 12;
+  }
+
+  if (left < 8) {
+    left = Math.max(8, markerRect.left + window.scrollX + (markerRect.width / 2) - (tooltipWidth / 2));
+    if (left + tooltipWidth > viewportWidth - 8) {
+      left = viewportWidth - tooltipWidth - 8;
+    }
+    top = markerRect.bottom + window.scrollY + 12;
+  }
+
+  const scrollTop = window.scrollY;
+  const scrollBottom = scrollTop + viewportHeight;
+  if (top < scrollTop + 8) top = scrollTop + 8;
+  if (top + tooltipHeight > scrollBottom - 8) top = scrollBottom - tooltipHeight - 8;
+
+  tooltipEl.style.left = `${left}px`;
+  tooltipEl.style.top = `${top}px`;
+}
+
+function hideTooltipDelayed() {
+  tooltipTimeout = setTimeout(() => {
+    tooltipEl.classList.remove('visible');
+    tooltipEl.setAttribute('aria-hidden', 'true');
+  }, 120);
+}
+
+tooltipEl.addEventListener('mouseenter', () => clearTimeout(tooltipTimeout));
+tooltipEl.addEventListener('mouseleave', hideTooltipDelayed);
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.marker') && !e.target.closest('.tooltip')) {
+    tooltipEl.classList.remove('visible');
+    tooltipEl.setAttribute('aria-hidden', 'true');
+  }
+});
+
+renderQuarterTicks();
+renderZoneDividers();
+renderEventMarkers();
+renderMedianLine();
+
+DATA.incidents
+  .slice()
+  .sort((a, b) => new Date(a.date) - new Date(b.date))
+  .forEach(renderMarker);
+</script>
+
+</body>
+</html>

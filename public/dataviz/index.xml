@@ -2,10 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>dataviz on Andreas Makas</title>
-    <link>https://ndrma.github.io/dataviz/</link>
+    <link>http://localhost:1313/dataviz/</link>
     <description>Recent content in dataviz on Andreas Makas</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
-    <atom:link href="https://ndrma.github.io/dataviz/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 23 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/dataviz/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Trades before the announcements</title>
+      <link>http://localhost:1313/dataviz/trades-before-announcements/</link>
+      <pubDate>Thu, 23 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/dataviz/trades-before-announcements/</guid>
+      <description>Trading activity preceding Trump&amp;#39;s foreign policy and market announcements.</description>
+    </item>
   </channel>
 </rss>
