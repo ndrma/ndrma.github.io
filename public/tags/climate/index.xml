@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Climate on Andreas Makas</title>
+    <link>http://localhost:1313/tags/climate/</link>
+    <description>Recent content in Climate on Andreas Makas</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 25 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/climate/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Atlantic Meridional Overturning Circulation</title>
+      <link>http://localhost:1313/dataviz/amoc-post/</link>
+      <pubDate>Sat, 25 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/dataviz/amoc-post/</guid>
+      <description>A schematic of the AMOC, the system that keeps Europe mild — and what happens if it stops.</description>
+    </item>
+  </channel>
+</rss>

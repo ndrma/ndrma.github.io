@@ -6,8 +6,15 @@
     <description>Recent content on Andreas Makas</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 23 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 25 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Atlantic Meridional Overturning Circulation</title>
+      <link>http://localhost:1313/dataviz/amoc-post/</link>
+      <pubDate>Sat, 25 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/dataviz/amoc-post/</guid>
+      <description>A schematic of the AMOC — the system that keeps Europe mild — and what happens if it stops.</description>
+    </item>
     <item>
       <title>Trades before the announcements</title>
       <link>http://localhost:1313/dataviz/trades-before-announcements/</link>

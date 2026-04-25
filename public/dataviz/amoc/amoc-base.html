@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AMOC schematic</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --ocean: #d6d6d6;
+    --land: #6e6e6e;
+    --land-stroke: #555555;
+    --text: #1a1a1a;
+    --muted: #666666;
+    --rule: #e0e0e0;
+    --warm: #c4654a;
+    --warm-bright: #d97a5e;
+    --cold: #1f3556;
+    --cold-bright: #2c4f7c;
+    --sink: #1a1a1a;
+    --collapse-cool: #1f3556;
+    --error: #b04444;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .figure { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+  .header { border-bottom: 1px solid var(--rule); padding-bottom: 12px; margin-bottom: 16px; }
+  .header h1 { font-size: 18px; font-weight: 600; margin: 0 0 4px 0; }
+  .header .deck { color: var(--muted); font-size: 13px; font-weight: 400; margin: 0; }
+
+  .controls { display: flex; gap: 8px; align-items: center; margin: 12px 0 8px; flex-wrap: wrap; }
+  .toggle-btn {
+    font: inherit; font-size: 12px; font-weight: 500;
+    padding: 6px 12px;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .toggle-btn:hover { border-color: var(--cold); }
+  .toggle-btn.active { background: var(--cold); color: white; border-color: var(--cold); }
+  .controls .hint { color: var(--muted); font-size: 11px; }
+
+  .map-wrap { position: relative; background: var(--ocean); }
+  svg { display: block; width: 100%; height: auto; }
+  .land { fill: var(--land); stroke: var(--land-stroke); stroke-width: 0.6; }
+  .ocean-bg { fill: var(--ocean); }
+
+  .strand-warm-knockout {
+    fill: none;
+    stroke: var(--ocean);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    opacity: 0.85;
+  }
+  .strand-warm {
+    fill: none;
+    stroke: var(--warm-bright);
+    stroke-width: 0.7;
+    stroke-linecap: round;
+    opacity: 0.65;
+  }
+  .strand-cold {
+    fill: none;
+    stroke: var(--cold);
+    stroke-width: 0.7;
+    stroke-linecap: round;
+    opacity: 0.55;
+  }
+
+  .strand-arrow-warm { fill: var(--warm-bright); opacity: 1; }
+  .strand-arrow-cold { fill: var(--cold); opacity: 1; }
+
+  .source-ring { fill: none; stroke: var(--warm); stroke-width: 1; opacity: 0.55; }
+  .source-label {
+    font-size: 11px; font-weight: 500; fill: var(--warm);
+    paint-order: stroke; stroke: var(--bg); stroke-width: 3; stroke-linejoin: round;
+  }
+
+  .sink-ring { fill: none; stroke: var(--sink); stroke-width: 1; opacity: 0.55; transition: opacity 0.6s; }
+  .sink-label {
+    font-size: 11px; font-weight: 500; fill: var(--text);
+    paint-order: stroke; stroke: var(--bg); stroke-width: 3; stroke-linejoin: round;
+  }
+
+  .city-dot {
+    fill: var(--text);
+    opacity: 0.45;
+    transition: opacity 0.6s, fill 0.6s, r 0.6s;
+  }
+  .city-label {
+    font-size: 11px; font-weight: 500; fill: var(--text);
+    opacity: 0.55;
+    paint-order: stroke; stroke: var(--bg); stroke-width: 3; stroke-linejoin: round;
+    transition: opacity 0.6s, font-weight 0.6s;
+  }
+  .city-line {
+    stroke: var(--text);
+    stroke-width: 1;
+    opacity: 0;
+    transition: opacity 0.6s, stroke 0.6s;
+  }
+  .city-value {
+    font-size: 12px; font-weight: 700; fill: var(--collapse-cool);
+    opacity: 0;
+    paint-order: stroke; stroke: var(--bg); stroke-width: 3; stroke-linejoin: round;
+    transition: opacity 0.6s;
+  }
+
+  .inset-group { transition: opacity 0.6s; }
+  .collapsed .inset-group { opacity: 0; pointer-events: none; }
+
+  .collapsed .warm-layer,
+  .collapsed .cold-layer { opacity: 0.08; }
+  .collapsed .anomaly-layer { opacity: 1; }
+  .collapsed .source-ring { opacity: 0.15; }
+  .collapsed .sink-ring { opacity: 0.2; }
+  .collapsed .city-dot { opacity: 1; fill: var(--collapse-cool); }
+  .collapsed .city-label { opacity: 1; font-weight: 600; }
+  .collapsed .city-line { opacity: 0.6; stroke: var(--collapse-cool); }
+  .collapsed .city-value { opacity: 1; }
+
+  .anomaly-layer { opacity: 0; transition: opacity 0.6s; pointer-events: none; }
+  .warm-layer, .cold-layer { transition: opacity 0.6s; }
+
+  .inset-title {
+    font-size: 10px; font-weight: 600; fill: #fafafa;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .inset-label { font-size: 10px; fill: #fafafa; }
+  .inset-label-dim { font-size: 9px; fill: #fafafa; opacity: 0.7; }
+
+  .status {
+    position: absolute; top: 8px; left: 8px;
+    background: rgba(255,255,255,0.92); padding: 4px 8px;
+    font-size: 11px; color: var(--muted); border: 1px solid var(--rule);
+  }
+  .status.error { color: var(--error); border-color: var(--error); }
+  .status.hidden { display: none; }
+
+  .footer {
+    border-top: 1px solid var(--rule); padding-top: 8px; margin-top: 12px;
+    color: var(--muted); font-size: 11px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+  .legend {
+    display: flex; gap: 16px; padding: 8px 0;
+    font-size: 11px; color: var(--muted); flex-wrap: wrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 20px; height: 3px; border-radius: 1px; }
+</style>
+</head>
+<body>
+<div class="figure">
+  <div class="header">
+    <h1>The Atlantic Meridional Overturning Circulation</h1>
+    <p class="deck">Warm surface flow on top, cold deep flow below &mdash; and what happens if it stops</p>
+  </div>
+
+  <div class="controls">
+    <button id="toggle" class="toggle-btn">Show slowdown</button>
+    <span class="hint">Modeled annual mean cooling at full AMOC collapse (Liu et al. 2017, van Westen et al. 2025)</span>
+  </div>
+
+  <div class="map-wrap">
+    <svg id="map" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet"></svg>
+    <div id="status" class="status">Loading basemap&hellip;</div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--warm-bright)"></span>Warm surface flow north</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--cold)"></span>Cold deep return south</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--sink);border-radius:50%;width:8px;height:8px"></span>Deep water formation</div>
+  </div>
+
+  <div class="footer">
+    <span>Basemap: Natural Earth 1:50m. Flow field after Buckley &amp; Marshall (2016) and Reverdin (2003). Collapse anomalies from Liu et al. (2017) and van Westen et al. (2025).</span>
+    Sources. Flow paths schematic, after Buckley & Marshall (2016) Reviews of Geophysics and Reverdin (2003). Collapse anomalies from Liu et al. (2017) Sci. Adv. and van Westen et al. (2025). Basemap: Natural Earth 1:50m. Methodology: D3.js with a hand-tuned vector field; streamlines integrated procedurally rather than from observational drifter data, for editorial legibility.
+    <span>As of 25 April 2026</span>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<script>
+(async () => {
+  const statusEl = document.getElementById("status");
+  const setStatus = (msg, isError = false) => {
+    statusEl.textContent = msg;
+    statusEl.classList.toggle("error", isError);
+  };
+
+  try {
+    if (typeof d3 === "undefined") throw new Error("d3 failed to load");
+    if (typeof topojson === "undefined") throw new Error("topojson-client failed to load");
+
+    const width = 1200;
+    const height = 800;
+
+    const projection = d3.geoMercator()
+      .center([-30, 42])
+      .scale(560)
+      .translate([width / 2, height / 2]);
+
+    const path = d3.geoPath(projection);
+    const svg = d3.select("#map");
+
+    const defs = svg.append("defs");
+    defs.append("clipPath")
+      .attr("id", "frame-clip")
+      .append("rect").attr("width", width).attr("height", height);
+
+    const anomalyGrad = defs.append("radialGradient").attr("id", "anomaly-grad");
+    anomalyGrad.append("stop").attr("offset", "0%").attr("stop-color", "#1f3556").attr("stop-opacity", 0.55);
+    anomalyGrad.append("stop").attr("offset", "60%").attr("stop-color", "#2c4f7c").attr("stop-opacity", 0.25);
+    anomalyGrad.append("stop").attr("offset", "100%").attr("stop-color", "#2c4f7c").attr("stop-opacity", 0);
+
+    const warmMaskGrad = defs.append("linearGradient")
+      .attr("id", "warm-fade-grad")
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", 0).attr("y1", height).attr("x2", 0).attr("y2", 0);
+    warmMaskGrad.append("stop").attr("offset", "0%").attr("stop-color", "white");
+    warmMaskGrad.append("stop").attr("offset", "35%").attr("stop-color", "white");
+    warmMaskGrad.append("stop").attr("offset", "70%").attr("stop-color", "#444");
+    warmMaskGrad.append("stop").attr("offset", "90%").attr("stop-color", "black");
+    warmMaskGrad.append("stop").attr("offset", "100%").attr("stop-color", "black");
+    defs.append("mask").attr("id", "warm-fade-mask")
+      .append("rect").attr("width", width).attr("height", height).attr("fill", "url(#warm-fade-grad)");
+
+    const coldMaskGrad = defs.append("linearGradient")
+      .attr("id", "cold-fade-grad")
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", height);
+    coldMaskGrad.append("stop").attr("offset", "0%").attr("stop-color", "white");
+    coldMaskGrad.append("stop").attr("offset", "35%").attr("stop-color", "white");
+    coldMaskGrad.append("stop").attr("offset", "70%").attr("stop-color", "#444");
+    coldMaskGrad.append("stop").attr("offset", "90%").attr("stop-color", "black");
+    coldMaskGrad.append("stop").attr("offset", "100%").attr("stop-color", "black");
+    defs.append("mask").attr("id", "cold-fade-mask")
+      .append("rect").attr("width", width).attr("height", height).attr("fill", "url(#cold-fade-grad)");
+
+    const mapG = svg.append("g").attr("clip-path", "url(#frame-clip)");
+
+    mapG.append("rect")
+      .attr("class", "ocean-bg")
+      .attr("width", width).attr("height", height);
+
+    setStatus("Fetching land geometry\u2026");
+    const world = await d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/land-50m.json");
+    if (!world?.objects?.land) throw new Error("Topology missing 'land' object");
+    const land = topojson.feature(world, world.objects.land);
+
+    const maskCanvas = document.createElement("canvas");
+    maskCanvas.width = width;
+    maskCanvas.height = height;
+    const maskCtx = maskCanvas.getContext("2d");
+    maskCtx.fillStyle = "#000";
+    maskCtx.fillRect(0, 0, width, height);
+    maskCtx.fillStyle = "#fff";
+    const cullPath = d3.geoPath(projection, maskCtx);
+    maskCtx.beginPath();
+    cullPath(land);
+    maskCtx.fill();
+    const maskData = maskCtx.getImageData(0, 0, width, height).data;
+
+    function isLand(x, y) {
+      const ix = Math.round(x), iy = Math.round(y);
+      if (ix < 0 || iy < 0 || ix >= width || iy >= height) return true;
+      return maskData[(iy * width + ix) * 4] > 128;
+    }
+
+    function inExclusionZone(lon, lat) {
+      if (lon > -6 && lon < 37 && lat > 30 && lat < 46) return true;
+      if (lon < -95) return true;
+      if (lon < -85 && lat < 16) return true;
+      return false;
+    }
+
+    function inPassThroughZone(lon, lat) {
+      if (lon > -85 && lon < -75 && lat > 22 && lat < 32) return true;
+      return false;
+    }
+
+    const warmField = [
+      {lon: -85, lat: 19, u: -0.4, v: 0.85, w: 4},
+      {lon: -86, lat: 21, u: -0.2, v: 0.95, w: 4.5},
+      {lon: -88, lat: 23, u: 0.1, v: 0.95, w: 5},
+      {lon: -88, lat: 25, u: 0.4, v: 0.7, w: 5.5},
+      {lon: -86, lat: 26, u: 0.7, v: 0.3, w: 6},
+      {lon: -83, lat: 25, u: 0.85, v: 0.0, w: 6},
+      {lon: -81, lat: 24.5, u: 0.95, v: 0.1, w: 6},
+      {lon: -79, lat: 25, u: 0.9, v: 0.3, w: 5.5},
+      {lon: -78, lat: 26.5, u: 0.4, v: 0.85, w: 5},
+      {lon: -82, lat: 12, u: 0.0, v: 0.95, w: 4},
+      {lon: -78, lat: 12, u: 0.2, v: 0.9, w: 4},
+      {lon: -38, lat: 4, u: 0.0, v: 1.0, w: 4.5},
+      {lon: -32, lat: 4, u: 0.0, v: 1.0, w: 4.5},
+      {lon: -45, lat: 4, u: 0.0, v: 1.0, w: 4.5},
+      {lon: -55, lat: 12, u: -0.7, v: 0.4, w: 2},
+      {lon: -65, lat: 14, u: -0.6, v: 0.5, w: 2},
+      {lon: -50, lat: 16, u: -0.6, v: 0.5, w: 1.5},
+      {lon: -8, lat: 53, u: 0.7, v: 0.6, w: 3},
+      {lon: -10, lat: 56, u: 0.5, v: 0.7, w: 3},
+      {lon: -76, lat: 30, u: 0.3, v: 0.85, w: 1},
+      {lon: -73, lat: 33, u: 0.5, v: 0.75, w: 1},
+      {lon: -73, lat: 36, u: 0.8, v: 0.6, w: 1},
+      {lon: -68, lat: 38, u: 0.95, v: 0.4, w: 1},
+      {lon: -62, lat: 40, u: 1.0, v: 0.35, w: 1},
+      {lon: -55, lat: 42, u: 1.0, v: 0.4, w: 1},
+      {lon: -45, lat: 45, u: 0.95, v: 0.45, w: 1},
+      {lon: -35, lat: 48, u: 0.85, v: 0.5, w: 1},
+      {lon: -25, lat: 51, u: 0.75, v: 0.55, w: 1},
+      {lon: -18, lat: 54, u: 0.6, v: 0.6, w: 1},
+      {lon: -5, lat: 60, u: 0.3, v: 0.8, w: 1},
+      {lon: 0, lat: 63, u: 0.3, v: 0.85, w: 1},
+      {lon: 5, lat: 66, u: 0.4, v: 0.85, w: 1},
+      {lon: -22, lat: 60, u: -0.3, v: 0.5, w: 1},
+      {lon: -28, lat: 62, u: -0.5, v: 0.2, w: 1},
+      {lon: -30, lat: 25, u: 0.1, v: 0.5, w: 0.6},
+      {lon: -25, lat: 30, u: 0.1, v: 0.6, w: 0.6},
+      {lon: -22, lat: 35, u: 0.2, v: 0.7, w: 0.6},
+    ];
+
+    const coldField = [
+      {lon: 5, lat: 70, u: -0.5, v: -0.5, w: 3},
+      {lon: 0, lat: 67, u: -0.4, v: -0.7, w: 3},
+      {lon: -32, lat: 63, u: -0.3, v: -0.6, w: 3},
+      {lon: -28, lat: 61, u: -0.3, v: -0.7, w: 3},
+      {lon: -52, lat: 58, u: -0.2, v: -0.7, w: 3},
+      {lon: -48, lat: 55, u: -0.2, v: -0.85, w: 3},
+      {lon: -65, lat: 65, u: 0.2, v: -0.5, w: 1.5},
+      {lon: -55, lat: 65, u: 0.0, v: -0.6, w: 1.5},
+      {lon: -45, lat: 64, u: -0.2, v: -0.6, w: 1.5},
+      {lon: -75, lat: 62, u: 0.3, v: -0.7, w: 1.2},
+      {lon: -10, lat: 65, u: -0.3, v: -0.7, w: 1},
+      {lon: -18, lat: 63, u: -0.4, v: -0.8, w: 1},
+      {lon: -55, lat: 47, u: -0.15, v: -0.95, w: 1},
+      {lon: -60, lat: 42, u: -0.1, v: -0.95, w: 1},
+      {lon: -65, lat: 36, u: -0.05, v: -0.95, w: 1},
+      {lon: -70, lat: 30, u: -0.05, v: -0.95, w: 1},
+      {lon: -73, lat: 24, u: -0.1, v: -0.9, w: 1},
+      {lon: -68, lat: 18, u: 0.1, v: -0.85, w: 1},
+      {lon: -55, lat: 14, u: 0.3, v: -0.7, w: 1},
+    ];
+
+    function interpolateField(field, lon, lat, power = 2.5) {
+      let sumU = 0, sumV = 0, sumW = 0;
+      for (const p of field) {
+        const dx = lon - p.lon;
+        const dy = lat - p.lat;
+        const d2 = dx * dx + dy * dy + 0.5;
+        const weight = (p.w || 1) / Math.pow(d2, power / 2);
+        sumU += p.u * weight;
+        sumV += p.v * weight;
+        sumW += weight;
+      }
+      return [sumU / sumW, sumV / sumW];
+    }
+
+    function traceStreamline(field, seedLon, seedLat, maxSteps = 80, stepSize = 0.6, allowPassThrough = false) {
+      const segments = [];
+      let currentSegment = [];
+      let lon = seedLon, lat = seedLat;
+      let onLand = false;
+      let landSteps = 0;
+      const maxLandSteps = 25;
+
+      for (let i = 0; i < maxSteps; i++) {
+        const [px, py] = projection([lon, lat]);
+        if (px < -10 || py < -10 || px > width + 10 || py > height + 10) break;
+        if (inExclusionZone(lon, lat)) break;
+
+        const land = isLand(px, py);
+
+        if (land) {
+          if (allowPassThrough && inPassThroughZone(lon, lat) && landSteps < maxLandSteps) {
+            if (currentSegment.length > 1) {
+              segments.push(currentSegment);
+              currentSegment = [];
+            }
+            onLand = true;
+            landSteps++;
+          } else {
+            break;
+          }
+        } else {
+          if (onLand) {
+            onLand = false;
+            landSteps = 0;
+            currentSegment = [[px, py]];
+          } else {
+            currentSegment.push([px, py]);
+          }
+        }
+
+        const [u, v] = interpolateField(field, lon, lat);
+        const mag = Math.sqrt(u*u + v*v);
+        if (mag < 0.05) break;
+        lon += (u / mag) * stepSize;
+        lat += (v / mag) * stepSize;
+        if (lat < 0 || lat > 80 || lon < -100 || lon > 30) break;
+      }
+
+      if (currentSegment.length > 1) segments.push(currentSegment);
+      return segments;
+    }
+
+    function totalSegmentLength(segments) {
+      return segments.reduce((sum, seg) => sum + seg.length, 0);
+    }
+
+    // ===== STRAND GENERATION =====
+    const warmStrands = [];
+
+    for (let lon = -90; lon <= 15; lon += 3.5) {
+      for (let lat = 8; lat <= 65; lat += 3) {
+        if (inExclusionZone(lon, lat)) continue;
+        const [px, py] = projection([lon, lat]);
+        if (px < 0 || py < 0 || px > width || py > height) continue;
+        if (isLand(px, py)) continue;
+        const jLon = lon + (Math.random() - 0.5) * 1.5;
+        const jLat = lat + (Math.random() - 0.5) * 1.5;
+        if (inExclusionZone(jLon, jLat)) continue;
+        const segs = traceStreamline(warmField, jLon, jLat, 80, 0.55, true);
+        if (totalSegmentLength(segs) > 6) warmStrands.push(segs);
+      }
+    }
+
+    // Caribbean entry band — feeds INTO Loop Current
+    for (let lon = -88; lon <= -75; lon += 0.7) {
+      const lat = 14 + Math.random() * 4;
+      if (inExclusionZone(lon, lat)) continue;
+      const [px, py] = projection([lon, lat]);
+      if (px < 0 || py < 0 || px > width || py > height) continue;
+      if (isLand(px, py)) continue;
+      const segs = traceStreamline(warmField, lon, lat, 120, 0.5, true);
+      if (totalSegmentLength(segs) > 8) warmStrands.push(segs);
+    }
+
+    // ===== TROPICAL ATLANTIC: dense seeds DEEP off-frame, longer trace =====
+    // Seeds at lat 6-10, well below the visible bottom edge.
+    // With 0.5 step size and 200 max steps, plenty of room to reach lat 50+.
+    // No more on-edge band — strands enter through the bottom edge already in motion.
+    for (let lon = -52; lon <= -20; lon += 0.5) {
+      const lat = 6 + Math.random() * 4;  // off-frame deep south
+      if (inExclusionZone(lon, lat)) continue;
+      const segs = traceStreamline(warmField, lon, lat, 200, 0.5, true);
+      if (totalSegmentLength(segs) > 8) warmStrands.push(segs);
+    }
+
+    // Additional pass even deeper for redundancy and density variation
+    for (let lon = -55; lon <= -22; lon += 0.7) {
+      const lat = 3 + Math.random() * 3;
+      if (inExclusionZone(lon, lat)) continue;
+      const segs = traceStreamline(warmField, lon, lat, 220, 0.45, true);
+      if (totalSegmentLength(segs) > 8) warmStrands.push(segs);
+    }
+
+    // Gulf of Mexico cluster
+    for (let i = 0; i < 50; i++) {
+      const lon = -92 + Math.random() * 12;
+      const lat = 19 + Math.random() * 8;
+      if (inExclusionZone(lon, lat)) continue;
+      const [px, py] = projection([lon, lat]);
+      if (px < 0 || py < 0 || px > width || py > height) continue;
+      if (isLand(px, py)) continue;
+      const segs = traceStreamline(warmField, lon, lat, 110, 0.5, true);
+      if (totalSegmentLength(segs) > 8) warmStrands.push(segs);
+    }
+
+    const coldStrands = [];
+    for (let lon = -78; lon <= 5; lon += 3) {
+      for (let lat = 8; lat <= 70; lat += 2.8) {
+        if (inExclusionZone(lon, lat)) continue;
+        const [px, py] = projection([lon, lat]);
+        if (px < 0 || py < 0 || px > width || py > height) continue;
+        if (isLand(px, py)) continue;
+        const jLon = lon + (Math.random() - 0.5) * 1.2;
+        const jLat = lat + (Math.random() - 0.5) * 1.2;
+        if (inExclusionZone(jLon, jLat)) continue;
+        const segs = traceStreamline(coldField, jLon, jLat, 60, 0.55, false);
+        if (totalSegmentLength(segs) > 6) coldStrands.push(segs);
+      }
+    }
+
+    function generateClusterSeeds(centerLon, centerLat, radius, count) {
+      const seeds = [];
+      for (let i = 0; i < count; i++) {
+        const angle = (i / count) * Math.PI * 2 + Math.random() * 0.5;
+        const r = Math.random() * radius;
+        seeds.push([
+          centerLon + Math.cos(angle) * r,
+          centerLat + Math.sin(angle) * r
+        ]);
+      }
+      return seeds;
+    }
+
+    const coldExtraSeeds = [
+      ...generateClusterSeeds(-52, 58, 1.5, 10),
+      ...generateClusterSeeds(-32, 62, 1.5, 10),
+      ...generateClusterSeeds(2, 68, 1.5, 10),
+      ...generateClusterSeeds(-65, 65, 2.5, 8),
+      ...generateClusterSeeds(-55, 66, 2.5, 8),
+    ];
+    coldExtraSeeds.forEach(([lon, lat]) => {
+      if (inExclusionZone(lon, lat)) return;
+      const [px, py] = projection([lon, lat]);
+      if (px < 0 || py < 0 || px > width || py > height) return;
+      if (isLand(px, py)) return;
+      const segs = traceStreamline(coldField, lon, lat, 80, 0.5, false);
+      if (totalSegmentLength(segs) > 8) coldStrands.push(segs);
+    });
+
+    const lineGen = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
+
+    const coldG = mapG.append("g")
+      .attr("class", "cold-layer")
+      .attr("mask", "url(#cold-fade-mask)");
+    coldStrands.forEach(segs => {
+      segs.forEach(seg => {
+        if (seg.length > 1) {
+          coldG.append("path").attr("class", "strand-cold").attr("d", lineGen(seg));
+        }
+      });
+    });
+
+    const warmG = mapG.append("g")
+      .attr("class", "warm-layer")
+      .attr("mask", "url(#warm-fade-mask)");
+    warmStrands.forEach(segs => {
+      segs.forEach(seg => {
+        if (seg.length > 1) {
+          warmG.append("path").attr("class", "strand-warm-knockout").attr("d", lineGen(seg));
+        }
+      });
+    });
+    warmStrands.forEach(segs => {
+      segs.forEach(seg => {
+        if (seg.length > 1) {
+          warmG.append("path").attr("class", "strand-warm").attr("d", lineGen(seg));
+        }
+      });
+    });
+
+    function addArrowToStrand(segs, layerG, arrowClass) {
+      const lastSeg = segs[segs.length - 1];
+      if (!lastSeg || lastSeg.length < 3) return;
+      const last = lastSeg[lastSeg.length - 1];
+      const prev = lastSeg[lastSeg.length - 3];
+      const dx = last[0] - prev[0];
+      const dy = last[1] - prev[1];
+      const len = Math.sqrt(dx*dx + dy*dy);
+      if (len < 0.1) return;
+      const angleDeg = Math.atan2(dy, dx) * 180 / Math.PI;
+      layerG.append("path")
+        .attr("class", arrowClass)
+        .attr("d", "M 0 -3.2 L 5.5 0 L 0 2.2 Z")
+        .attr("transform", `translate(${last[0]}, ${last[1]}) rotate(${angleDeg})`);
+    }
+
+    warmStrands.forEach(segs => {
+      if (totalSegmentLength(segs) > 25 && Math.random() < 0.30) {
+        addArrowToStrand(segs, warmG, "strand-arrow-warm");
+      }
+    });
+    coldStrands.forEach(segs => {
+      if (totalSegmentLength(segs) > 25 && Math.random() < 0.30) {
+        addArrowToStrand(segs, coldG, "strand-arrow-cold");
+      }
+    });
+
+    mapG.append("path")
+      .datum(land).attr("class", "land").attr("d", path);
+
+    const anomalyG = mapG.append("g").attr("class", "anomaly-layer");
+    const anomalyHotspots = [
+      {lon: -30, lat: 62, r: 240},
+      {lon: 0, lat: 62, r: 200},
+      {lon: -3, lat: 56, r: 160},
+      {lon: -20, lat: 50, r: 180},
+    ];
+    anomalyHotspots.forEach(h => {
+      const [x, y] = projection([h.lon, h.lat]);
+      anomalyG.append("circle")
+        .attr("cx", x).attr("cy", y).attr("r", h.r)
+        .attr("fill", "url(#anomaly-grad)");
+    });
+
+    const sources = [
+      {name: "Gulf of Mexico", lon: -88, lat: 22, dx: 14, dy: -2, anchor: "start"},
+      {name: "Tropical Atlantic", lon: -38, lat: 12, dx: 14, dy: 0, anchor: "start"},
+    ];
+
+    const srcG = svg.append("g").attr("clip-path", "url(#frame-clip)");
+    sources.forEach(s => {
+      const [x, y] = projection([s.lon, s.lat]);
+      srcG.append("circle").attr("class", "source-ring")
+        .attr("cx", x).attr("cy", y).attr("r", 14);
+      srcG.append("text").attr("class", "source-label")
+        .attr("x", x + s.dx).attr("y", y + s.dy)
+        .attr("text-anchor", s.anchor)
+        .attr("dominant-baseline", "middle")
+        .text(s.name);
+    });
+
+    const sinkSites = [
+      {name: "Labrador Sea", lon: -52, lat: 58, dx: -16, dy: -2, anchor: "end"},
+      {name: "Irminger Sea", lon: -32, lat: 63, dx: 0, dy: -22, anchor: "middle"},
+      {name: "Nordic Seas", lon: 5, lat: 70, dx: -16, dy: -2, anchor: "end"}
+    ];
+
+    const sinkG = svg.append("g").attr("clip-path", "url(#frame-clip)");
+    sinkSites.forEach(s => {
+      const [x, y] = projection([s.lon, s.lat]);
+      sinkG.append("circle").attr("class", "sink-ring")
+        .attr("cx", x).attr("cy", y).attr("r", 14);
+      sinkG.append("text").attr("class", "sink-label")
+        .attr("x", x + s.dx).attr("y", y + s.dy)
+        .attr("text-anchor", s.anchor)
+        .attr("dominant-baseline", "middle")
+        .text(s.name);
+    });
+
+    const citySites = [
+      {name: "Reykjavík", lon: -22, lat: 64, anomaly: "−15 °C", labelDx: 18, labelDy: -10, anchor: "start"},
+      {name: "Edinburgh", lon: -3.2, lat: 56, anomaly: "−7 °C", labelDx: 16, labelDy: -16, anchor: "start"},
+      {name: "Oslo", lon: 10.7, lat: 60, anomaly: "−8 °C", labelDx: 20, labelDy: 22, anchor: "start"},
+      {name: "Dublin", lon: -6.3, lat: 53, anomaly: "−6 °C", labelDx: -16, labelDy: 4, anchor: "end"},
+      {name: "London", lon: -0.1, lat: 51, anomaly: "−5 °C", labelDx: -16, labelDy: 4, anchor: "end"}
+    ];
+
+    const cityG = svg.append("g").attr("clip-path", "url(#frame-clip)");
+    citySites.forEach(s => {
+      const [x, y] = projection([s.lon, s.lat]);
+      const lx = x + s.labelDx;
+      const ly = y + s.labelDy;
+      cityG.append("line").attr("class", "city-line")
+        .attr("x1", x).attr("y1", y).attr("x2", lx).attr("y2", ly);
+      cityG.append("circle").attr("class", "city-dot")
+        .attr("cx", x).attr("cy", y).attr("r", 2.5);
+      cityG.append("text").attr("class", "city-label")
+        .attr("x", lx).attr("y", ly - 6).attr("text-anchor", s.anchor)
+        .text(s.name);
+      cityG.append("text").attr("class", "city-value")
+        .attr("x", lx).attr("y", ly + 7).attr("text-anchor", s.anchor)
+        .text(s.anomaly);
+    });
+
+    // CROSS-SECTION INSET
+    const insetW = 360;
+    const insetH = 180;
+    const insetX = width - insetW - 30;
+    const insetY = height - insetH - 30;
+
+    const insetG = svg.append("g")
+      .attr("class", "inset-group")
+      .attr("transform", `translate(${insetX}, ${insetY})`);
+
+    insetG.append("text").attr("class", "inset-title")
+      .attr("x", insetW / 2).attr("y", 0)
+      .attr("text-anchor", "middle")
+      .text("Cross-section: how it works");
+
+    const ovalLeft = 30;
+    const ovalRight = insetW - 30;
+    const ovalTop = 36;
+    const ovalBottom = insetH - 30;
+    const ovalCx = (ovalLeft + ovalRight) / 2;
+    const ovalCy = (ovalTop + ovalBottom) / 2;
+    const rx = (ovalRight - ovalLeft) / 2;
+    const ry = (ovalBottom - ovalTop) / 2;
+
+    function ovalPoint(angle) {
+      return [ovalCx + rx * Math.cos(angle), ovalCy + ry * Math.sin(angle)];
+    }
+    function ovalTangent(angle) {
+      const dx = -rx * Math.sin(angle);
+      const dy = ry * Math.cos(angle);
+      const len = Math.sqrt(dx*dx + dy*dy);
+      return [dx / len, dy / len];
+    }
+
+    const gapAngle = 0.06 * Math.PI;
+    const warmStart = Math.PI + gapAngle;
+    const warmEnd = 2 * Math.PI - gapAngle;
+    const warmSamples = [];
+    for (let i = 0; i <= 40; i++) {
+      const t = warmStart + (warmEnd - warmStart) * (i / 40);
+      warmSamples.push(ovalPoint(t));
+    }
+    insetG.append("path")
+      .attr("d", lineGen(warmSamples))
+      .attr("fill", "none")
+      .attr("stroke", "var(--warm-bright)")
+      .attr("opacity", 0.8)            
+      .attr("stroke-width", 4)
+      .attr("stroke-linecap", "round");
+
+
+    const warmEndPt = ovalPoint(warmEnd);
+    const warmEndTangent = ovalTangent(warmEnd);
+    const warmAngleDeg = Math.atan2(warmEndTangent[1], warmEndTangent[0]) * 180 / Math.PI;
+    insetG.append("path")
+      .attr("d", "M 0 -5 L 8 0 L 0 5 Z")
+      .attr("fill", "var(--warm-bright)")
+      .attr("transform", `translate(${warmEndPt[0]}, ${warmEndPt[1]}) rotate(${warmAngleDeg})`);
+
+    const coldStart = gapAngle;
+    const coldEnd = Math.PI - gapAngle;
+    const coldSamples = [];
+    for (let i = 0; i <= 40; i++) {
+      const t = coldStart + (coldEnd - coldStart) * (i / 40);
+      coldSamples.push(ovalPoint(t));
+    }
+    insetG.append("path")
+      .attr("d", lineGen(coldSamples))
+      .attr("fill", "none")
+      .attr("stroke", "var(--cold-bright)")
+      .attr("opacity", 0.8) 
+      .attr("stroke-width", 4)
+      .attr("stroke-linecap", "round");
+
+    const coldEndPt = ovalPoint(coldEnd);
+    const coldEndTangent = ovalTangent(coldEnd);
+    const coldAngleDeg = Math.atan2(coldEndTangent[1], coldEndTangent[0]) * 180 / Math.PI;
+    insetG.append("path")
+      .attr("d", "M 0 -5 L 8 0 L 0 5 Z")
+      .attr("fill", "var(--cold-bright)")
+      .attr("transform", `translate(${coldEndPt[0]}, ${coldEndPt[1]}) rotate(${coldAngleDeg})`);
+
+    insetG.append("text").attr("class", "inset-label")
+      .attr("x", ovalLeft - 14).attr("y", ovalCy)
+      .attr("text-anchor", "end").attr("dominant-baseline", "middle")
+      .text("South");
+    insetG.append("text").attr("class", "inset-label")
+      .attr("x", ovalRight + 14).attr("y", ovalCy)
+      .attr("text-anchor", "start").attr("dominant-baseline", "middle")
+      .text("North");
+
+    insetG.append("text").attr("class", "inset-label-dim")
+      .attr("x", ovalCx).attr("y", ovalCy + 4)
+      .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
+      .text("water cools and sinks at the north");
+
+    insetG.append("text").attr("class", "inset-label")
+      .attr("x", ovalCx).attr("y", ovalTop - 14)
+      .attr("text-anchor", "middle")
+      .attr("fill", "var(--warm-bright)").attr("font-weight", 600)
+      .text("warm surface flow north");
+    insetG.append("text").attr("class", "inset-label")
+      .attr("x", ovalCx).attr("y", ovalBottom + 16)
+      .attr("text-anchor", "middle")
+      .attr("fill", "var(--cold-bright)").attr("font-weight", 600)
+      .text("cold deep flow south");
+
+    const figure = document.querySelector(".figure");
+    const toggle = document.getElementById("toggle");
+    toggle.addEventListener("click", () => {
+      const collapsed = figure.classList.toggle("collapsed");
+      toggle.classList.toggle("active", collapsed);
+      toggle.textContent = collapsed ? "Show active circulation" : "Show slowdown";
+    });
+
+    statusEl.classList.add("hidden");
+
+  } catch (err) {
+    console.error("AMOC error:", err);
+    setStatus("Map error: " + err.message, true);
+  }
+})();
+</script>
+</body>
+</html>

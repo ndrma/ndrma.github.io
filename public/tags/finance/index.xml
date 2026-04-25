@@ -10,10 +10,10 @@
     <atom:link href="http://localhost:1313/tags/finance/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Trades before the announcements</title>
-      <link>http://localhost:1313/dataviz/trades-before-announcements2/</link>
+      <link>http://localhost:1313/dataviz/trades-before-announcements/</link>
       <pubDate>Thu, 23 Apr 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/dataviz/trades-before-announcements2/</guid>
-      <description>Documented instances of well-timed trading activity preceding Trump foreign-policy and market-moving announcements during his second term.</description>
+      <guid>http://localhost:1313/dataviz/trades-before-announcements/</guid>
+      <description>Trading activity preceding Trump&amp;#39;s foreign policy and market announcements.</description>
     </item>
   </channel>
 </rss>
