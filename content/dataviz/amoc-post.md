@@ -6,6 +6,12 @@ tags: ["climate", "cartography", "data-visualisation"]
 showToc: false
 ShowReadingTime: false
 
+cover:
+    image: /dataviz/images/cover_amoc_1.png
+    alt: "Cover Photo"
+    caption: ""
+    relative: true
+
 ---
 *Toggle the slowdown scenario to see the modelled annual mean cooling at major North Atlantic and Nordic cities under a full AMOC shutdown.*
 
