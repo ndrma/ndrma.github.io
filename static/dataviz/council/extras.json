@@ -1,0 +1,414 @@
+{
+  "band_multipliers": {
+    "england_post_2017": {
+      "A": 0.6666666666666666,
+      "B": 0.7777777777777778,
+      "C": 0.8888888888888888,
+      "D": 1.0,
+      "E": 1.2222222222222223,
+      "F": 1.4444444444444444,
+      "G": 1.6666666666666667,
+      "H": 2.0
+    },
+    "england_pre_2017": {
+      "A": 0.6666666666666666,
+      "B": 0.7777777777777778,
+      "C": 0.8888888888888888,
+      "D": 1.0,
+      "E": 1.2222222222222223,
+      "F": 1.4444444444444444,
+      "G": 1.6666666666666667,
+      "H": 2.0
+    },
+    "scotland_post_2017": {
+      "A": 0.6666666666666666,
+      "B": 0.7777777777777778,
+      "C": 0.8888888888888888,
+      "D": 1.0,
+      "E": 1.314,
+      "F": 1.625,
+      "G": 1.958,
+      "H": 2.45
+    },
+    "scotland_pre_2017": {
+      "A": 0.6666666666666666,
+      "B": 0.7777777777777778,
+      "C": 0.8888888888888888,
+      "D": 1.0,
+      "E": 1.2222222222222223,
+      "F": 1.4444444444444444,
+      "G": 1.6666666666666667,
+      "H": 2.0
+    }
+  },
+  "baseline_year": 2010,
+  "councils": {
+    "Birmingham": "england",
+    "Edinburgh": "scotland",
+    "Hackney": "england",
+    "Manchester": "england",
+    "Nottingham": "england"
+  },
+  "tax_rules": {
+    "1990": {
+      "basic_top": 23705,
+      "br": 0.25,
+      "hr": 0.4,
+      "ni_lower": 0,
+      "ni_main": 0.12,
+      "ni_upper": 0,
+      "ni_upper_rate": 0.02,
+      "pa": 3005
+    },
+    "1991": {
+      "basic_top": 26995,
+      "br": 0.25,
+      "hr": 0.4,
+      "ni_lower": 0,
+      "ni_main": 0.12,
+      "ni_upper": 0,
+      "ni_upper_rate": 0.02,
+      "pa": 3295
+    },
+    "1992": {
+      "basic_top": 27145,
+      "br": 0.25,
+      "hr": 0.4,
+      "ni_lower": 0,
+      "ni_main": 0.12,
+      "ni_upper": 0,
+      "ni_upper_rate": 0.02,
+      "pa": 3445
+    },
+    "1993": {
+      "basic_top": 27145,
+      "br": 0.25,
+      "hr": 0.4,
+      "ni_lower": 0,
+      "ni_main": 0.12,
+      "ni_upper": 0,
+      "ni_upper_rate": 0.02,
+      "pa": 3445
+    },
+    "1994": {
+      "basic_top": 27145,
+      "br": 0.25,
+      "hr": 0.4,
+      "ni_lower": 0,
+      "ni_main": 0.12,
+      "ni_upper": 0,
+      "ni_upper_rate": 0.02,
+      "pa": 3445
+    },
+    "1995": {
+      "basic_top": 27825,
+      "br": 0.25,
+      "hr": 0.4,
+      "ni_lower": 0,
+      "ni_main": 0.12,
+      "ni_upper": 0,
+      "ni_upper_rate": 0.02,
+      "pa": 3525
+    },
+    "1996": {
+      "basic_top": 29265,
+      "br": 0.24,
+      "hr": 0.4,
+      "ni_lower": 0,
+      "ni_main": 0.12,
+      "ni_upper": 0,
+      "ni_upper_rate": 0.02,
+      "pa": 3765
+    },
+    "1997": {
+      "basic_top": 30145,
+      "br": 0.23,
+      "hr": 0.4,
+      "ni_lower": 0,
+      "ni_main": 0.12,
+      "ni_upper": 0,
+      "ni_upper_rate": 0.02,
+      "pa": 4045
+    },
+    "1998": {
+      "basic_top": 31295,
+      "br": 0.23,
+      "hr": 0.4,
+      "ni_lower": 0,
+      "ni_main": 0.12,
+      "ni_upper": 0,
+      "ni_upper_rate": 0.02,
+      "pa": 4195
+    },
+    "1999": {
+      "basic_top": 32335,
+      "br": 0.23,
+      "hr": 0.4,
+      "ni_lower": 0,
+      "ni_main": 0.1,
+      "ni_upper": 26000,
+      "ni_upper_rate": 0.02,
+      "pa": 4335
+    },
+    "2000": {
+      "basic_top": 32785,
+      "br": 0.22,
+      "hr": 0.4,
+      "ni_lower": 3950,
+      "ni_main": 0.1,
+      "ni_upper": 27820,
+      "ni_upper_rate": 0.02,
+      "pa": 4385
+    },
+    "2001": {
+      "basic_top": 33935,
+      "br": 0.22,
+      "hr": 0.4,
+      "ni_lower": 4520,
+      "ni_main": 0.1,
+      "ni_upper": 29900,
+      "ni_upper_rate": 0.02,
+      "pa": 4535
+    },
+    "2002": {
+      "basic_top": 34515,
+      "br": 0.22,
+      "hr": 0.4,
+      "ni_lower": 4630,
+      "ni_main": 0.1,
+      "ni_upper": 30420,
+      "ni_upper_rate": 0.02,
+      "pa": 4615
+    },
+    "2003": {
+      "basic_top": 35115,
+      "br": 0.22,
+      "hr": 0.4,
+      "ni_lower": 4630,
+      "ni_main": 0.11,
+      "ni_upper": 30940,
+      "ni_upper_rate": 0.01,
+      "pa": 4615
+    },
+    "2004": {
+      "basic_top": 36145,
+      "br": 0.22,
+      "hr": 0.4,
+      "ni_lower": 4730,
+      "ni_main": 0.11,
+      "ni_upper": 31720,
+      "ni_upper_rate": 0.01,
+      "pa": 4745
+    },
+    "2005": {
+      "basic_top": 37295,
+      "br": 0.22,
+      "hr": 0.4,
+      "ni_lower": 4890,
+      "ni_main": 0.11,
+      "ni_upper": 32760,
+      "ni_upper_rate": 0.01,
+      "pa": 4895
+    },
+    "2006": {
+      "basic_top": 38335,
+      "br": 0.22,
+      "hr": 0.4,
+      "ni_lower": 5040,
+      "ni_main": 0.11,
+      "ni_upper": 33540,
+      "ni_upper_rate": 0.01,
+      "pa": 5035
+    },
+    "2007": {
+      "basic_top": 39825,
+      "br": 0.22,
+      "hr": 0.4,
+      "ni_lower": 5200,
+      "ni_main": 0.11,
+      "ni_upper": 34840,
+      "ni_upper_rate": 0.01,
+      "pa": 5225
+    },
+    "2008": {
+      "basic_top": 40835,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 5460,
+      "ni_main": 0.11,
+      "ni_upper": 40040,
+      "ni_upper_rate": 0.01,
+      "pa": 6035
+    },
+    "2009": {
+      "basic_top": 43875,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 5720,
+      "ni_main": 0.11,
+      "ni_upper": 43890,
+      "ni_upper_rate": 0.01,
+      "pa": 6475
+    },
+    "2010": {
+      "basic_top": 43875,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 5720,
+      "ni_main": 0.11,
+      "ni_upper": 43890,
+      "ni_upper_rate": 0.01,
+      "pa": 6475
+    },
+    "2011": {
+      "basic_top": 42475,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 7230,
+      "ni_main": 0.12,
+      "ni_upper": 42480,
+      "ni_upper_rate": 0.02,
+      "pa": 7475
+    },
+    "2012": {
+      "basic_top": 42475,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 7590,
+      "ni_main": 0.12,
+      "ni_upper": 42480,
+      "ni_upper_rate": 0.02,
+      "pa": 8105
+    },
+    "2013": {
+      "basic_top": 41450,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 7750,
+      "ni_main": 0.12,
+      "ni_upper": 41440,
+      "ni_upper_rate": 0.02,
+      "pa": 9440
+    },
+    "2014": {
+      "basic_top": 41865,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 7960,
+      "ni_main": 0.12,
+      "ni_upper": 41860,
+      "ni_upper_rate": 0.02,
+      "pa": 10000
+    },
+    "2015": {
+      "basic_top": 42385,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 8060,
+      "ni_main": 0.12,
+      "ni_upper": 42380,
+      "ni_upper_rate": 0.02,
+      "pa": 10600
+    },
+    "2016": {
+      "basic_top": 43000,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 8060,
+      "ni_main": 0.12,
+      "ni_upper": 43000,
+      "ni_upper_rate": 0.02,
+      "pa": 11000
+    },
+    "2017": {
+      "basic_top": 45000,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 8160,
+      "ni_main": 0.12,
+      "ni_upper": 45030,
+      "ni_upper_rate": 0.02,
+      "pa": 11500
+    },
+    "2018": {
+      "basic_top": 46350,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 8420,
+      "ni_main": 0.12,
+      "ni_upper": 46380,
+      "ni_upper_rate": 0.02,
+      "pa": 11850
+    },
+    "2019": {
+      "basic_top": 50000,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 8630,
+      "ni_main": 0.12,
+      "ni_upper": 50020,
+      "ni_upper_rate": 0.02,
+      "pa": 12500
+    },
+    "2020": {
+      "basic_top": 50000,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 9520,
+      "ni_main": 0.12,
+      "ni_upper": 50020,
+      "ni_upper_rate": 0.02,
+      "pa": 12500
+    },
+    "2021": {
+      "basic_top": 50270,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 9570,
+      "ni_main": 0.12,
+      "ni_upper": 50280,
+      "ni_upper_rate": 0.02,
+      "pa": 12570
+    },
+    "2022": {
+      "basic_top": 50270,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 9880,
+      "ni_main": 0.1325,
+      "ni_upper": 50280,
+      "ni_upper_rate": 0.0325,
+      "pa": 12570
+    },
+    "2023": {
+      "basic_top": 50270,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 12580,
+      "ni_main": 0.12,
+      "ni_upper": 50280,
+      "ni_upper_rate": 0.02,
+      "pa": 12570
+    },
+    "2024": {
+      "basic_top": 50270,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 12580,
+      "ni_main": 0.08,
+      "ni_upper": 50280,
+      "ni_upper_rate": 0.02,
+      "pa": 12570
+    },
+    "2025": {
+      "basic_top": 50270,
+      "br": 0.2,
+      "hr": 0.4,
+      "ni_lower": 12580,
+      "ni_main": 0.08,
+      "ni_upper": 50280,
+      "ni_upper_rate": 0.02,
+      "pa": 12570
+    }
+  }
+}

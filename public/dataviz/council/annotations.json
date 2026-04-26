@@ -1,0 +1,18 @@
+[
+  {
+    "id": "freeze",
+    "anchor": {"year": 2021, "value": 100},
+    "title": "Thresholds frozen",
+    "body": "From April 2021 the personal allowance and higher-rate threshold stopped tracking inflation. As wages and prices kept rising, more income fell into tax — 'fiscal drag'.",
+    "tooltip_position": "right",
+    "arrow_svg": null
+  },
+  {
+    "id": "covid-spike",
+    "anchor": {"year": 2022, "value": 136},
+    "title": "Inflation peaks",
+    "body": "CPI hit a 40-year high in October 2022 (11.1% YoY). Council tax bills set the following spring were the largest in over a decade.",
+    "tooltip_position": "right",
+    "arrow_svg": null
+  }
+]

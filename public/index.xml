@@ -16,6 +16,13 @@
       <description>A schematic of the AMOC — the system that keeps Europe mild — and what happens if it stops.</description>
     </item>
     <item>
+      <title>The household squeeze</title>
+      <link>http://localhost:1313/dataviz/uk_council_tax/</link>
+      <pubDate>Sat, 25 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/dataviz/uk_council_tax/</guid>
+      <description>Comparison of the impact of income tax and flat council tax on take home pay. Example of 5 cities in the UK.</description>
+    </item>
+    <item>
       <title>Trades before the announcements</title>
       <link>http://localhost:1313/dataviz/trades-before-announcements/</link>
       <pubDate>Thu, 23 Apr 2026 00:00:00 +0000</pubDate>

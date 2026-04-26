@@ -29,3 +29,6 @@ cover:
   iframe.addEventListener('load', resizeIframe);
   window.addEventListener('resize', resizeIframe);
 </script>
+<br>
+<br>
+*Update: as reported by the BBC, one of the people betting has been arrested, https://www.bbc.co.uk/news/articles/c20832yg5p2o

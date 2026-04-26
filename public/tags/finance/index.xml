@@ -6,8 +6,15 @@
     <description>Recent content in Finance on Andreas Makas</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 23 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 26 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/finance/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The household squeeze</title>
+      <link>http://localhost:1313/dataviz/uk_council_tax/</link>
+      <pubDate>Sun, 26 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/dataviz/uk_council_tax/</guid>
+      <description>Trading activity preceding Trump&amp;#39;s foreign policy and market announcements.</description>
+    </item>
     <item>
       <title>Trades before the announcements</title>
       <link>http://localhost:1313/dataviz/trades-before-announcements/</link>

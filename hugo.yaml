@@ -55,22 +55,22 @@ menu:
   main:
     - name: useful stuff 
       url: "#"
-      weight: 5
-    - name: projects 
-      url: projects
-      weight: 10
+      weight: 25
+    #- name: projects 
+    #  url: projects
+    #  weight: 10
     - name: dataviz
       url: dataviz
       weight: 9
-    - name: snippets 
-      url: snippets
-      weight: 15
-    - name: links 
-      url: links
-      weight: 20
-    - name: info
-      url: info
-      weight: 25
+    #- name: snippets 
+    #  url: snippets
+    #  weight: 15
+    #- name: links 
+    #  url: links
+    #  weight: 20
+    #- name: info
+    #  url: info
+    #  weight: 25
     # - name: tags 
     #   url: tags/
     #   weight: 30
