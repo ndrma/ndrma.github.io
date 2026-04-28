@@ -23,6 +23,13 @@
       <description>Comparison of the impact of income tax and flat council tax on take home pay. Example of 5 cities in the UK.</description>
     </item>
     <item>
+      <title>How April temperatures have shifted in four UK cities</title>
+      <link>http://localhost:1313/dataviz/april_temps/</link>
+      <pubDate>Fri, 24 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/dataviz/april_temps/</guid>
+      <description>Median April temperature range for London, Manchester, Edinburgh and Inverness, 2000–2026, drawn from ERA5 reanalysis.</description>
+    </item>
+    <item>
       <title>Trades before the announcements</title>
       <link>http://localhost:1313/dataviz/trades-before-announcements/</link>
       <pubDate>Thu, 23 Apr 2026 00:00:00 +0000</pubDate>

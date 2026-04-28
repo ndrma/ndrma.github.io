@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>April temperatures — UK cities, 2000–2025</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg:        #f4f1ea;
+    --ink:       #1d1d1b;
+    --muted:    #6b665d;
+    --rule:     #cfc8b8;
+    --warm:     #7a2e2a;   /* dull burgundy = max */
+    --cool:     #2e4d6b;   /* slate blue   = min */
+    --band:     #7a2e2a18;
+    /* per-city palette for the combined panel */
+    --c-london:     #7a2e2a;
+    --c-manchester: #b07a1c;
+    --c-edinburgh:  #2e4d6b;
+    --c-inverness:  #4f6e3a;
+    --tooltip-bg:#1d1d1bf2;
+    --tooltip-fg:#f4f1ea;
+    --serif:    "Iowan Old Style","Charter","Source Serif Pro",Georgia,serif;
+    --mono:     "JetBrains Mono","IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  html,body { background: var(--bg); color: var(--ink); margin: 0; }
+  body {
+    font-family: var(--serif);
+    font-feature-settings: "onum","liga";
+    padding: 2.5rem clamp(1rem, 4vw, 3rem);
+    max-width: 1400px; margin: 0 auto;
+  }
+  header { margin-bottom: 2rem; }
+  h1 {
+    font-weight: 500; font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    letter-spacing: -0.01em; margin: 0 0 .35rem;
+  }
+  .sub { color: var(--muted); font-size: .95rem; margin: 0; max-width: 56ch; }
+  .legend {
+    display: flex; gap: 1.25rem; margin-top: 1rem;
+    font-family: var(--mono); font-size: .72rem;
+    text-transform: uppercase; letter-spacing: .08em; color: var(--muted);
+  }
+  .legend i { display: inline-block; width: 18px; height: 2px; vertical-align: middle; margin-right: .4rem; }
+
+  .grid {
+    display: grid; grid-template-columns: 1fr; gap: 1.75rem;
+  }
+
+  figure { margin: 0; }
+  figcaption {
+    font-family: var(--mono); font-size: .72rem;
+    text-transform: uppercase; letter-spacing: .12em;
+    color: var(--ink); margin-bottom: .35rem;
+  }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+  .axis path, .axis line { stroke: var(--rule); shape-rendering: crispEdges; }
+  .axis text { fill: var(--muted); font-family: var(--mono); font-size: 10px; }
+  .grid-line { stroke: var(--rule); stroke-dasharray: 2 3; opacity: .55; }
+
+  .line-range { fill: none; stroke: var(--warm); stroke-width: .9; }
+
+  .hover-rule  { stroke: var(--ink); stroke-width: .5; opacity: 0; }
+  .hover-dot   { fill: var(--ink); opacity: 0; }
+  .overlay     { fill: transparent; }
+
+  #tooltip {
+    position: fixed; pointer-events: none; z-index: 10;
+    background: var(--tooltip-bg); color: var(--tooltip-fg);
+    padding: .55rem .7rem; border-radius: 4px;
+    font-family: var(--mono); font-size: .72rem; line-height: 1.45;
+    opacity: 0; transition: opacity .12s;
+    white-space: nowrap;
+  }
+  #tooltip .d { color: #c9c2b1; margin-bottom: .2rem; }
+  #tooltip .row { display: flex; justify-content: space-between; gap: 1.2rem; }
+  #tooltip .k { color: #c9c2b1; }
+
+  footer { margin-top: 2.5rem; font-size: .8rem; color: var(--muted); }
+  footer code { font-family: var(--mono); background: #e8e3d6; padding: 1px 5px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>April median temperature range, 2000–2026</h1>
+  <p class="sub">Median daily range (max − min) within each April, in degrees Celsius. One point per year. Hover for the underlying medians of the daily max and min.</p>
+  <div class="legend">
+    <span><i style="background:var(--warm)"></i>Median daily range (°C)</span>
+  </div>
+</header>
+
+<div id="grid" class="grid"></div>
+
+<div id="tooltip" role="status" aria-live="polite"></div>
+
+<footer>
+  Source: Open-Meteo Historical Weather API (ERA5 reanalysis).
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script>
+(function () {
+  const CITIES = ["London", "Manchester", "Edinburgh", "Inverness"];
+  const data = {"London":[{"year":1940,"n_days":30,"tmax_median":12.8,"tmin_median":6.65,"range_median":6.15},{"year":1941,"n_days":30,"tmax_median":10.15,"tmin_median":3.5,"range_median":6.65},{"year":1942,"n_days":30,"tmax_median":12.4,"tmin_median":5.35,"range_median":7.05},{"year":1943,"n_days":30,"tmax_median":14.4,"tmin_median":7.3,"range_median":7.1},{"year":1944,"n_days":30,"tmax_median":14.95,"tmin_median":6.7,"range_median":8.25},{"year":1945,"n_days":30,"tmax_median":13.55,"tmin_median":5.8,"range_median":7.75},{"year":1946,"n_days":30,"tmax_median":14.9,"tmin_median":6.15,"range_median":8.75},{"year":1947,"n_days":30,"tmax_median":14.15,"tmin_median":5.8,"range_median":8.35},{"year":1948,"n_days":30,"tmax_median":14.0,"tmin_median":5.8,"range_median":8.2},{"year":1949,"n_days":30,"tmax_median":14.4,"tmin_median":5.5,"range_median":8.9},{"year":1950,"n_days":30,"tmax_median":11.4,"tmin_median":3.7,"range_median":7.7},{"year":1951,"n_days":30,"tmax_median":10.5,"tmin_median":2.75,"range_median":7.75},{"year":1952,"n_days":30,"tmax_median":13.8,"tmin_median":5.65,"range_median":8.15},{"year":1953,"n_days":30,"tmax_median":11.45,"tmin_median":4.35,"range_median":7.1},{"year":1954,"n_days":30,"tmax_median":11.0,"tmin_median":2.35,"range_median":8.65},{"year":1955,"n_days":30,"tmax_median":13.05,"tmin_median":4.1,"range_median":8.95},{"year":1956,"n_days":30,"tmax_median":10.65,"tmin_median":2.45,"range_median":8.2},{"year":1957,"n_days":30,"tmax_median":13.65,"tmin_median":5.1,"range_median":8.55},{"year":1958,"n_days":30,"tmax_median":9.95,"tmin_median":2.05,"range_median":7.9},{"year":1959,"n_days":30,"tmax_median":13.15,"tmin_median":6.15,"range_median":7.0},{"year":1960,"n_days":30,"tmax_median":13.25,"tmin_median":5.1,"range_median":8.15},{"year":1961,"n_days":30,"tmax_median":15.0,"tmin_median":6.55,"range_median":8.45},{"year":1962,"n_days":30,"tmax_median":11.4,"tmin_median":3.8,"range_median":7.6},{"year":1963,"n_days":30,"tmax_median":13.2,"tmin_median":4.45,"range_median":8.75},{"year":1964,"n_days":30,"tmax_median":13.3,"tmin_median":6.05,"range_median":7.25},{"year":1965,"n_days":30,"tmax_median":12.75,"tmin_median":4.15,"range_median":8.6},{"year":1966,"n_days":30,"tmax_median":12.4,"tmin_median":3.85,"range_median":8.55},{"year":1967,"n_days":30,"tmax_median":11.35,"tmin_median":4.15,"range_median":7.2},{"year":1968,"n_days":30,"tmax_median":13.05,"tmin_median":4.5,"range_median":8.55},{"year":1969,"n_days":30,"tmax_median":11.45,"tmin_median":3.1,"range_median":8.35},{"year":1970,"n_days":30,"tmax_median":10.65,"tmin_median":1.45,"range_median":9.2},{"year":1971,"n_days":30,"tmax_median":10.9,"tmin_median":4.05,"range_median":6.85},{"year":1972,"n_days":30,"tmax_median":11.7,"tmin_median":5.05,"range_median":6.65},{"year":1973,"n_days":30,"tmax_median":10.25,"tmin_median":3.1,"range_median":7.15},{"year":1974,"n_days":30,"tmax_median":11.5,"tmin_median":4.75,"range_median":6.75},{"year":1975,"n_days":30,"tmax_median":13.05,"tmin_median":5.0,"range_median":8.05},{"year":1976,"n_days":30,"tmax_median":12.7,"tmin_median":3.95,"range_median":8.75},{"year":1977,"n_days":30,"tmax_median":10.6,"tmin_median":2.65,"range_median":7.95},{"year":1978,"n_days":30,"tmax_median":9.5,"tmin_median":3.45,"range_median":6.05},{"year":1979,"n_days":30,"tmax_median":11.25,"tmin_median":4.75,"range_median":6.5},{"year":1980,"n_days":30,"tmax_median":11.3,"tmin_median":5.05,"range_median":6.25},{"year":1981,"n_days":30,"tmax_median":10.35,"tmin_median":4.45,"range_median":5.9},{"year":1982,"n_days":30,"tmax_median":12.9,"tmin_median":4.25,"range_median":8.65},{"year":1983,"n_days":30,"tmax_median":11.3,"tmin_median":3.05,"range_median":8.25},{"year":1984,"n_days":30,"tmax_median":12.3,"tmin_median":3.0,"range_median":9.3},{"year":1985,"n_days":30,"tmax_median":12.5,"tmin_median":4.85,"range_median":7.65},{"year":1986,"n_days":30,"tmax_median":9.9,"tmin_median":2.55,"range_median":7.35},{"year":1987,"n_days":30,"tmax_median":14.35,"tmin_median":6.15,"range_median":8.2},{"year":1988,"n_days":30,"tmax_median":11.8,"tmin_median":3.55,"range_median":8.25},{"year":1989,"n_days":30,"tmax_median":11.2,"tmin_median":4.2,"range_median":7.0},{"year":1990,"n_days":30,"tmax_median":12.65,"tmin_median":4.3,"range_median":8.35},{"year":1991,"n_days":30,"tmax_median":11.7,"tmin_median":4.25,"range_median":7.45},{"year":1992,"n_days":30,"tmax_median":13.25,"tmin_median":4.5,"range_median":8.75},{"year":1993,"n_days":30,"tmax_median":13.4,"tmin_median":6.9,"range_median":6.5},{"year":1994,"n_days":30,"tmax_median":11.0,"tmin_median":3.7,"range_median":7.3},{"year":1995,"n_days":30,"tmax_median":13.6,"tmin_median":6.3,"range_median":7.3},{"year":1996,"n_days":30,"tmax_median":13.4,"tmin_median":4.8,"range_median":8.6},{"year":1997,"n_days":30,"tmax_median":12.85,"tmin_median":4.1,"range_median":8.75},{"year":1998,"n_days":30,"tmax_median":12.5,"tmin_median":5.3,"range_median":7.2},{"year":1999,"n_days":30,"tmax_median":14.1,"tmin_median":6.85,"range_median":7.25},{"year":2000,"n_days":30,"tmax_median":12.9,"tmin_median":4.6,"range_median":8.3},{"year":2001,"n_days":30,"tmax_median":11.7,"tmin_median":3.8,"range_median":7.9},{"year":2002,"n_days":30,"tmax_median":13.75,"tmin_median":4.75,"range_median":9.0},{"year":2003,"n_days":30,"tmax_median":15.2,"tmin_median":5.3,"range_median":9.9},{"year":2004,"n_days":30,"tmax_median":13.7,"tmin_median":5.7,"range_median":8.0},{"year":2005,"n_days":30,"tmax_median":13.5,"tmin_median":5.6,"range_median":7.9},{"year":2006,"n_days":30,"tmax_median":13.1,"tmin_median":5.4,"range_median":7.7},{"year":2007,"n_days":30,"tmax_median":16.55,"tmin_median":7.3,"range_median":9.25},{"year":2008,"n_days":30,"tmax_median":11.75,"tmin_median":4.8,"range_median":6.95},{"year":2009,"n_days":30,"tmax_median":14.35,"tmin_median":5.9,"range_median":8.45},{"year":2010,"n_days":30,"tmax_median":13.45,"tmin_median":4.5,"range_median":8.95},{"year":2011,"n_days":30,"tmax_median":17.1,"tmin_median":7.15,"range_median":9.95},{"year":2012,"n_days":30,"tmax_median":11.75,"tmin_median":4.1,"range_median":7.65},{"year":2013,"n_days":30,"tmax_median":11.3,"tmin_median":2.5,"range_median":8.8},{"year":2014,"n_days":30,"tmax_median":14.55,"tmin_median":6.9,"range_median":7.65},{"year":2015,"n_days":30,"tmax_median":13.85,"tmin_median":4.65,"range_median":9.2},{"year":2016,"n_days":30,"tmax_median":11.7,"tmin_median":3.85,"range_median":7.85},{"year":2017,"n_days":30,"tmax_median":14.0,"tmin_median":5.1,"range_median":8.9},{"year":2018,"n_days":30,"tmax_median":13.65,"tmin_median":7.0,"range_median":6.65},{"year":2019,"n_days":30,"tmax_median":13.4,"tmin_median":5.05,"range_median":8.35},{"year":2020,"n_days":30,"tmax_median":16.65,"tmin_median":6.35,"range_median":10.3},{"year":2021,"n_days":30,"tmax_median":11.6,"tmin_median":1.55,"range_median":10.05},{"year":2022,"n_days":30,"tmax_median":15.1,"tmin_median":5.3,"range_median":9.8},{"year":2023,"n_days":30,"tmax_median":13.15,"tmin_median":4.8,"range_median":8.35},{"year":2024,"n_days":30,"tmax_median":13.2,"tmin_median":6.65,"range_median":6.55},{"year":2025,"n_days":30,"tmax_median":16.3,"tmin_median":7.65,"range_median":8.65},{"year":2026,"n_days":25,"tmax_median":15.9,"tmin_median":7.2,"range_median":8.7}],"Manchester":[{"year":1940,"n_days":30,"tmax_median":11.7,"tmin_median":6.05,"range_median":5.65},{"year":1941,"n_days":30,"tmax_median":9.05,"tmin_median":2.8,"range_median":6.25},{"year":1942,"n_days":30,"tmax_median":11.55,"tmin_median":3.8,"range_median":7.75},{"year":1943,"n_days":30,"tmax_median":13.15,"tmin_median":6.4,"range_median":6.75},{"year":1944,"n_days":30,"tmax_median":13.45,"tmin_median":6.4,"range_median":7.05},{"year":1945,"n_days":30,"tmax_median":13.5,"tmin_median":5.65,"range_median":7.85},{"year":1946,"n_days":30,"tmax_median":13.0,"tmin_median":5.6,"range_median":7.4},{"year":1947,"n_days":30,"tmax_median":12.15,"tmin_median":5.3,"range_median":6.85},{"year":1948,"n_days":30,"tmax_median":12.85,"tmin_median":4.45,"range_median":8.4},{"year":1949,"n_days":30,"tmax_median":13.05,"tmin_median":6.05,"range_median":7.0},{"year":1950,"n_days":30,"tmax_median":9.75,"tmin_median":3.3,"range_median":6.45},{"year":1951,"n_days":30,"tmax_median":8.75,"tmin_median":1.85,"range_median":6.9},{"year":1952,"n_days":30,"tmax_median":13.1,"tmin_median":4.8,"range_median":8.3},{"year":1953,"n_days":30,"tmax_median":9.5,"tmin_median":2.75,"range_median":6.75},{"year":1954,"n_days":30,"tmax_median":10.8,"tmin_median":2.25,"range_median":8.55},{"year":1955,"n_days":30,"tmax_median":11.9,"tmin_median":4.05,"range_median":7.85},{"year":1956,"n_days":30,"tmax_median":9.75,"tmin_median":1.3,"range_median":8.45},{"year":1957,"n_days":30,"tmax_median":11.95,"tmin_median":3.7,"range_median":8.25},{"year":1958,"n_days":30,"tmax_median":9.65,"tmin_median":1.55,"range_median":8.1},{"year":1959,"n_days":30,"tmax_median":11.75,"tmin_median":4.2,"range_median":7.55},{"year":1960,"n_days":30,"tmax_median":12.25,"tmin_median":3.8,"range_median":8.45},{"year":1961,"n_days":30,"tmax_median":13.9,"tmin_median":6.55,"range_median":7.35},{"year":1962,"n_days":30,"tmax_median":9.5,"tmin_median":2.6,"range_median":6.9},{"year":1963,"n_days":30,"tmax_median":10.9,"tmin_median":4.25,"range_median":6.65},{"year":1964,"n_days":30,"tmax_median":11.45,"tmin_median":5.5,"range_median":5.95},{"year":1965,"n_days":30,"tmax_median":10.5,"tmin_median":3.55,"range_median":6.95},{"year":1966,"n_days":30,"tmax_median":10.1,"tmin_median":3.15,"range_median":6.95},{"year":1967,"n_days":30,"tmax_median":9.65,"tmin_median":4.25,"range_median":5.4},{"year":1968,"n_days":30,"tmax_median":13.05,"tmin_median":3.8,"range_median":9.25},{"year":1969,"n_days":30,"tmax_median":9.6,"tmin_median":2.9,"range_median":6.7},{"year":1970,"n_days":30,"tmax_median":8.8,"tmin_median":1.9,"range_median":6.9},{"year":1971,"n_days":30,"tmax_median":10.75,"tmin_median":3.8,"range_median":6.95},{"year":1972,"n_days":30,"tmax_median":10.6,"tmin_median":4.25,"range_median":6.35},{"year":1973,"n_days":30,"tmax_median":9.15,"tmin_median":2.6,"range_median":6.55},{"year":1974,"n_days":30,"tmax_median":11.1,"tmin_median":3.15,"range_median":7.95},{"year":1975,"n_days":30,"tmax_median":11.35,"tmin_median":4.75,"range_median":6.6},{"year":1976,"n_days":30,"tmax_median":10.1,"tmin_median":3.1,"range_median":7.0},{"year":1977,"n_days":30,"tmax_median":8.85,"tmin_median":3.2,"range_median":5.65},{"year":1978,"n_days":30,"tmax_median":9.25,"tmin_median":2.8,"range_median":6.45},{"year":1979,"n_days":30,"tmax_median":9.8,"tmin_median":3.25,"range_median":6.55},{"year":1980,"n_days":30,"tmax_median":11.6,"tmin_median":4.45,"range_median":7.15},{"year":1981,"n_days":30,"tmax_median":10.8,"tmin_median":2.55,"range_median":8.25},{"year":1982,"n_days":30,"tmax_median":12.1,"tmin_median":3.8,"range_median":8.3},{"year":1983,"n_days":30,"tmax_median":9.15,"tmin_median":1.95,"range_median":7.2},{"year":1984,"n_days":30,"tmax_median":10.4,"tmin_median":3.4,"range_median":7.0},{"year":1985,"n_days":30,"tmax_median":10.5,"tmin_median":4.35,"range_median":6.15},{"year":1986,"n_days":30,"tmax_median":8.6,"tmin_median":1.7,"range_median":6.9},{"year":1987,"n_days":30,"tmax_median":13.4,"tmin_median":5.75,"range_median":7.65},{"year":1988,"n_days":30,"tmax_median":11.05,"tmin_median":3.4,"range_median":7.65},{"year":1989,"n_days":30,"tmax_median":10.0,"tmin_median":2.25,"range_median":7.75},{"year":1990,"n_days":30,"tmax_median":10.9,"tmin_median":3.65,"range_median":7.25},{"year":1991,"n_days":30,"tmax_median":10.7,"tmin_median":3.3,"range_median":7.4},{"year":1992,"n_days":30,"tmax_median":11.25,"tmin_median":4.9,"range_median":6.35},{"year":1993,"n_days":30,"tmax_median":12.2,"tmin_median":5.95,"range_median":6.25},{"year":1994,"n_days":30,"tmax_median":10.25,"tmin_median":2.8,"range_median":7.45},{"year":1995,"n_days":30,"tmax_median":11.65,"tmin_median":4.55,"range_median":7.1},{"year":1996,"n_days":30,"tmax_median":11.75,"tmin_median":4.95,"range_median":6.8},{"year":1997,"n_days":30,"tmax_median":11.45,"tmin_median":4.55,"range_median":6.9},{"year":1998,"n_days":30,"tmax_median":11.0,"tmin_median":3.95,"range_median":7.05},{"year":1999,"n_days":30,"tmax_median":12.8,"tmin_median":5.65,"range_median":7.15},{"year":2000,"n_days":30,"tmax_median":10.75,"tmin_median":2.8,"range_median":7.95},{"year":2001,"n_days":30,"tmax_median":9.9,"tmin_median":3.4,"range_median":6.5},{"year":2002,"n_days":30,"tmax_median":12.1,"tmin_median":3.85,"range_median":8.25},{"year":2003,"n_days":30,"tmax_median":13.6,"tmin_median":5.1,"range_median":8.5},{"year":2004,"n_days":30,"tmax_median":12.8,"tmin_median":5.75,"range_median":7.05},{"year":2005,"n_days":30,"tmax_median":11.95,"tmin_median":4.7,"range_median":7.25},{"year":2006,"n_days":30,"tmax_median":10.8,"tmin_median":4.35,"range_median":6.45},{"year":2007,"n_days":30,"tmax_median":14.35,"tmin_median":6.5,"range_median":7.85},{"year":2008,"n_days":30,"tmax_median":9.55,"tmin_median":3.5,"range_median":6.05},{"year":2009,"n_days":30,"tmax_median":13.85,"tmin_median":4.9,"range_median":8.95},{"year":2010,"n_days":30,"tmax_median":12.4,"tmin_median":2.6,"range_median":9.8},{"year":2011,"n_days":30,"tmax_median":14.7,"tmin_median":6.5,"range_median":8.2},{"year":2012,"n_days":30,"tmax_median":9.7,"tmin_median":3.25,"range_median":6.45},{"year":2013,"n_days":30,"tmax_median":10.3,"tmin_median":3.15,"range_median":7.15},{"year":2014,"n_days":30,"tmax_median":13.15,"tmin_median":6.3,"range_median":6.85},{"year":2015,"n_days":30,"tmax_median":12.4,"tmin_median":3.6,"range_median":8.8},{"year":2016,"n_days":30,"tmax_median":9.95,"tmin_median":2.85,"range_median":7.1},{"year":2017,"n_days":30,"tmax_median":11.65,"tmin_median":4.5,"range_median":7.15},{"year":2018,"n_days":30,"tmax_median":12.4,"tmin_median":5.95,"range_median":6.45},{"year":2019,"n_days":30,"tmax_median":13.4,"tmin_median":5.4,"range_median":8.0},{"year":2020,"n_days":30,"tmax_median":15.95,"tmin_median":5.7,"range_median":10.25},{"year":2021,"n_days":30,"tmax_median":10.9,"tmin_median":0.3,"range_median":10.6},{"year":2022,"n_days":30,"tmax_median":13.7,"tmin_median":5.5,"range_median":8.2},{"year":2023,"n_days":30,"tmax_median":12.15,"tmin_median":5.2,"range_median":6.95},{"year":2024,"n_days":30,"tmax_median":11.7,"tmin_median":5.75,"range_median":5.95},{"year":2025,"n_days":30,"tmax_median":15.2,"tmin_median":6.45,"range_median":8.75},{"year":2026,"n_days":25,"tmax_median":13.6,"tmin_median":5.3,"range_median":8.3}],"Edinburgh":[{"year":1940,"n_days":30,"tmax_median":10.7,"tmin_median":4.35,"range_median":6.35},{"year":1941,"n_days":30,"tmax_median":6.9,"tmin_median":2.2,"range_median":4.7},{"year":1942,"n_days":30,"tmax_median":9.9,"tmin_median":4.0,"range_median":5.9},{"year":1943,"n_days":30,"tmax_median":11.9,"tmin_median":6.05,"range_median":5.85},{"year":1944,"n_days":30,"tmax_median":12.7,"tmin_median":6.6,"range_median":6.1},{"year":1945,"n_days":30,"tmax_median":12.8,"tmin_median":6.3,"range_median":6.5},{"year":1946,"n_days":30,"tmax_median":11.6,"tmin_median":5.9,"range_median":5.7},{"year":1947,"n_days":30,"tmax_median":10.9,"tmin_median":5.35,"range_median":5.55},{"year":1948,"n_days":30,"tmax_median":11.1,"tmin_median":4.55,"range_median":6.55},{"year":1949,"n_days":30,"tmax_median":11.3,"tmin_median":5.65,"range_median":5.65},{"year":1950,"n_days":30,"tmax_median":8.75,"tmin_median":2.75,"range_median":6.0},{"year":1951,"n_days":30,"tmax_median":7.85,"tmin_median":1.6,"range_median":6.25},{"year":1952,"n_days":30,"tmax_median":11.4,"tmin_median":5.5,"range_median":5.9},{"year":1953,"n_days":30,"tmax_median":8.6,"tmin_median":2.6,"range_median":6.0},{"year":1954,"n_days":30,"tmax_median":10.1,"tmin_median":3.75,"range_median":6.35},{"year":1955,"n_days":30,"tmax_median":11.35,"tmin_median":5.55,"range_median":5.8},{"year":1956,"n_days":30,"tmax_median":8.7,"tmin_median":1.2,"range_median":7.5},{"year":1957,"n_days":30,"tmax_median":11.5,"tmin_median":3.7,"range_median":7.8},{"year":1958,"n_days":30,"tmax_median":9.55,"tmin_median":2.85,"range_median":6.7},{"year":1959,"n_days":30,"tmax_median":10.7,"tmin_median":4.7,"range_median":6.0},{"year":1960,"n_days":30,"tmax_median":11.85,"tmin_median":5.25,"range_median":6.6},{"year":1961,"n_days":30,"tmax_median":11.75,"tmin_median":6.1,"range_median":5.65},{"year":1962,"n_days":30,"tmax_median":8.85,"tmin_median":2.3,"range_median":6.55},{"year":1963,"n_days":30,"tmax_median":10.15,"tmin_median":3.0,"range_median":7.15},{"year":1964,"n_days":30,"tmax_median":10.4,"tmin_median":5.05,"range_median":5.35},{"year":1965,"n_days":30,"tmax_median":10.2,"tmin_median":3.75,"range_median":6.45},{"year":1966,"n_days":30,"tmax_median":5.9,"tmin_median":2.25,"range_median":3.65},{"year":1967,"n_days":30,"tmax_median":9.2,"tmin_median":3.95,"range_median":5.25},{"year":1968,"n_days":30,"tmax_median":10.6,"tmin_median":3.45,"range_median":7.15},{"year":1969,"n_days":30,"tmax_median":8.8,"tmin_median":2.3,"range_median":6.5},{"year":1970,"n_days":30,"tmax_median":8.3,"tmin_median":1.15,"range_median":7.15},{"year":1971,"n_days":30,"tmax_median":9.55,"tmin_median":3.2,"range_median":6.35},{"year":1972,"n_days":30,"tmax_median":9.75,"tmin_median":4.3,"range_median":5.45},{"year":1973,"n_days":30,"tmax_median":8.35,"tmin_median":2.55,"range_median":5.8},{"year":1974,"n_days":30,"tmax_median":10.4,"tmin_median":3.1,"range_median":7.3},{"year":1975,"n_days":30,"tmax_median":9.65,"tmin_median":3.9,"range_median":5.75},{"year":1976,"n_days":30,"tmax_median":8.95,"tmin_median":3.9,"range_median":5.05},{"year":1977,"n_days":30,"tmax_median":8.9,"tmin_median":2.95,"range_median":5.95},{"year":1978,"n_days":30,"tmax_median":7.5,"tmin_median":2.65,"range_median":4.85},{"year":1979,"n_days":30,"tmax_median":10.0,"tmin_median":2.35,"range_median":7.65},{"year":1980,"n_days":30,"tmax_median":10.6,"tmin_median":4.3,"range_median":6.3},{"year":1981,"n_days":30,"tmax_median":10.95,"tmin_median":3.0,"range_median":7.95},{"year":1982,"n_days":30,"tmax_median":11.25,"tmin_median":4.75,"range_median":6.5},{"year":1983,"n_days":30,"tmax_median":8.6,"tmin_median":1.85,"range_median":6.75},{"year":1984,"n_days":30,"tmax_median":9.8,"tmin_median":3.2,"range_median":6.6},{"year":1985,"n_days":30,"tmax_median":10.0,"tmin_median":3.85,"range_median":6.15},{"year":1986,"n_days":30,"tmax_median":7.75,"tmin_median":1.45,"range_median":6.3},{"year":1987,"n_days":30,"tmax_median":11.75,"tmin_median":4.8,"range_median":6.95},{"year":1988,"n_days":30,"tmax_median":10.25,"tmin_median":3.8,"range_median":6.45},{"year":1989,"n_days":30,"tmax_median":8.65,"tmin_median":2.95,"range_median":5.7},{"year":1990,"n_days":30,"tmax_median":9.8,"tmin_median":3.6,"range_median":6.2},{"year":1991,"n_days":30,"tmax_median":9.55,"tmin_median":3.75,"range_median":5.8},{"year":1992,"n_days":30,"tmax_median":10.3,"tmin_median":4.55,"range_median":5.75},{"year":1993,"n_days":30,"tmax_median":10.3,"tmin_median":4.65,"range_median":5.65},{"year":1994,"n_days":30,"tmax_median":9.25,"tmin_median":2.45,"range_median":6.8},{"year":1995,"n_days":30,"tmax_median":10.15,"tmin_median":3.9,"range_median":6.25},{"year":1996,"n_days":30,"tmax_median":10.45,"tmin_median":5.15,"range_median":5.3},{"year":1997,"n_days":30,"tmax_median":11.1,"tmin_median":4.85,"range_median":6.25},{"year":1998,"n_days":30,"tmax_median":8.5,"tmin_median":3.7,"range_median":4.8},{"year":1999,"n_days":30,"tmax_median":11.65,"tmin_median":5.9,"range_median":5.75},{"year":2000,"n_days":30,"tmax_median":9.2,"tmin_median":3.55,"range_median":5.65},{"year":2001,"n_days":30,"tmax_median":8.9,"tmin_median":3.1,"range_median":5.8},{"year":2002,"n_days":30,"tmax_median":10.7,"tmin_median":4.1,"range_median":6.6},{"year":2003,"n_days":30,"tmax_median":12.3,"tmin_median":4.85,"range_median":7.45},{"year":2004,"n_days":30,"tmax_median":11.15,"tmin_median":5.0,"range_median":6.15},{"year":2005,"n_days":30,"tmax_median":9.95,"tmin_median":4.05,"range_median":5.9},{"year":2006,"n_days":30,"tmax_median":9.85,"tmin_median":4.2,"range_median":5.65},{"year":2007,"n_days":30,"tmax_median":12.9,"tmin_median":5.9,"range_median":7.0},{"year":2008,"n_days":30,"tmax_median":8.85,"tmin_median":3.25,"range_median":5.6},{"year":2009,"n_days":30,"tmax_median":12.1,"tmin_median":5.2,"range_median":6.9},{"year":2010,"n_days":30,"tmax_median":10.65,"tmin_median":3.85,"range_median":6.8},{"year":2011,"n_days":30,"tmax_median":13.2,"tmin_median":6.6,"range_median":6.6},{"year":2012,"n_days":30,"tmax_median":8.55,"tmin_median":2.9,"range_median":5.65},{"year":2013,"n_days":30,"tmax_median":9.05,"tmin_median":2.4,"range_median":6.65},{"year":2014,"n_days":30,"tmax_median":11.0,"tmin_median":6.25,"range_median":4.75},{"year":2015,"n_days":30,"tmax_median":10.4,"tmin_median":3.2,"range_median":7.2},{"year":2016,"n_days":30,"tmax_median":8.55,"tmin_median":2.85,"range_median":5.7},{"year":2017,"n_days":30,"tmax_median":11.05,"tmin_median":5.25,"range_median":5.8},{"year":2018,"n_days":30,"tmax_median":10.7,"tmin_median":5.15,"range_median":5.55},{"year":2019,"n_days":30,"tmax_median":10.8,"tmin_median":4.4,"range_median":6.4},{"year":2020,"n_days":30,"tmax_median":12.0,"tmin_median":4.2,"range_median":7.8},{"year":2021,"n_days":30,"tmax_median":9.35,"tmin_median":1.5,"range_median":7.85},{"year":2022,"n_days":30,"tmax_median":10.65,"tmin_median":5.0,"range_median":5.65},{"year":2023,"n_days":30,"tmax_median":11.0,"tmin_median":4.35,"range_median":6.65},{"year":2024,"n_days":30,"tmax_median":10.65,"tmin_median":4.5,"range_median":6.15},{"year":2025,"n_days":30,"tmax_median":11.7,"tmin_median":5.7,"range_median":6.0},{"year":2026,"n_days":25,"tmax_median":11.4,"tmin_median":4.3,"range_median":7.1}],"Inverness":[{"year":1940,"n_days":30,"tmax_median":10.6,"tmin_median":3.9,"range_median":6.7},{"year":1941,"n_days":30,"tmax_median":8.35,"tmin_median":1.7,"range_median":6.65},{"year":1942,"n_days":30,"tmax_median":10.9,"tmin_median":2.85,"range_median":8.05},{"year":1943,"n_days":30,"tmax_median":11.4,"tmin_median":5.3,"range_median":6.1},{"year":1944,"n_days":30,"tmax_median":12.85,"tmin_median":6.7,"range_median":6.15},{"year":1945,"n_days":30,"tmax_median":12.1,"tmin_median":5.7,"range_median":6.4},{"year":1946,"n_days":30,"tmax_median":11.95,"tmin_median":5.25,"range_median":6.7},{"year":1947,"n_days":30,"tmax_median":10.65,"tmin_median":5.35,"range_median":5.3},{"year":1948,"n_days":30,"tmax_median":10.9,"tmin_median":4.85,"range_median":6.05},{"year":1949,"n_days":30,"tmax_median":11.2,"tmin_median":4.7,"range_median":6.5},{"year":1950,"n_days":30,"tmax_median":8.45,"tmin_median":2.2,"range_median":6.25},{"year":1951,"n_days":30,"tmax_median":7.1,"tmin_median":1.0,"range_median":6.1},{"year":1952,"n_days":30,"tmax_median":11.55,"tmin_median":5.0,"range_median":6.55},{"year":1953,"n_days":30,"tmax_median":7.8,"tmin_median":1.35,"range_median":6.45},{"year":1954,"n_days":30,"tmax_median":10.55,"tmin_median":3.15,"range_median":7.4},{"year":1955,"n_days":30,"tmax_median":11.55,"tmin_median":3.65,"range_median":7.9},{"year":1956,"n_days":30,"tmax_median":8.4,"tmin_median":0.8,"range_median":7.6},{"year":1957,"n_days":30,"tmax_median":10.95,"tmin_median":3.7,"range_median":7.25},{"year":1958,"n_days":30,"tmax_median":9.35,"tmin_median":3.05,"range_median":6.3},{"year":1959,"n_days":30,"tmax_median":10.3,"tmin_median":4.05,"range_median":6.25},{"year":1960,"n_days":30,"tmax_median":10.9,"tmin_median":5.5,"range_median":5.4},{"year":1961,"n_days":30,"tmax_median":12.15,"tmin_median":4.95,"range_median":7.2},{"year":1962,"n_days":30,"tmax_median":9.15,"tmin_median":0.85,"range_median":8.3},{"year":1963,"n_days":30,"tmax_median":10.4,"tmin_median":3.1,"range_median":7.3},{"year":1964,"n_days":30,"tmax_median":10.3,"tmin_median":4.7,"range_median":5.6},{"year":1965,"n_days":30,"tmax_median":9.9,"tmin_median":3.2,"range_median":6.7},{"year":1966,"n_days":30,"tmax_median":6.3,"tmin_median":0.6,"range_median":5.7},{"year":1967,"n_days":30,"tmax_median":9.5,"tmin_median":2.85,"range_median":6.65},{"year":1968,"n_days":30,"tmax_median":12.3,"tmin_median":2.05,"range_median":10.25},{"year":1969,"n_days":30,"tmax_median":8.45,"tmin_median":1.95,"range_median":6.5},{"year":1970,"n_days":30,"tmax_median":7.3,"tmin_median":0.8,"range_median":6.5},{"year":1971,"n_days":30,"tmax_median":9.8,"tmin_median":3.15,"range_median":6.65},{"year":1972,"n_days":30,"tmax_median":9.5,"tmin_median":3.55,"range_median":5.95},{"year":1973,"n_days":30,"tmax_median":7.65,"tmin_median":1.55,"range_median":6.1},{"year":1974,"n_days":30,"tmax_median":13.0,"tmin_median":2.9,"range_median":10.1},{"year":1975,"n_days":30,"tmax_median":9.15,"tmin_median":3.6,"range_median":5.55},{"year":1976,"n_days":30,"tmax_median":9.7,"tmin_median":4.1,"range_median":5.6},{"year":1977,"n_days":30,"tmax_median":7.8,"tmin_median":2.1,"range_median":5.7},{"year":1978,"n_days":30,"tmax_median":8.4,"tmin_median":2.05,"range_median":6.35},{"year":1979,"n_days":30,"tmax_median":8.5,"tmin_median":3.05,"range_median":5.45},{"year":1980,"n_days":30,"tmax_median":11.0,"tmin_median":4.2,"range_median":6.8},{"year":1981,"n_days":30,"tmax_median":10.4,"tmin_median":3.05,"range_median":7.35},{"year":1982,"n_days":30,"tmax_median":11.05,"tmin_median":4.2,"range_median":6.85},{"year":1983,"n_days":30,"tmax_median":7.6,"tmin_median":0.75,"range_median":6.85},{"year":1984,"n_days":30,"tmax_median":9.7,"tmin_median":3.75,"range_median":5.95},{"year":1985,"n_days":30,"tmax_median":9.25,"tmin_median":3.6,"range_median":5.65},{"year":1986,"n_days":30,"tmax_median":7.15,"tmin_median":0.0,"range_median":7.15},{"year":1987,"n_days":30,"tmax_median":10.3,"tmin_median":4.0,"range_median":6.3},{"year":1988,"n_days":30,"tmax_median":9.9,"tmin_median":3.2,"range_median":6.7},{"year":1989,"n_days":30,"tmax_median":9.05,"tmin_median":2.5,"range_median":6.55},{"year":1990,"n_days":30,"tmax_median":9.25,"tmin_median":2.7,"range_median":6.55},{"year":1991,"n_days":30,"tmax_median":10.15,"tmin_median":3.3,"range_median":6.85},{"year":1992,"n_days":30,"tmax_median":10.05,"tmin_median":3.8,"range_median":6.25},{"year":1993,"n_days":30,"tmax_median":10.25,"tmin_median":4.2,"range_median":6.05},{"year":1994,"n_days":30,"tmax_median":9.05,"tmin_median":2.7,"range_median":6.35},{"year":1995,"n_days":30,"tmax_median":8.55,"tmin_median":3.2,"range_median":5.35},{"year":1996,"n_days":30,"tmax_median":10.6,"tmin_median":4.65,"range_median":5.95},{"year":1997,"n_days":30,"tmax_median":9.85,"tmin_median":4.2,"range_median":5.65},{"year":1998,"n_days":30,"tmax_median":8.5,"tmin_median":3.2,"range_median":5.3},{"year":1999,"n_days":30,"tmax_median":11.75,"tmin_median":4.75,"range_median":7.0},{"year":2000,"n_days":30,"tmax_median":8.6,"tmin_median":2.15,"range_median":6.45},{"year":2001,"n_days":30,"tmax_median":9.25,"tmin_median":2.45,"range_median":6.8},{"year":2002,"n_days":30,"tmax_median":11.65,"tmin_median":3.2,"range_median":8.45},{"year":2003,"n_days":30,"tmax_median":12.9,"tmin_median":5.1,"range_median":7.8},{"year":2004,"n_days":30,"tmax_median":10.75,"tmin_median":5.6,"range_median":5.15},{"year":2005,"n_days":30,"tmax_median":10.85,"tmin_median":3.8,"range_median":7.05},{"year":2006,"n_days":30,"tmax_median":9.85,"tmin_median":3.2,"range_median":6.65},{"year":2007,"n_days":30,"tmax_median":13.15,"tmin_median":6.15,"range_median":7.0},{"year":2008,"n_days":30,"tmax_median":9.55,"tmin_median":1.8,"range_median":7.75},{"year":2009,"n_days":30,"tmax_median":12.95,"tmin_median":4.6,"range_median":8.35},{"year":2010,"n_days":30,"tmax_median":10.2,"tmin_median":2.2,"range_median":8.0},{"year":2011,"n_days":30,"tmax_median":13.1,"tmin_median":5.7,"range_median":7.4},{"year":2012,"n_days":30,"tmax_median":8.5,"tmin_median":1.85,"range_median":6.65},{"year":2013,"n_days":30,"tmax_median":8.7,"tmin_median":2.2,"range_median":6.5},{"year":2014,"n_days":30,"tmax_median":11.3,"tmin_median":4.95,"range_median":6.35},{"year":2015,"n_days":30,"tmax_median":9.95,"tmin_median":3.45,"range_median":6.5},{"year":2016,"n_days":30,"tmax_median":8.85,"tmin_median":2.4,"range_median":6.45},{"year":2017,"n_days":30,"tmax_median":10.05,"tmin_median":4.05,"range_median":6.0},{"year":2018,"n_days":30,"tmax_median":11.15,"tmin_median":3.85,"range_median":7.3},{"year":2019,"n_days":30,"tmax_median":11.95,"tmin_median":4.45,"range_median":7.5},{"year":2020,"n_days":30,"tmax_median":12.1,"tmin_median":3.2,"range_median":8.9},{"year":2021,"n_days":30,"tmax_median":9.65,"tmin_median":0.4,"range_median":9.25},{"year":2022,"n_days":30,"tmax_median":10.9,"tmin_median":3.95,"range_median":6.95},{"year":2023,"n_days":30,"tmax_median":11.3,"tmin_median":3.1,"range_median":8.2},{"year":2024,"n_days":30,"tmax_median":10.0,"tmin_median":2.8,"range_median":7.2},{"year":2025,"n_days":30,"tmax_median":13.9,"tmin_median":4.0,"range_median":9.9},{"year":2026,"n_days":25,"tmax_median":11.0,"tmin_median":3.5,"range_median":7.5}]};
+
+  // One row per April: { year, tmax_median, tmin_median, range_median, n_days }
+  const MIN_YEAR = 2000;
+  for (const city of CITIES) {
+    data[city] = data[city]
+      .filter(d => +d.year >= MIN_YEAR)
+      .map(d => ({
+        year: +d.year,
+        n_days: +d.n_days,
+        tmax: +d.tmax_median,
+        tmin: +d.tmin_median,
+        range: +d.range_median,
+      }));
+  }
+
+  const maxLen = d3.max(CITIES, c => data[c].length);
+  const yDomain = [
+    Math.min(0, d3.min(CITIES, c => d3.min(data[c], d => d.range))),
+    d3.max(CITIES, c => d3.max(data[c], d => d.range)) + 1,
+  ];
+
+  const tooltip = document.getElementById("tooltip");
+
+  const grid = d3.select("#grid");
+  for (const city of CITIES) {
+    const fig = grid.append("figure");
+    fig.append("figcaption").text(city);
+    drawPanel(fig, city, data[city]);
+  }
+
+  // Combined panel: all four cities on one chart
+  const figAll = grid.append("figure");
+  figAll.append("figcaption").text("All four cities");
+  drawCombined(figAll, data);
+
+  function drawPanel(fig, city, rows) {
+    const margin = { top: 8, right: 12, bottom: 26, left: 32 };
+    const W = 1200, H = 320;
+    const iw = W - margin.left - margin.right;
+    const ih = H - margin.top  - margin.bottom;
+
+    const svg = fig.append("svg")
+      .attr("viewBox", `0 0 ${W} ${H}`)
+      .attr("preserveAspectRatio", "xMidYMid meet");
+
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // X-axis is the row index (0..n-1) so all 30 days within an April
+    // get equal horizontal space and the line runs predominantly
+    // X-axis is the row index (0..n-1), one row per April.
+    const x = d3.scaleLinear().domain([0, maxLen - 1]).range([0, iw]);
+    const y = d3.scaleLinear().domain(yDomain).nice().range([ih, 0]);
+
+    // gridlines
+    g.append("g")
+      .attr("class", "grid")
+      .selectAll("line")
+      .data(y.ticks(5))
+      .join("line")
+        .attr("class", "grid-line")
+        .attr("x1", 0).attr("x2", iw)
+        .attr("y1", d => y(d)).attr("y2", d => y(d));
+
+    // single line of per-April median range
+    const lineRange = d3.line()
+      .x((d, i) => x(i))
+      .y(d => y(d.range))
+      .defined(d => Number.isFinite(d.range));
+
+    g.append("path").datum(rows).attr("class", "line-range").attr("d", lineRange);
+
+    // x-axis ticks every 5 years, plus the very first and last year
+    const tickIdx = rows
+      .map((r, i) => (r.year % 5 === 0 ? i : -1))
+      .filter(i => i >= 0);
+
+    g.append("g")
+      .attr("class", "axis")
+      .attr("transform", `translate(0,${ih})`)
+      .call(
+        d3.axisBottom(x)
+          .tickValues(tickIdx)
+          .tickSizeOuter(0)
+          .tickFormat(i => rows[i].year)
+      );
+
+    g.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y).ticks(5).tickSize(0).tickPadding(6))
+      .call(s => s.select(".domain").remove());
+
+    // hover layer
+    const rule = g.append("line").attr("class", "hover-rule").attr("y1", 0).attr("y2", ih);
+    const dot = g.append("circle").attr("class", "hover-dot").attr("r", 2.8);
+
+    g.append("rect")
+      .attr("class", "overlay")
+      .attr("width", iw).attr("height", ih)
+      .on("pointerenter", () => {
+        rule.style("opacity", 1);
+        dot.style("opacity", 1);
+        tooltip.style.opacity = 1;
+      })
+      .on("pointerleave", () => {
+        rule.style("opacity", 0);
+        dot.style("opacity", 0);
+        tooltip.style.opacity = 0;
+      })
+      .on("pointermove", (event) => {
+        const [mx] = d3.pointer(event);
+        const idx = Math.max(0, Math.min(rows.length - 1, Math.round(x.invert(mx))));
+        const d = rows[idx]; if (!d) return;
+
+        rule.attr("x1", x(idx)).attr("x2", x(idx));
+        dot.attr("cx", x(idx)).attr("cy", y(d.range));
+
+        tooltip.innerHTML = `
+          <div class="d">${city} · April ${d.year}${d.n_days < 30 ? ` (${d.n_days} days)` : ""}</div>
+          <div class="row"><span class="k">median range</span><span>${d.range.toFixed(1)} °C</span></div>
+          <div class="row"><span class="k">median max</span><span>${d.tmax.toFixed(1)} °C</span></div>
+          <div class="row"><span class="k">median min</span><span>${d.tmin.toFixed(1)} °C</span></div>`;
+        tooltip.style.left = (event.clientX + 14) + "px";
+        tooltip.style.top  = (event.clientY + 14) + "px";
+      });
+  }
+
+  function drawCombined(fig, data) {
+    const margin = { top: 8, right: 100, bottom: 26, left: 32 };
+    const W = 1200, H = 360;
+    const iw = W - margin.left - margin.right;
+    const ih = H - margin.top  - margin.bottom;
+
+    const svg = fig.append("svg")
+      .attr("viewBox", `0 0 ${W} ${H}`)
+      .attr("preserveAspectRatio", "xMidYMid meet");
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleLinear().domain([0, maxLen - 1]).range([0, iw]);
+    const y = d3.scaleLinear().domain(yDomain).nice().range([ih, 0]);
+
+    // Map city -> CSS var holding its colour
+    const colorVar = c => `var(--c-${c.toLowerCase()})`;
+
+    g.append("g")
+      .attr("class", "grid")
+      .selectAll("line")
+      .data(y.ticks(5))
+      .join("line")
+        .attr("class", "grid-line")
+        .attr("x1", 0).attr("x2", iw)
+        .attr("y1", d => y(d)).attr("y2", d => y(d));
+
+    // one path per city
+    const lineRange = d3.line()
+      .x((d, i) => x(i))
+      .y(d => y(d.range))
+      .defined(d => Number.isFinite(d.range));
+
+    for (const city of CITIES) {
+      g.append("path")
+        .datum(data[city])
+        .attr("fill", "none")
+        .attr("stroke", colorVar(city))
+        .attr("stroke-width", 1.1)
+        .attr("d", lineRange);
+    }
+
+    // shared x-ticks (use the longest series for tick lookup)
+    const refRows = data[CITIES.reduce((a, b) => data[a].length >= data[b].length ? a : b)];
+    const tickIdx = refRows
+      .map((r, i) => (r.year % 5 === 0 ? i : -1))
+      .filter(i => i >= 0);
+
+    g.append("g")
+      .attr("class", "axis")
+      .attr("transform", `translate(0,${ih})`)
+      .call(
+        d3.axisBottom(x)
+          .tickValues(tickIdx)
+          .tickSizeOuter(0)
+          .tickFormat(i => refRows[i].year)
+      );
+
+    g.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y).ticks(5).tickSize(0).tickPadding(6))
+      .call(s => s.select(".domain").remove());
+
+    // right-side end-of-line city labels
+    for (const city of CITIES) {
+      const rows = data[city];
+      const last = rows[rows.length - 1];
+      g.append("text")
+        .attr("x", iw + 6)
+        .attr("y", y(last.range))
+        .attr("dy", "0.32em")
+        .attr("fill", colorVar(city))
+        .style("font-family", "var(--mono)")
+        .style("font-size", "11px")
+        .text(city);
+    }
+
+    // hover: show all four values for the year under the cursor
+    const rule = g.append("line").attr("class", "hover-rule").attr("y1", 0).attr("y2", ih);
+    const dots = {};
+    for (const city of CITIES) {
+      dots[city] = g.append("circle")
+        .attr("r", 3)
+        .attr("fill", colorVar(city))
+        .style("opacity", 0);
+    }
+
+    g.append("rect")
+      .attr("class", "overlay")
+      .attr("width", iw).attr("height", ih)
+      .on("pointerenter", () => {
+        rule.style("opacity", 1);
+        for (const c of CITIES) dots[c].style("opacity", 1);
+        tooltip.style.opacity = 1;
+      })
+      .on("pointerleave", () => {
+        rule.style("opacity", 0);
+        for (const c of CITIES) dots[c].style("opacity", 0);
+        tooltip.style.opacity = 0;
+      })
+      .on("pointermove", (event) => {
+        const [mx] = d3.pointer(event);
+        const idx = Math.max(0, Math.min(maxLen - 1, Math.round(x.invert(mx))));
+        rule.attr("x1", x(idx)).attr("x2", x(idx));
+
+        // Find the year at this index using the reference rows
+        const year = refRows[idx]?.year;
+        const lines = [`<div class="d">April ${year}</div>`];
+        for (const city of CITIES) {
+          const rows = data[city];
+          const d = rows[Math.min(idx, rows.length - 1)];
+          if (!d || d.year !== year) {
+            dots[city].style("opacity", 0);
+            continue;
+          }
+          dots[city].style("opacity", 1)
+            .attr("cx", x(idx)).attr("cy", y(d.range));
+          lines.push(
+            `<div class="row"><span class="k" style="color:${getComputedStyle(document.documentElement).getPropertyValue('--c-' + city.toLowerCase())}">${city}</span><span>${d.range.toFixed(1)} °C</span></div>`
+          );
+        }
+        tooltip.innerHTML = lines.join("");
+        tooltip.style.left = (event.clientX + 14) + "px";
+        tooltip.style.top  = (event.clientY + 14) + "px";
+      });
+  }
+})();
+</script>
+
+<script>
+// Tell the parent page how tall we are, so it can size the iframe.
+(function () {
+  function postHeight() {
+    const h = document.documentElement.scrollHeight;
+    parent.postMessage({ type: "chart-resize", height: h }, "*");
+  }
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+  // After D3 has drawn, post again — D3 runs after first paint
+  setTimeout(postHeight, 100);
+  setTimeout(postHeight, 500);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>D3 on Andreas Makas</title>
+    <link>http://localhost:1313/tags/d3/</link>
+    <description>Recent content in D3 on Andreas Makas</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 24 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/d3/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How April temperatures have shifted in four UK cities</title>
+      <link>http://localhost:1313/dataviz/april-temps/</link>
+      <pubDate>Fri, 24 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/dataviz/april-temps/</guid>
+      <description>Median April temperature range for London, Manchester, Edinburgh and Inverness, 2000–2026, drawn from ERA5 reanalysis.</description>
+    </item>
+  </channel>
+</rss>

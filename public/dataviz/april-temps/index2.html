@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>April temperatures — UK cities, 2000–2025</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg:        #f4f1ea;
+    --ink:       #1d1d1b;
+    --muted:    #6b665d;
+    --rule:     #cfc8b8;
+    --warm:     #7a2e2a;   /* dull burgundy = max */
+    --cool:     #2e4d6b;   /* slate blue   = min */
+    --band:     #7a2e2a18;
+    /* per-city palette for the combined panel */
+    --c-london:     #7a2e2a;
+    --c-manchester: #b07a1c;
+    --c-edinburgh:  #2e4d6b;
+    --c-inverness:  #4f6e3a;
+    --tooltip-bg:#1d1d1bf2;
+    --tooltip-fg:#f4f1ea;
+    --serif:    "Iowan Old Style","Charter","Source Serif Pro",Georgia,serif;
+    --mono:     "JetBrains Mono","IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  html,body { background: var(--bg); color: var(--ink); margin: 0; }
+  body {
+    font-family: var(--serif);
+    font-feature-settings: "onum","liga";
+    padding: 2.5rem clamp(1rem, 4vw, 3rem);
+    max-width: 1400px; margin: 0 auto;
+  }
+  header { margin-bottom: 2rem; }
+  h1 {
+    font-weight: 500; font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    letter-spacing: -0.01em; margin: 0 0 .35rem;
+  }
+  .sub { color: var(--muted); font-size: .95rem; margin: 0; max-width: 56ch; }
+  .legend {
+    display: flex; gap: 1.25rem; margin-top: 1rem;
+    font-family: var(--mono); font-size: .72rem;
+    text-transform: uppercase; letter-spacing: .08em; color: var(--muted);
+  }
+  .legend i { display: inline-block; width: 18px; height: 2px; vertical-align: middle; margin-right: .4rem; }
+
+  .grid {
+    display: grid; grid-template-columns: 1fr; gap: 1.75rem;
+  }
+
+  figure { margin: 0; }
+  figcaption {
+    font-family: var(--mono); font-size: .72rem;
+    text-transform: uppercase; letter-spacing: .12em;
+    color: var(--ink); margin-bottom: .35rem;
+  }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+  .axis path, .axis line { stroke: var(--rule); shape-rendering: crispEdges; }
+  .axis text { fill: var(--muted); font-family: var(--mono); font-size: 10px; }
+  .grid-line { stroke: var(--rule); stroke-dasharray: 2 3; opacity: .55; }
+
+  .line-range { fill: none; stroke: var(--warm); stroke-width: .9; }
+
+  .hover-rule  { stroke: var(--ink); stroke-width: .5; opacity: 0; }
+  .hover-dot   { fill: var(--ink); opacity: 0; }
+  .overlay     { fill: transparent; }
+
+  #tooltip {
+    position: fixed; pointer-events: none; z-index: 10;
+    background: var(--tooltip-bg); color: var(--tooltip-fg);
+    padding: .55rem .7rem; border-radius: 4px;
+    font-family: var(--mono); font-size: .72rem; line-height: 1.45;
+    opacity: 0; transition: opacity .12s;
+    white-space: nowrap;
+  }
+  #tooltip .d { color: #c9c2b1; margin-bottom: .2rem; }
+  #tooltip .row { display: flex; justify-content: space-between; gap: 1.2rem; }
+  #tooltip .k { color: #c9c2b1; }
+
+  footer { margin-top: 2.5rem; font-size: .8rem; color: var(--muted); }
+  footer code { font-family: var(--mono); background: #e8e3d6; padding: 1px 5px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>April median temperature range, 1940–2026</h1>
+  <p class="sub">Median daily range (max − min) within each April, in degrees Celsius. One point per year. Hover for the underlying medians of the daily max and min.</p>
+  <div class="legend">
+    <span><i style="background:var(--warm)"></i>Median daily range (°C)</span>
+  </div>
+</header>
+
+<div id="grid" class="grid"></div>
+
+<div id="tooltip" role="status" aria-live="polite"></div>
+
+<footer>
+  Source: Open-Meteo Historical Weather API (ERA5 reanalysis). Build the dataset with <code>python fetch_openmeteo.py</code> and drop the resulting <code>april_temps.json</code> next to this file.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script>
+(async function () {
+  const CITIES = ["London", "Manchester", "Edinburgh", "Inverness"];
+  const data = await d3.json("april_monthly.json");
+
+  // One row per April: { year, tmax_median, tmin_median, range_median, n_days }
+  for (const city of CITIES) {
+    data[city] = data[city].map(d => ({
+      year: +d.year,
+      n_days: +d.n_days,
+      tmax: +d.tmax_median,
+      tmin: +d.tmin_median,
+      range: +d.range_median,
+    }));
+  }
+
+  const maxLen = d3.max(CITIES, c => data[c].length);
+  const yDomain = [
+    Math.min(0, d3.min(CITIES, c => d3.min(data[c], d => d.range))),
+    d3.max(CITIES, c => d3.max(data[c], d => d.range)) + 1,
+  ];
+
+  const tooltip = document.getElementById("tooltip");
+
+  const grid = d3.select("#grid");
+  for (const city of CITIES) {
+    const fig = grid.append("figure");
+    fig.append("figcaption").text(city);
+    drawPanel(fig, city, data[city]);
+  }
+
+  // Combined panel: all four cities on one chart
+  const figAll = grid.append("figure");
+  figAll.append("figcaption").text("All four cities");
+  drawCombined(figAll, data);
+
+  function drawPanel(fig, city, rows) {
+    const margin = { top: 8, right: 12, bottom: 26, left: 32 };
+    const W = 1200, H = 320;
+    const iw = W - margin.left - margin.right;
+    const ih = H - margin.top  - margin.bottom;
+
+    const svg = fig.append("svg")
+      .attr("viewBox", `0 0 ${W} ${H}`)
+      .attr("preserveAspectRatio", "xMidYMid meet");
+
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // X-axis is the row index (0..n-1) so all 30 days within an April
+    // get equal horizontal space and the line runs predominantly
+    // X-axis is the row index (0..n-1), one row per April.
+    const x = d3.scaleLinear().domain([0, maxLen - 1]).range([0, iw]);
+    const y = d3.scaleLinear().domain(yDomain).nice().range([ih, 0]);
+
+    // gridlines
+    g.append("g")
+      .attr("class", "grid")
+      .selectAll("line")
+      .data(y.ticks(5))
+      .join("line")
+        .attr("class", "grid-line")
+        .attr("x1", 0).attr("x2", iw)
+        .attr("y1", d => y(d)).attr("y2", d => y(d));
+
+    // single line of per-April median range
+    const lineRange = d3.line()
+      .x((d, i) => x(i))
+      .y(d => y(d.range))
+      .defined(d => Number.isFinite(d.range));
+
+    g.append("path").datum(rows).attr("class", "line-range").attr("d", lineRange);
+
+    // x-axis ticks every 5 years, plus the very first and last year
+    const tickIdx = rows
+      .map((r, i) => (r.year % 5 === 0 ? i : -1))
+      .filter(i => i >= 0);
+
+    g.append("g")
+      .attr("class", "axis")
+      .attr("transform", `translate(0,${ih})`)
+      .call(
+        d3.axisBottom(x)
+          .tickValues(tickIdx)
+          .tickSizeOuter(0)
+          .tickFormat(i => rows[i].year)
+      );
+
+    g.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y).ticks(5).tickSize(0).tickPadding(6))
+      .call(s => s.select(".domain").remove());
+
+    // hover layer
+    const rule = g.append("line").attr("class", "hover-rule").attr("y1", 0).attr("y2", ih);
+    const dot = g.append("circle").attr("class", "hover-dot").attr("r", 2.8);
+
+    g.append("rect")
+      .attr("class", "overlay")
+      .attr("width", iw).attr("height", ih)
+      .on("pointerenter", () => {
+        rule.style("opacity", 1);
+        dot.style("opacity", 1);
+        tooltip.style.opacity = 1;
+      })
+      .on("pointerleave", () => {
+        rule.style("opacity", 0);
+        dot.style("opacity", 0);
+        tooltip.style.opacity = 0;
+      })
+      .on("pointermove", (event) => {
+        const [mx] = d3.pointer(event);
+        const idx = Math.max(0, Math.min(rows.length - 1, Math.round(x.invert(mx))));
+        const d = rows[idx]; if (!d) return;
+
+        rule.attr("x1", x(idx)).attr("x2", x(idx));
+        dot.attr("cx", x(idx)).attr("cy", y(d.range));
+
+        tooltip.innerHTML = `
+          <div class="d">${city} · April ${d.year}${d.n_days < 30 ? ` (${d.n_days} days)` : ""}</div>
+          <div class="row"><span class="k">median range</span><span>${d.range.toFixed(1)} °C</span></div>
+          <div class="row"><span class="k">median max</span><span>${d.tmax.toFixed(1)} °C</span></div>
+          <div class="row"><span class="k">median min</span><span>${d.tmin.toFixed(1)} °C</span></div>`;
+        tooltip.style.left = (event.clientX + 14) + "px";
+        tooltip.style.top  = (event.clientY + 14) + "px";
+      });
+  }
+
+  function drawCombined(fig, data) {
+    const margin = { top: 8, right: 100, bottom: 26, left: 32 };
+    const W = 1200, H = 360;
+    const iw = W - margin.left - margin.right;
+    const ih = H - margin.top  - margin.bottom;
+
+    const svg = fig.append("svg")
+      .attr("viewBox", `0 0 ${W} ${H}`)
+      .attr("preserveAspectRatio", "xMidYMid meet");
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleLinear().domain([0, maxLen - 1]).range([0, iw]);
+    const y = d3.scaleLinear().domain(yDomain).nice().range([ih, 0]);
+
+    // Map city -> CSS var holding its colour
+    const colorVar = c => `var(--c-${c.toLowerCase()})`;
+
+    g.append("g")
+      .attr("class", "grid")
+      .selectAll("line")
+      .data(y.ticks(5))
+      .join("line")
+        .attr("class", "grid-line")
+        .attr("x1", 0).attr("x2", iw)
+        .attr("y1", d => y(d)).attr("y2", d => y(d));
+
+    // one path per city
+    const lineRange = d3.line()
+      .x((d, i) => x(i))
+      .y(d => y(d.range))
+      .defined(d => Number.isFinite(d.range));
+
+    for (const city of CITIES) {
+      g.append("path")
+        .datum(data[city])
+        .attr("fill", "none")
+        .attr("stroke", colorVar(city))
+        .attr("stroke-width", 1.1)
+        .attr("d", lineRange);
+    }
+
+    // shared x-ticks (use the longest series for tick lookup)
+    const refRows = data[CITIES.reduce((a, b) => data[a].length >= data[b].length ? a : b)];
+    const tickIdx = refRows
+      .map((r, i) => (r.year % 5 === 0 ? i : -1))
+      .filter(i => i >= 0);
+
+    g.append("g")
+      .attr("class", "axis")
+      .attr("transform", `translate(0,${ih})`)
+      .call(
+        d3.axisBottom(x)
+          .tickValues(tickIdx)
+          .tickSizeOuter(0)
+          .tickFormat(i => refRows[i].year)
+      );
+
+    g.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y).ticks(5).tickSize(0).tickPadding(6))
+      .call(s => s.select(".domain").remove());
+
+    // right-side end-of-line city labels
+    for (const city of CITIES) {
+      const rows = data[city];
+      const last = rows[rows.length - 1];
+      g.append("text")
+        .attr("x", iw + 6)
+        .attr("y", y(last.range))
+        .attr("dy", "0.32em")
+        .attr("fill", colorVar(city))
+        .style("font-family", "var(--mono)")
+        .style("font-size", "11px")
+        .text(city);
+    }
+
+    // hover: show all four values for the year under the cursor
+    const rule = g.append("line").attr("class", "hover-rule").attr("y1", 0).attr("y2", ih);
+    const dots = {};
+    for (const city of CITIES) {
+      dots[city] = g.append("circle")
+        .attr("r", 3)
+        .attr("fill", colorVar(city))
+        .style("opacity", 0);
+    }
+
+    g.append("rect")
+      .attr("class", "overlay")
+      .attr("width", iw).attr("height", ih)
+      .on("pointerenter", () => {
+        rule.style("opacity", 1);
+        for (const c of CITIES) dots[c].style("opacity", 1);
+        tooltip.style.opacity = 1;
+      })
+      .on("pointerleave", () => {
+        rule.style("opacity", 0);
+        for (const c of CITIES) dots[c].style("opacity", 0);
+        tooltip.style.opacity = 0;
+      })
+      .on("pointermove", (event) => {
+        const [mx] = d3.pointer(event);
+        const idx = Math.max(0, Math.min(maxLen - 1, Math.round(x.invert(mx))));
+        rule.attr("x1", x(idx)).attr("x2", x(idx));
+
+        // Find the year at this index using the reference rows
+        const year = refRows[idx]?.year;
+        const lines = [`<div class="d">April ${year}</div>`];
+        for (const city of CITIES) {
+          const rows = data[city];
+          const d = rows[Math.min(idx, rows.length - 1)];
+          if (!d || d.year !== year) {
+            dots[city].style("opacity", 0);
+            continue;
+          }
+          dots[city].style("opacity", 1)
+            .attr("cx", x(idx)).attr("cy", y(d.range));
+          lines.push(
+            `<div class="row"><span class="k" style="color:${getComputedStyle(document.documentElement).getPropertyValue('--c-' + city.toLowerCase())}">${city}</span><span>${d.range.toFixed(1)} °C</span></div>`
+          );
+        }
+        tooltip.innerHTML = lines.join("");
+        tooltip.style.left = (event.clientX + 14) + "px";
+        tooltip.style.top  = (event.clientY + 14) + "px";
+      });
+  }
+})();
+</script>
+</body>
+</html>

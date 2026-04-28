@@ -124,50 +124,70 @@
 
 <article class="post-entry"> 
 <figure class="entry-cover">
-        <img loading="lazy" src="http://localhost:1313/blog/images/unreal_engine.png" alt="Cover Photo">
+        <img loading="lazy" src="http://localhost:1313/dataviz/images/cover_amoc_1.png" alt="Cover Photo">
 </figure>
   <header class="entry-header">
-    <h2 class="entry-hint-parent">Unreal&#43;houdini&#43;linux
+    <h2 class="entry-hint-parent">The Atlantic Meridional Overturning Circulation
     </h2>
   </header>
   <div class="entry-content">
-    <p>⬛️ links and before we begin https://github.com/EpicGames/UnrealEngine?tab=readme-ov-file#getting-up-and-running https://www.sidefx.com/forum/topic/61839/?page=1#post-404735 https://www.youtube.com/watch?v=TOpdnwBxEq4 (unlisted video, for UE4, but helpful stuff, sourcing houdini environment (the most useful part) at around 27:40) during houdini installation, choose the plugins you’ll want / need, otherwise install those now for the version you’re on (a lot of the time, the most recent bleeding edge version won’t play well with compiling alongside UE) https://www.youtube.com/watch?v=600RgBneV_A (newer video, Manjaro base, UE5.1) ⬛️ First things make the directory for UE5 and switch to it git clone git@github.com:EpicGames/UnrealEngine.git now in the UE5 directory ./Setup.sh then find the plugin for unreal at /opt/sidefx/houdini_engine (you need to plugin that corresponds to the current version of houdini in the system, if you remove that version it will break the integration) get the HoudiniEngine folder and copy it in the Plugins/Runtime folder of UE5 NOW it is important to initialize the houdini environment before the next step so that when the make files are generated it knows what to look for cd /opt/hfsX source houdini_setup The Houdini 20.0.653 environment has been initialized. back in the top directory ./GenerateProjectFiles.sh [With the environment initialized you shouldn’t get any errors at the generate script] make (it shouldn’t require sudo) a lot of the times there might be some error in the UE make that just reks all of it. That’s 99% the houdini engine plugin. 1st try removing it from the directory and recompiling, it should go faster and without errors. Then is the troubleshooting, have to find a houdini version that UE5 agrees with and wants to compile. So off you go! after compiling has finished, and all has gone well, need shortcuts for rofi now ⬛️ regarding updates and changes soon(TM)
+    <p>Toggle the slowdown scenario to see the modelled annual mean cooling at major North Atlantic and Nordic cities under a full AMOC shutdown.
+The Atlantic Meridional Overturning Circulation (AMOC) is the system of currents that carries warm water from the tropics to the North Atlantic and returns cold water south at depth. It is part of the reason northwestern Europe is warmer than its latitude would suggest. A study published in Science Advances in April 2026 (Portmann et al.) found that observational constraints project a roughly 51% AMOC weakening by 2100 under a moderate emissions scenario — sharper than previous model estimates. A companion paper (van Westen et al., 2025) reports observational evidence consistent with this trajectory. The map below shows the warm surface flow on top, the cold deep return below, and the three sites where surface water cools, becomes denser, and sinks — driving the whole circulation.
 </p>
   </div>
-  <footer class="entry-footer"><span title='2024-04-16 22:31:58 +0100 BST'>April 16, 2024</span>&nbsp;·&nbsp;<span>2 min</span></footer>
-  <a class="entry-link" aria-label="post link to Unreal&#43;houdini&#43;linux" href="http://localhost:1313/blog/unreal&#43;houdini&#43;linux/"></a>
+  <footer class="entry-footer"><span title='2026-04-25 00:00:00 +0000 UTC'>April 25, 2026</span></footer>
+  <a class="entry-link" aria-label="post link to The Atlantic Meridional Overturning Circulation" href="http://localhost:1313/dataviz/amoc-post/"></a>
 </article>
 
 <article class="post-entry"> 
 <figure class="entry-cover">
-        <img loading="lazy" src="http://localhost:1313/blog/images/mint.jpg" alt="Cover Photo">
+        <img loading="lazy" src="http://localhost:1313/dataviz/images/cover_uk_income.png" alt="Cover Photo">
 </figure>
   <header class="entry-header">
-    <h2 class="entry-hint-parent">linux_things
+    <h2 class="entry-hint-parent">The household squeeze
     </h2>
   </header>
   <div class="entry-content">
-    <p>While using linux for vfx work I’ve had to do some general maintenance stuff, wrote the steps so that I understand the process better myself. I use linux mint btw.
-⬛️ Moving /home (and some partitioning that was needed) This guide is the source of what I did: https://forums.linuxmint.com/viewtopic.php?p=2192189#p2192189 It’s written by a well respected member of the linux mint forums (rene, thank you), it’s really solid.
-The guide being solid is no substitute to having backups and timeshifts, so do those. Using pika lately and really liking it. ...</p>
+    <p>
+Select gross income, council area, and council tax band to check the % impact of the flat council tax amount. (Single earner, household income adjustment tbr)
+to add: ofgem cap adjusted for size / second earner / cip adjusted household expenses for disposable income in the end</p>
   </div>
-  <footer class="entry-footer"><span title='2024-04-16 20:23:26 +0100 BST'>April 16, 2024</span>&nbsp;·&nbsp;<span>2 min</span></footer>
-  <a class="entry-link" aria-label="post link to linux_things" href="http://localhost:1313/blog/linux_things/"></a>
+  <footer class="entry-footer"><span title='2026-04-25 00:00:00 +0000 UTC'>April 25, 2026</span></footer>
+  <a class="entry-link" aria-label="post link to The household squeeze" href="http://localhost:1313/dataviz/uk_council_tax/"></a>
 </article>
 
 <article class="post-entry"> 
 <figure class="entry-cover">
-        <img loading="lazy" src="http://localhost:1313/blog/images/QGIS_Cover.png" alt="Cover Photo">
+        <img loading="lazy" src="http://localhost:1313/dataviz/images/cover_april_temps.png" alt="Cover Photo">
 </figure>
   <header class="entry-header">
-    <h2 class="entry-hint-parent">GIS_things
+    <h2 class="entry-hint-parent">How April temperatures have shifted in four UK cities
     </h2>
   </header>
   <div class="entry-content">
-    <p>lines of code / process for when trying to modify maps</p>
+    <p>Small data sketch built from Open-Meteo’s historical archive, plotting the median diurnal temperature range during April for four UK cities since the year 2000.
+One point per April per city.
+The diurnal range is a softer than the absolute temperature. It tells how changeable a typical April day is, rather than how warm.
+Notes on the data ERA5 data at ~10 km resolution, sampled at each city’s centre coordinate. ERA5 model has a consistent grid of values from 1940 to today.
+...</p>
   </div>
-  <footer class="entry-footer"><span title='2024-04-08 19:08:03 +0100 BST'>April 8, 2024</span>&nbsp;·&nbsp;<span>3 min</span></footer>
-  <a class="entry-link" aria-label="post link to GIS_things" href="http://localhost:1313/blog/gis_things/"></a>
+  <footer class="entry-footer"><span title='2026-04-24 00:00:00 +0000 UTC'>April 24, 2026</span></footer>
+  <a class="entry-link" aria-label="post link to How April temperatures have shifted in four UK cities" href="http://localhost:1313/dataviz/april_temps/"></a>
+</article>
+
+<article class="post-entry"> 
+<figure class="entry-cover">
+        <img loading="lazy" src="http://localhost:1313/dataviz/images/cover_trump_1.png" alt="Cover Photo">
+</figure>
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Trades before the announcements
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p> *Update: as reported by the BBC, one of the people betting has been arrested, https://www.bbc.co.uk/news/articles/c20832yg5p2o</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-04-23 00:00:00 +0000 UTC'>April 23, 2026</span></footer>
+  <a class="entry-link" aria-label="post link to Trades before the announcements" href="http://localhost:1313/dataviz/trades-before-announcements/"></a>
 </article>
     </main>
     

@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>April temperatures — UK cities, 2000–2025</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg:        #f4f1ea;
+    --ink:       #1d1d1b;
+    --muted:    #6b665d;
+    --rule:     #cfc8b8;
+    --warm:     #7a2e2a;   /* dull burgundy = max */
+    --cool:     #2e4d6b;   /* slate blue   = min */
+    --band:     #7a2e2a18;
+    --tooltip-bg:#1d1d1bf2;
+    --tooltip-fg:#f4f1ea;
+    --serif:    "Iowan Old Style","Charter","Source Serif Pro",Georgia,serif;
+    --mono:     "JetBrains Mono","IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  html,body { background: var(--bg); color: var(--ink); margin: 0; }
+  body {
+    font-family: var(--serif);
+    font-feature-settings: "onum","liga";
+    padding: 2.5rem clamp(1rem, 4vw, 3rem);
+    max-width: 1400px; margin: 0 auto;
+  }
+  header { margin-bottom: 2rem; }
+  h1 {
+    font-weight: 500; font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    letter-spacing: -0.01em; margin: 0 0 .35rem;
+  }
+  .sub { color: var(--muted); font-size: .95rem; margin: 0; max-width: 56ch; }
+  .legend {
+    display: flex; gap: 1.25rem; margin-top: 1rem;
+    font-family: var(--mono); font-size: .72rem;
+    text-transform: uppercase; letter-spacing: .08em; color: var(--muted);
+  }
+  .legend i { display: inline-block; width: 18px; height: 2px; vertical-align: middle; margin-right: .4rem; }
+
+  .grid {
+    display: grid; grid-template-columns: 1fr; gap: 1.75rem;
+  }
+
+  figure { margin: 0; }
+  figcaption {
+    font-family: var(--mono); font-size: .72rem;
+    text-transform: uppercase; letter-spacing: .12em;
+    color: var(--ink); margin-bottom: .35rem;
+  }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+  .axis path, .axis line { stroke: var(--rule); shape-rendering: crispEdges; }
+  .axis text { fill: var(--muted); font-family: var(--mono); font-size: 10px; }
+  .grid-line { stroke: var(--rule); stroke-dasharray: 2 3; opacity: .55; }
+
+  .line-max { fill: none; stroke: var(--warm); stroke-width: .9; }
+  .line-min { fill: none; stroke: var(--cool); stroke-width: .9; }
+  .band     { fill: var(--band); }
+
+  .hover-rule  { stroke: var(--ink); stroke-width: .5; opacity: 0; }
+  .hover-dot   { fill: var(--ink); opacity: 0; }
+  .overlay     { fill: transparent; }
+
+  #tooltip {
+    position: fixed; pointer-events: none; z-index: 10;
+    background: var(--tooltip-bg); color: var(--tooltip-fg);
+    padding: .55rem .7rem; border-radius: 4px;
+    font-family: var(--mono); font-size: .72rem; line-height: 1.45;
+    opacity: 0; transition: opacity .12s;
+    white-space: nowrap;
+  }
+  #tooltip .d { color: #c9c2b1; margin-bottom: .2rem; }
+  #tooltip .row { display: flex; justify-content: space-between; gap: 1.2rem; }
+  #tooltip .k { color: #c9c2b1; }
+
+  footer { margin-top: 2.5rem; font-size: .8rem; color: var(--muted); }
+  footer code { font-family: var(--mono); background: #e8e3d6; padding: 1px 5px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>April temperatures, 1940–2026</h1>
+  <p class="sub">Daily maximum and minimum. Each chart covers every April day from 1940 through April 2026 — non-April days are omitted. Hover for exact values.</p>
+  <div class="legend">
+    <span><i style="background:var(--warm)"></i>Daily max</span>
+    <span><i style="background:var(--cool)"></i>Daily min</span>
+  </div>
+</header>
+
+<div id="grid" class="grid"></div>
+
+<div id="tooltip" role="status" aria-live="polite"></div>
+
+<footer>
+  Source: Open-Meteo Historical Weather API (ERA5 reanalysis).
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script>
+(async function () {
+  const CITIES = ["London", "Manchester", "Edinburgh", "Inverness"];
+  const data = await d3.json("april_temps.json");
+
+  // parse once, share x-domain across panels for visual comparison
+  const parse = d3.utcParse("%Y-%m-%d");
+  for (const city of CITIES) {
+    data[city].forEach(d => {
+      d.date = parse(d.date);
+      d.tmax = +d.tmax;
+      d.tmin = +d.tmin;
+    });
+  }
+
+  const maxLen = d3.max(CITIES, c => data[c].length);
+  const yDomain = [
+    d3.min(CITIES, c => d3.min(data[c], d => d.tmin)) - 1,
+    d3.max(CITIES, c => d3.max(data[c], d => d.tmax)) + 1,
+  ];
+
+  const tooltip = document.getElementById("tooltip");
+  const fmtDate = d3.utcFormat("%-d %b %Y");
+
+  const grid = d3.select("#grid");
+  for (const city of CITIES) {
+    const fig = grid.append("figure");
+    fig.append("figcaption").text(city);
+    drawPanel(fig, city, data[city]);
+  }
+
+  function drawPanel(fig, city, rows) {
+    const margin = { top: 8, right: 12, bottom: 26, left: 32 };
+    const W = 1200, H = 220;
+    const iw = W - margin.left - margin.right;
+    const ih = H - margin.top  - margin.bottom;
+
+    const svg = fig.append("svg")
+      .attr("viewBox", `0 0 ${W} ${H}`)
+      .attr("preserveAspectRatio", "xMidYMid meet");
+
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // X-axis is the row index (0..n-1) so all 30 days within an April
+    // get equal horizontal space and the line runs predominantly
+    // horizontal across the panel. Year boundaries fall at indices
+    // that are multiples of 30.
+    const x = d3.scaleLinear().domain([0, maxLen - 1]).range([0, iw]);
+    const y = d3.scaleLinear().domain(yDomain).nice().range([ih, 0]);
+
+    // gridlines
+    g.append("g")
+      .attr("class", "grid")
+      .selectAll("line")
+      .data(y.ticks(5))
+      .join("line")
+        .attr("class", "grid-line")
+        .attr("x1", 0).attr("x2", iw)
+        .attr("y1", d => y(d)).attr("y2", d => y(d));
+
+    // Break the path between Aprils: a point is "defined" only if the
+    // previous point is from the same year, so D3 draws a tiny gap
+    // between each year's last day and the next year's first day.
+    const sameYear = (d, i, arr) =>
+      i > 0 && arr[i - 1].date.getUTCFullYear() === d.date.getUTCFullYear();
+    const definedPair = (d, i, arr) =>
+      Number.isFinite(d.tmax) && Number.isFinite(d.tmin) && sameYear(d, i, arr);
+
+    // shaded band between max & min
+    const area = d3.area()
+      .x((d, i) => x(i))
+      .y0(d => y(d.tmin))
+      .y1(d => y(d.tmax))
+      .defined(definedPair);
+
+    g.append("path").datum(rows).attr("class", "band").attr("d", area);
+
+    // lines
+    const lineMax = d3.line().x((d, i) => x(i)).y(d => y(d.tmax))
+      .defined((d, i, arr) => Number.isFinite(d.tmax) && sameYear(d, i, arr));
+    const lineMin = d3.line().x((d, i) => x(i)).y(d => y(d.tmin))
+      .defined((d, i, arr) => Number.isFinite(d.tmin) && sameYear(d, i, arr));
+
+    g.append("path").datum(rows).attr("class", "line-max").attr("d", lineMax);
+    g.append("path").datum(rows).attr("class", "line-min").attr("d", lineMin);
+
+    // year-boundary ticks: find the index of the first row of each year,
+    // then keep every 5th label so the axis isn't crowded.
+    const yearStarts = [];
+    rows.forEach((r, i) => {
+      if (i === 0 || rows[i - 1].date.getUTCFullYear() !== r.date.getUTCFullYear()) {
+        yearStarts.push({ i, year: r.date.getUTCFullYear() });
+      }
+    });
+    const tickValues = yearStarts.filter(o => o.year % 5 === 0).map(o => o.i);
+
+    g.append("g")
+      .attr("class", "axis")
+      .attr("transform", `translate(0,${ih})`)
+      .call(
+        d3.axisBottom(x)
+          .tickValues(tickValues)
+          .tickSizeOuter(0)
+          .tickFormat(i => rows[i].date.getUTCFullYear())
+      );
+
+    g.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y).ticks(5).tickSize(0).tickPadding(6))
+      .call(s => s.select(".domain").remove());
+
+    // hover layer
+    const rule = g.append("line").attr("class", "hover-rule").attr("y1", 0).attr("y2", ih);
+    const dotMax = g.append("circle").attr("class", "hover-dot").attr("r", 2.8);
+    const dotMin = g.append("circle").attr("class", "hover-dot").attr("r", 2.8);
+
+    g.append("rect")
+      .attr("class", "overlay")
+      .attr("width", iw).attr("height", ih)
+      .on("pointerenter", () => {
+        rule.style("opacity", 1);
+        dotMax.style("opacity", 1);
+        dotMin.style("opacity", 1);
+        tooltip.style.opacity = 1;
+      })
+      .on("pointerleave", () => {
+        rule.style("opacity", 0);
+        dotMax.style("opacity", 0);
+        dotMin.style("opacity", 0);
+        tooltip.style.opacity = 0;
+      })
+      .on("pointermove", (event) => {
+        const [mx] = d3.pointer(event);
+        const idx = Math.max(0, Math.min(rows.length - 1, Math.round(x.invert(mx))));
+        const d = rows[idx]; if (!d) return;
+
+        rule.attr("x1", x(idx)).attr("x2", x(idx));
+        dotMax.attr("cx", x(idx)).attr("cy", y(d.tmax));
+        dotMin.attr("cx", x(idx)).attr("cy", y(d.tmin));
+
+        const range = (d.tmax - d.tmin).toFixed(1);
+        tooltip.innerHTML = `
+          <div class="d">${city} · ${fmtDate(d.date)}</div>
+          <div class="row"><span class="k">max</span><span>${d.tmax.toFixed(1)} °C</span></div>
+          <div class="row"><span class="k">min</span><span>${d.tmin.toFixed(1)} °C</span></div>
+          <div class="row"><span class="k">range</span><span>${range} °C</span></div>`;
+        tooltip.style.left = (event.clientX + 14) + "px";
+        tooltip.style.top  = (event.clientY + 14) + "px";
+      });
+  }
+})();
+</script>
+</body>
+</html>
