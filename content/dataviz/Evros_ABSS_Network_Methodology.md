@@ -1,6 +1,6 @@
 ---
 title: "Automatic Surveillance Network"
-date: 2024-11-25
+date: 2025-01-25
 description: "The Evros border has been a testing ground and a funnel for a host of EU-wide research into surveillance and machine vision which involves a wide arrange of stakeholders across the EU. A lot of this is showcased during the Greek Ministry of Migration’s presentation of the REACTION program."
 
 tags: ["politics", "finance", "interactive"]
