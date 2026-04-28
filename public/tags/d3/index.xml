@@ -10,9 +10,9 @@
     <atom:link href="http://localhost:1313/tags/d3/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How April temperatures have shifted in four UK cities</title>
-      <link>http://localhost:1313/dataviz/april-temps/</link>
+      <link>http://localhost:1313/dataviz/april_temps/</link>
       <pubDate>Fri, 24 Apr 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/dataviz/april-temps/</guid>
+      <guid>http://localhost:1313/dataviz/april_temps/</guid>
       <description>Median April temperature range for London, Manchester, Edinburgh and Inverness, 2000–2026, drawn from ERA5 reanalysis.</description>
     </item>
   </channel>

@@ -36,5 +36,12 @@
       <guid>http://localhost:1313/dataviz/trades-before-announcements/</guid>
       <description>Trading activity preceding Trump&amp;#39;s foreign policy and market announcements.</description>
     </item>
+    <item>
+      <title>Automatic Surveillance Network</title>
+      <link>http://localhost:1313/dataviz/evros_abss_network_methodology/</link>
+      <pubDate>Mon, 25 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/dataviz/evros_abss_network_methodology/</guid>
+      <description>The Evros border has been a testing ground and a funnel for a host of EU-wide research into surveillance and machine vision which involves a wide arrange of stakeholders across the EU. A lot of this is showcased during the Greek Ministry of Migration’s presentation of the REACTION program.</description>
+    </item>
   </channel>
 </rss>
