@@ -14,14 +14,14 @@ cover:
     caption: ""
     relative: true
 ---
-*The maps in this section were produced within the hour of data acquisition or news development — reference graphics intended to place a story quickly, not exhaustive analyses.*
+*The maps in this section were produced within the hour of data acquisition or news development, reference graphics intended to place a story quickly, not exhaustive analyses.*
 ## South Georgia, US
 
 ### Active fire detection
 ![](/dataviz/images/images_quick/FIRMS_NA.png)
 *Source: NASA FIRMS / LANCE — 26 April 2026*
 
-The Highway 82 and Pineland Road fires broke out in southeastern Georgia on 20 April, driven by extreme drought, high winds, and debris left by Hurricane Helene. By the 26th, the two fires had together burned over 50,000 acres and destroyed more than 120 homes — the most lost to wildfire in state history.
+The Highway 82 and Pineland Road fires broke out in southeastern Georgia on 20 April, driven by extreme drought, high winds, and debris left by Hurricane Helene. By the 26th, the two fires had together burned over 50,000 acres and destroyed more than 120 homes.
 
 This map uses FIRMS/LANCE near-real-time active fire detection data from 26 April, showing hotspot positions across Brantley and Clinch counties at the time of acquisition. The FIRMS is sub-daily detection. Really important for mapping active fronts. (Highway 82 fire doubled in size overnight)
 
@@ -38,11 +38,7 @@ The map was produced and published the same day as data acquisition, as part of 
 This map overlays FIRMS hotspot detections on a true color base layer, showing active fire positions across Brantley and Clinch counties against the wider landscape context. The two smoke plumes tracking northeast are clearly visible, consistent with the wind direction driving both fires during this period. The Atlantic coastline is visible to the east, placing the fires roughly 50 miles inland.
  
 The true color base gives a clearer read of the smoke extent and direction than a processed composite would at this scale, and confirms the separation between the two fire fronts at the time of acquisition.
- 
-*Update — 28 April: Pineland Road fire at 32,000 acres, 23% contained. Highway 82 at 22,600 acres, 32% contained.*
 
-
-*Update — 28 April: NASA Earth Observatory published Landsat 8 imagery from 23 April showing Atkinson and Fruitland at high resolution, confirming the extent of charred residential areas alongside forest loss.*
 
 ---
 
@@ -71,7 +67,7 @@ The second map in this pair uses Sentinel-2 multispectral imagery from 26 April 
 
 ---
 
-### Burn extent
+### DRC — Current state
 ![](/dataviz/images/images_quick/DRC.png)
 *Sources: IPIS Research, ACLED, Critical Threats Project, OCHA, OHCHR, UN Group of Experts (July 2025), Sentinel-2 imagery (Copernicus). As of April 2026.*
 
@@ -79,6 +75,6 @@ The left panel shows the extent of active conflict and M23/Rwanda-controlled ter
 The gap between the two panels is the story: the ceasefire exists on paper across most of this territory while the ground situation reflects continued consolidation along the Rwanda border corridor.
 
 
-*Update — 29 April: situation ongoing. No structural damage or casualties reported in coverage to date.*
+*Update — 29 April: situation ongoing*
 
 ---
