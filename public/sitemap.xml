@@ -3,7 +3,25 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2026-04-25T00:00:00+00:00</lastmod>
+    <lastmod>2026-04-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/dataviz/</loc>
+    <lastmod>2026-04-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/fire/</loc>
+    <lastmod>2026-04-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/maps/</loc>
+    <lastmod>2026-04-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/politics/</loc>
+    <lastmod>2026-04-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/dataviz/quick_maps/</loc>
+    <lastmod>2026-04-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2026-04-26T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/cartography/</loc>
     <lastmod>2026-04-25T00:00:00+00:00</lastmod>
@@ -14,19 +32,10 @@
     <loc>http://localhost:1313/tags/data-visualisation/</loc>
     <lastmod>2026-04-25T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/dataviz/</loc>
-    <lastmod>2026-04-25T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/tags/finance/</loc>
     <lastmod>2026-04-25T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/interactive/</loc>
-    <lastmod>2026-04-25T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/politics/</loc>
-    <lastmod>2026-04-25T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
     <lastmod>2026-04-25T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/dataviz/amoc-post/</loc>
@@ -52,6 +61,9 @@
   </url><url>
     <loc>http://localhost:1313/dataviz/trades-before-announcements/</loc>
     <lastmod>2026-04-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/dataviz/evros_abss_network_methodology/</loc>
+    <lastmod>2024-11-25T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/blog/</loc>
     <lastmod>2024-04-16T22:31:58+01:00</lastmod>
