@@ -14,7 +14,7 @@ cover:
     caption: ""
     relative: true
 ---
-
+*The maps in this section were produced within the hour of data acquisition or news development — reference graphics intended to place a story quickly, not exhaustive analyses.*
 ## South Georgia, US
 
 ### Active fire detection
@@ -71,4 +71,14 @@ The second map in this pair uses Sentinel-2 multispectral imagery from 26 April 
 
 ---
 
-<!-- DRC maps to follow -->
+### Burn extent
+![](/dataviz/images/images_quick/DRC.png)
+*Sources: IPIS Research, ACLED, Critical Threats Project, OCHA, OHCHR, UN Group of Experts (July 2025), Sentinel-2 imagery (Copernicus). As of April 2026.*
+
+The left panel shows the extent of active conflict and M23/Rwanda-controlled territory across Ituri, Nord-Kivu, and Sud-Kivu as of April 2026, against the ceasefire lines nominally agreed in the Luanda process. The right panel breaks down control and influence by actor: M23/Rwanda in teal across the Kivu corridor, with contested and FDLR-influenced areas in purple across Ituri and the northern fringe. The grey areas indicate zones where armed group presence is documented but control is disputed or fragmented.
+The gap between the two panels is the story: the ceasefire exists on paper across most of this territory while the ground situation reflects continued consolidation along the Rwanda border corridor.
+
+
+*Update — 29 April: situation ongoing. No structural damage or casualties reported in coverage to date.*
+
+---
