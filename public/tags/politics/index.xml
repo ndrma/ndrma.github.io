@@ -6,15 +6,8 @@
     <description>Recent content in Politics on Andreas Makas</description>
     <generator>Hugo -- 0.152.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 26 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 25 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/politics/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Quick Maps 1</title>
-      <link>http://localhost:1313/dataviz/quick_maps/</link>
-      <pubDate>Sun, 26 Apr 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/dataviz/quick_maps/</guid>
-      <description>Quick mapping of events on the 26th of April 2026</description>
-    </item>
     <item>
       <title>The household squeeze</title>
       <link>http://localhost:1313/dataviz/uk_council_tax/</link>
@@ -32,7 +25,7 @@
     <item>
       <title>Automatic Surveillance Network</title>
       <link>http://localhost:1313/dataviz/evros_abss_network_methodology/</link>
-      <pubDate>Mon, 25 Nov 2024 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 25 Jan 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/dataviz/evros_abss_network_methodology/</guid>
       <description>The Evros border has been a testing ground and a funnel for a host of EU-wide research into surveillance and machine vision which involves a wide arrange of stakeholders across the EU. A lot of this is showcased during the Greek Ministry of Migration’s presentation of the REACTION program.</description>
     </item>

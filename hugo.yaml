@@ -28,12 +28,15 @@ params:
     disableHLJS: true
 
   # Home Page
-  homeInfoParams:
-    Title: useful stuff 
-    Content: >
-      - Welcome!
-
-      - The posts below are stuff I find useful in my workflow and usually come back to - (hope they help you somewhere along your journey!)
+  #homeInfoParams:
+    #Title: work and links etc
+    #Content: >
+      #- Welcome!
+  # Home page with profile mode on
+  profileMode:
+    enabled: true
+    title: "Andreas Makas"
+    subtitle: "Welcome, currently please use the top right links for navigation"
 
   # Social Icons
   socialIcons:
@@ -54,7 +57,7 @@ params:
 menu:
   main:
     - name: useful stuff 
-      url: "#"
+      url: blog
       weight: 25
     #- name: projects 
     #  url: projects

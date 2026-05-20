@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Alt on Andreas Makas</title>
+    <link>http://localhost:1313/tags/alt/</link>
+    <description>Recent content in Alt on Andreas Makas</description>
+    <generator>Hugo -- 0.152.2</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 May 2026 20:23:26 +0100</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/alt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>void setup from zero</title>
+      <link>http://localhost:1313/blog/void_full_setup/</link>
+      <pubDate>Wed, 20 May 2026 20:23:26 +0100</pubDate>
+      <guid>http://localhost:1313/blog/void_full_setup/</guid>
+      <description>&lt;p&gt;Setting up an alternative, more open distribution, as well as an alternate desktop environment experiment.
+Also checking to see how dwm and void and worst of all nvidia, will behave in a different setup.&lt;/p&gt;
+&lt;p&gt;Maybe a fallback, maybe not.&lt;/p&gt;
+&lt;h3 id=&#34;--initial-install&#34;&gt;⬛️  initial install&lt;/h3&gt;
+&lt;br /&gt;
+&lt;p&gt;Alright so during the initial install from the base iso (extremely minimal) a couple of things of notice:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;EFI needs 1G, setup as EFI boot, vfat, MOUNT at /boot/efi&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/ is required, ext4&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/home can be separate, ext4&lt;/code&gt;
+&lt;br /&gt;
+If GRUB crashes at the end of the installation it&amp;rsquo;s probably due to some mismatch in the initial installation where it doesn&amp;rsquo;t see/find the steps it needs to install. If all is setup correctly (and secureboot etc hasn&amp;rsquo;t messed something up) chroot and grub-install MIGHT be a solution.
+&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;--we-have-the-user-the-admin-and-a-tty&#34;&gt;⚫️  we have the user, the admin, and a tty&lt;/h3&gt;
+&lt;br /&gt;
+alright so here, after updates and **xbps** has been updated too we got the terminal and basically nothing besides bash.
+&lt;p&gt;before we get to dwm, need a few things:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
