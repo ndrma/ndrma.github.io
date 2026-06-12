@@ -3,18 +3,6 @@ title: "Automatic Surveillance Network"
 date: 2025-01-25
 description: "The Evros border has been a testing ground and a funnel for a host of EU-wide research into surveillance and machine vision which involves a wide arrange of stakeholders across the EU. A lot of this is showcased during the Greek Ministry of Migration’s presentation of the REACTION program."
 
-Published in:
-
-https://wearesolomon.com/mag/focus-area/migration/invisible-walls-how-ai-tech-at-europes-borders-threatens-people-seeking-refuge/
-
-https://elpais.com/internacional/2025-01-16/fronteras-inteligentes-que-vulneran-derechos-fundamentales-financiadas-con-fondos-europeos.html
-
-https://background.tagesspiegel.de/digitalisierung-und-ki/briefing/ki-einsatz-beim-bamf-teuer-fehleranfaellig-und-selten-hilfreich
-
-https://inkstickmedia.com/for-migrants-artificial-intelligence-becomes-a-roadblock-to-europe/
-
-https://www.woz.ch/path-preview/node/92812
-
 tags: ["politics", "finance", "interactive"]
 showToc: false
 ShowReadingTime: false
@@ -27,6 +15,18 @@ cover:
     caption: ""
     relative: true
 ---
+
+Published in:
+
+https://wearesolomon.com/mag/focus-area/migration/invisible-walls-how-ai-tech-at-europes-borders-threatens-people-seeking-refuge/
+
+https://elpais.com/internacional/2025-01-16/fronteras-inteligentes-que-vulneran-derechos-fundamentales-financiadas-con-fondos-europeos.html
+
+https://background.tagesspiegel.de/digitalisierung-und-ki/briefing/ki-einsatz-beim-bamf-teuer-fehleranfaellig-und-selten-hilfreich
+
+https://inkstickmedia.com/for-migrants-artificial-intelligence-becomes-a-roadblock-to-europe/
+
+https://www.woz.ch/path-preview/node/92812
 
 # Evros ABSS 
 ![](/dataviz/images/images_meth/image11.png)
